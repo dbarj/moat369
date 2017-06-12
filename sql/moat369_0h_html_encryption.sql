@@ -4,8 +4,10 @@ PRO
 PRO <script>
 PRO 
 PRO // ----------------------------------------------------------------------------
+
 PRO // Written by Rodrigo Jorge <http://www.dbarj.com.br/>
 PRO // ----------------------------------------------------------------------------
+
 PRO 
 PRO var enctext = "".concat
 PRO (
