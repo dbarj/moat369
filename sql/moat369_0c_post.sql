@@ -63,13 +63,15 @@ HOS cp &&background_dump_dest./alert_&&_connect_identifier..log . >> &&moat369_l
 -- HOS rename alert_ 00006_&&common_moat369_prefix._alert_ alert_*.log >> &&moat369_log3..txt
 HOS ls -1 alert_*.log | while read line || [ -n "$line" ]; do mv $line 00006_&&common_moat369_prefix._$line; done >> &&moat369_log3..txt
 
+--
+DEF moat369_opatch = '00007_&&common_moat369_prefix._opatch.zip'
 -- zip
 HOS rm -f &&enc_key_file.
 HOS zip -m &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3..txt
 HOS zip -d &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3..txt
 HOS zip -m &&moat369_zip_filename. 00006_&&common_moat369_prefix._alert_*.log >> &&moat369_log3..txt
-HOS zip -j 00007_&&common_moat369_prefix._opatch $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. 00007_&&common_moat369_prefix._opatch.zip >> &&moat369_log3..txt
+HOS if [ '&&moat369_conf_incl_opatch.' == 'Y' ]; then zip -j &&moat369_opatch. $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3..txt; fi
+HOS if [ -f &&moat369_opatch. ]; then zip -m &&moat369_zip_filename. &&moat369_opatch. >> &&moat369_log3..txt; fi
 HOS zip -m &&moat369_zip_filename. &&moat369_driver. >> &&moat369_log3..txt
 HOS zip -m &&moat369_zip_filename. &&moat369_log2..txt >> &&moat369_log3..txt
 HOS zip -m &&moat369_zip_filename. &&moat369_tkprof._sort.txt >> &&moat369_log3..txt

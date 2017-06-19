@@ -8,7 +8,6 @@ DEF fc_encrypt_html               = '&&moat369_fdr_sql./moat369_fc_encrypt_html.
 DEF fc_encrypt_file               = '&&moat369_fdr_sql./moat369_fc_encrypt_file.sql'
 DEF fc_gen_select_star_query      = '&&moat369_fdr_sql./moat369_fc_gen_select_star_query.sql'
 DEF fc_get_dbvault_user           = '&&moat369_fdr_sql./moat369_fc_get_dbvault_user.sql'
-DEF fc_get_licensing              = '&&moat369_fdr_sql./moat369_fc_get_licensing.sql'
 DEF fc_oracle_version             = '&&moat369_fdr_sql./moat369_fc_oracle_version.sql'
 DEF fc_main_table_name            = '&&moat369_fdr_sql./moat369_fc_main_table_name.sql'
 DEF fc_seq_output_file            = '&&moat369_fdr_sql./moat369_fc_seq_output_file.sql'
@@ -27,6 +26,7 @@ DEF fc_set_value_var_nvl          = '&&moat369_fdr_sql./moat369_fc_set_value_var
 DEF fc_validate_variable          = '&&moat369_fdr_sql./moat369_fc_validate_variable.sql'
 DEF fc_zip_driver_files           = '&&moat369_fdr_sql./moat369_fc_zip_driver_files.sql'
 DEF fc_load_file_ifexist          = '&&moat369_fdr_sql./moat369_fc_load_file_ifexist.sql'
+DEF fc_wr_collector               = '&&moat369_fdr_sql./moat369_fc_wr_collector.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'

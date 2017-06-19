@@ -25,8 +25,8 @@ COL C2 NEW_V 2
 SELECT '' "C1", '' "C2" from dual WHERE ROWNUM = 0;
 COL C1 clear
 COL C2 clear
-DEF license_pack_param = '&1'
-DEF in_sections_param = '&2'
+DEF in_main_param1 = '&1'
+DEF in_main_param2 = '&2'
 UNDEF 1 2
 
 -- Start Time - Do not move it to the beggining, b4 we must ensure we are connected.
@@ -41,31 +41,61 @@ EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 -- Validate config file -> Must run after variables 1 and 2 are saved.
 @@&&fc_check_config.
 
+-- Check if param1 is license or section
+COL license_pack_param NEW_V license_pack_param nopri
+COL sections_param NEW_V sections_param nopri
+SELECT DECODE('&moat369_conf_ask_license.','Y','&&in_main_param1.','') license_pack_param,
+       DECODE('&moat369_conf_ask_license.','Y','&&in_main_param2.','&&in_main_param1.') sections_param
+FROM   DUAL;
+COL license_pack_param clear
+COL sections_param clear
+undef in_main_param1 in_main_param2
+
 -- Override moat369_sections with sections_param if provided
-@@&&fc_set_value_var_nvl. 'in_sections_param' '&&in_sections_param.' '&&moat369_sections.'
-DEF moat369_sections = '&&in_sections_param.'
-undef in_sections_param
+@@&&fc_set_value_var_nvl. 'sections_param' '&&sections_param.' '&&moat369_sections.'
+DEF moat369_sections = '&&sections_param.'
+undef sections_param
 
 -- Start
-SET TERM ON
--- parameters
-PRO
---PRO Parameter 1:
-PRO If your Database is licensed to use the Oracle Tuning pack please enter T.
-PRO If you have a license for Diagnostics pack but not for Tuning pack, enter D.
-PRO Be aware value N reduces the output content substantially. Avoid N if possible.
-PRO
---PRO Oracle Pack License? (Tuning, Diagnostics or None) [ T | D | N ] (required)
-@@&&fc_set_term_off.
+DEF step_pre_file_driver = 'step_pre_file_driver.sql'
+SPO &&step_pre_file_driver.
+PRO SET TERM ON
+PRO PRO If your Database is licensed to use the Oracle Tuning pack please enter T.
+PRO PRO If you have a license for Diagnostics pack but not for Tuning pack, enter D.
+PRO PRO Be aware value N reduces the output content substantially. Avoid N if possible.
+PRO PRO
+PRO @@&&fc_set_term_off.
+SPO OFF
 
-COL fc_get_licensing NEW_V fc_get_licensing
-SELECT CASE WHEN '&license_pack_param.' IS NULL THEN '' ELSE '&&fc_skip_script.' END || '&&fc_get_licensing.' "fc_get_licensing" FROM DUAL;
-COL fc_get_licensing clear
-@@&&fc_get_licensing.
+COL skip_spo_license NEW_V skip_spo_license
+COL skip_ask_license NEW_V skip_ask_license
+
+SELECT CASE WHEN '&moat369_conf_ask_license.' = 'Y' THEN '' ELSE '&&fc_skip_script.' END "skip_spo_license",
+       CASE WHEN '&moat369_conf_ask_license.' = 'Y' AND '&license_pack_param.' IS NULL THEN '' ELSE '&&fc_skip_script.' END "skip_ask_license"
+FROM   DUAL;
+COL skip_spo_license clear
+COL skip_ask_license clear
+
+@&&skip_spo_license.&&step_pre_file_driver.
+UNDEF skip_spo_license
+HOS rm -f &&step_pre_file_driver.
+
+SPO &&step_pre_file_driver.
+PRO SET TERM ON
+PRO ACCEPT license_pack_param char format a1 default '?' PROMPT "Oracle Pack License? (Tuning, Diagnostics or None) [ T | D | N ] (required): "
+PRO PRO
+PRO @@&&fc_set_term_off.
+SPO OFF
+
+@&&skip_ask_license.&&step_pre_file_driver.
+UNDEF skip_ask_license
+HOS rm -f &&step_pre_file_driver.
+
+UNDEF step_pre_file_driver
 
 @@&&fc_set_term_off.
 COL license_pack NEW_V license_pack FOR A1
-SELECT NVL(UPPER(TRIM('&license_pack_param.')), '?') "license_pack" FROM DUAL;
+SELECT NVL(UPPER(TRIM('&license_pack_param.')), 'N') "license_pack" FROM DUAL;
 COL license_pack clear
 UNDEF license_pack_param
 
@@ -77,6 +107,7 @@ COL diagnostics_pack clear
 COL skip_diagnostics NEW_V skip_diagnostics
 SELECT CASE WHEN '&&license_pack.' IN ('T', 'D') THEN NULL ELSE '&&fc_skip_script.' END skip_diagnostics FROM DUAL;
 COL skip_diagnostics clear
+-- -- -- -- -- --
 COL tuning_pack NEW_V tuning_pack FOR A1
 SELECT CASE WHEN '&&license_pack.' = 'T' THEN 'Y' ELSE 'N' END tuning_pack FROM DUAL;
 COL tuning_pack clear
@@ -85,9 +116,9 @@ SELECT CASE WHEN '&&license_pack.' = 'T' THEN NULL ELSE '&&fc_skip_script.' END 
 COL skip_tuning clear
 
 SET TERM ON;
-SELECT 'Be aware value "N" reduces output content substantially. Avoid "N" if possible.' warning FROM dual WHERE '&&license_pack.' = 'N';
+SELECT 'Be aware value "N" reduces output content substantially. Avoid "N" if possible.' warning FROM dual WHERE '&&license_pack.' = 'N' AND '&moat369_conf_ask_license.' = 'Y';
 BEGIN
-  IF '&&license_pack.' = 'N' THEN
+  IF '&&license_pack.' = 'N' AND '&moat369_conf_ask_license.' = 'Y' THEN
     DBMS_LOCK.SLEEP(5); -- sleep few seconds
   END IF;
 END;
@@ -132,12 +163,10 @@ SELECT decode(platform_id,
 COL cmd_awk  NEW_V clear
 COL cmd_grep NEW_V clear
 
-
 -- ENABLE ALL ROLES FOR USER SYS
 SET ROLE ALL;
 
 --PRO
---PRO Parameter 2: Days of History? (default 31)
 --PRO Use default value of 31 unless you have been instructed otherwise.
 --PRO
 COL history_days NEW_V history_days;
@@ -301,23 +330,34 @@ SELECT decode(platform_id,
 4,'machinfo', -- HP-UX IA (64-bit)
 'cat /proc/cpuinfo | grep -i name | sort | uniq' -- Others
 ) cmd_getcpu from v$database;
+COL cmd_getcpu clear
+HOS &&cmd_getcpu. > cpuinfo_model_name.txt
 
 -- esp collection
-HOS &&cmd_getcpu. > cpuinfo_model_name.txt
-SET TERM ON;
+COL skip_res NEW_V skip_res
+SELECT CASE WHEN '&&moat369_conf_incl_res.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_res FROM DUAL;
+COL skip_res clear
+COL skip_esp NEW_V skip_esp
+SELECT CASE WHEN '&&moat369_conf_incl_esp.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_esp FROM DUAL;
+COL skip_esp clear
+
+SET TERM ON
+PRO
 PRO Getting resources_requirements
 PRO Please wait ...
-@@&&skip_diagnostics.resources_requirements_awr.sql
-@@resources_requirements_statspack.sql
+@@&&skip_res.&&skip_diagnostics.resources_requirements_awr.sql
+@@&&skip_res.resources_requirements_statspack.sql
+SET TERM ON
 PRO Getting esp_collect_requirements
 PRO Please wait ...
-@@&&skip_diagnostics.esp_collect_requirements_awr.sql
-@@esp_collect_requirements_statspack.sql
+@@&&skip_esp.&&skip_diagnostics.esp_collect_requirements_awr.sql
+@@&&skip_esp.esp_collect_requirements_statspack.sql
 @@&&fc_set_term_off.
+
+unset skip_res skip_esp
 
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
-HOS zip -mT esp_requirements_&&host_name_short..zip cpuinfo_model_name.txt
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
@@ -521,7 +561,7 @@ VAR sql_text_display CLOB;
 VAR driver_seq NUMBER;
 EXEC :driver_seq := 0;
 VAR file_seq NUMBER;
-EXEC :file_seq := 8;
+EXEC :file_seq := 9;
 VAR repo_seq NUMBER;
 EXEC :repo_seq := 1;
 SELECT TO_CHAR(:repo_seq) report_sequence FROM DUAL;
@@ -571,81 +611,10 @@ SET RECSEP OFF;
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
--- log header
-SPO &&moat369_log..txt;
-PRO begin log
-PRO
-DEF;
-PRO Parameters
-SHOW PARAMETERS;
-SET TI ON;
-SET TIMI ON;
-SET TERM ON;
-PRO Getting SYS.WR_$% Tables
-PRO Please wait ...
-SET TERM OFF;
-SELECT table_name, blocks, num_rows, last_analyzed
-  FROM dba_tables
- WHERE owner = 'SYS'
-   AND table_name LIKE 'WR_$%'
- ORDER BY
-       table_name;
-SET TERM ON;
-PRO Getting SYS.WR_$% Table Partitions
-PRO Please wait ...
-SET TERM OFF;
-SELECT table_name, partition_name, blocks, num_rows, last_analyzed
-  FROM dba_tab_partitions
- WHERE table_owner = 'SYS'
-   AND table_name LIKE 'WR_$%'
- ORDER BY
-       table_name, partition_name;
-SET TERM ON;
-PRO Getting SYS.WR_$% Tables and Partitions
-PRO Please wait ...
-SET TERM OFF;
-SELECT table_name, partition_name, inserts, updates, deletes, timestamp, truncated
-  FROM dba_tab_modifications
- WHERE table_owner = 'SYS'
-   AND table_name LIKE 'WR_$%'
- ORDER BY
-       table_name, partition_name;
-SET TERM ON;
-PRO Getting SYS.WR_$% Indexes
-PRO Please wait ...
-SET TERM OFF;
-SELECT table_name, index_name, leaf_blocks, num_rows, last_analyzed
-  FROM dba_indexes
- WHERE table_owner = 'SYS'
-   AND table_name LIKE 'WR_$%'
- ORDER BY
-       table_name, index_name;
-SET TERM ON;
-PRO Getting SYS.WR_$% Index Partitions
-PRO Please wait ...
-SET TERM OFF;
-SELECT index_name, partition_name, leaf_blocks, num_rows, last_analyzed
-  FROM dba_ind_partitions
- WHERE index_owner = 'SYS'
-   AND index_name LIKE 'WR_$%'
- ORDER BY
-       index_name, partition_name;
-SET TERM ON;
-PRO Getting SYS.WR_$% Segments
-PRO Please wait ...
-SET TERM OFF;
-COL seg_part_name FOR A61
-SELECT segment_name||' '||partition_name seg_part_name, segment_type, blocks
-  FROM dba_segments
- WHERE owner = 'SYS'
-   AND segment_name LIKE 'WR_$%'
- ORDER BY
-       segment_name, partition_name;
-COL seg_part_name clear
-SET TI OFF;
-SET TIMI OFF;
-SPO OFF;
-@@&&fc_set_term_off.
+COL fc_wr_collector NEW_V fc_wr_collector
+SELECT CASE WHEN '&moat369_conf_incl_wr_data.' = 'Y' THEN '' ELSE '&&fc_skip_script.' END || '&&fc_wr_collector.' "fc_wr_collector" FROM DUAL;
+COL fc_wr_collector clear
+@@&&fc_wr_collector.
 
 -- main header
 SPO &&moat369_main_report..html;
@@ -661,11 +630,13 @@ PRO
 SPO OFF;
 
 -- zip into main the esp zip so far, then remove zip but preserve source esp files. let moat369.sql and run_moat369.sh do the clean up
-HOS zip -mT &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3..txt
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m esp_requirements_&&host_name_short..zip cpuinfo_model_name.txt >> &&moat369_log3..txt; else zip -m &&moat369_zip_filename. cpuinfo_model_name.txt >> &&moat369_log3..txt; fi
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3..txt; fi
+
 -- zip other files
-HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js                 >> &&moat369_log3..txt
-HOS zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3..txt
-HOS zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3..txt
+HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js >> &&moat369_log3..txt
+HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3..txt; fi
+HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3..txt; fi
 
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js   >> &&moat369_log3..txt; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js >> &&moat369_log3..txt; fi
