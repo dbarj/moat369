@@ -94,7 +94,7 @@ PRO <!--END_SENSITIVE_DATA-->
 SPO OFF;
 
 -- log footer
-SPO &&moat369_log..txt APP;
+SPO &&moat369_log. APP;
 PRO
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PRO

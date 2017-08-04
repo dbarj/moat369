@@ -23,11 +23,15 @@ COL c_skip_script_8 clear
 
 COL c_skip_result NEW_V c_skip_result NOPRI
 
-SELECT TRIM('&1. &2. &3. &4. &5. &6. &7. &8.') c_skip_result FROM dual;
+select trim('&1. &2. &3. &4. &5. &6. &7. &8.') c_skip_result from dual;
+select regexp_replace('&&c_skip_result.','^(&&fc_skip_script.)*','') c_skip_result from dual;
 
 COL c_skip_result clear
 
 PRO Skip call "&c_skip_result." as per execution parameter.
+
+--@@&&fc_def_empty_var. moat369_log3
+--HOS if [ -f &&moat369_log3. ]; then echo 'Skip call "&c_skip_result." as per execution parameter.' >> &&moat369_log3.; fi
 
 UNDEF 1 2 3 4 5 6 7 8
 

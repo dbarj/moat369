@@ -5,12 +5,12 @@ SET ECHO OFF
 SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.') moat369_time_stamp FROM DUAL;
 SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
 @@&&fc_clean_file_name. "title" "title_no_spaces"
-SELECT '&&common_moat369_prefix._&&section_id._&&report_sequence._&&title_no_spaces.' spool_filename FROM DUAL;
+SELECT '&&report_sequence._&&title_no_spaces.' spool_filename FROM DUAL;
 SET HEA OFF
 SET TERM ON
 
 -- log
-SPO &&moat369_log..txt APP;
+SPO &&moat369_log. APP;
 PRO
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PRO
@@ -45,7 +45,7 @@ EXEC :sql_text_display := REPLACE(REPLACE(TRIM(CHR(10) FROM :sql_text)||';', '<'
 --PRO
 SPO OFF;
 @@&&fc_set_term_off.
-HOS zip &&moat369_zip_filename. &&moat369_log..txt >> &&moat369_log3..txt
+HOS zip &&moat369_zip_filename. &&moat369_log. >> &&moat369_log3.
 
 -- spools query
 SPO &&common_moat369_prefix._query.sql;
@@ -58,7 +58,19 @@ SET HEA ON;
 SPO &&moat369_main_report..html APP;
 PRO <li title="&&main_table.">&&title.
 SPO OFF;
-HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3..txt
+HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3.
+
+-- Put standard values on skip
+@@&&fc_set_value_var_nvl. skip_html       '&&skip_html.'       '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_text       '&&skip_text.'       '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_csv        '&&skip_csv.'        '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_lch        '&&skip_lch.'        '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_pch        '&&skip_pch.'        '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_bch        '&&skip_bch.'        '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_graph      '&&skip_graph.'      '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_html_spool '&&skip_html_spool.' '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_text_file  '&&skip_text_file.'  '' '&&fc_skip_script.'
+@@&&fc_set_value_var_nvl. skip_html_file  '&&skip_html_file.'  '' '&&fc_skip_script.'
 
 -- execute one sql
 @@&&skip_html.&&moat369_skip_html.moat369_9b_one_html.sql
@@ -72,8 +84,8 @@ HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3..t
 @@&&skip_text_file.&&moat369_skip_file.moat369_9i_one_text_file.sql
 @@&&skip_html_file.&&moat369_skip_html.moat369_9j_one_html_file.sql
 --
-HOS zip &&moat369_zip_filename. &&moat369_log2..txt >> &&moat369_log3..txt
-HOS zip &&moat369_zip_filename. &&moat369_log3..txt > /dev/null
+HOS zip &&moat369_zip_filename. &&moat369_log2. >> &&moat369_log3.
+HOS zip &&moat369_zip_filename. &&moat369_log3. > /dev/null
 
 -- sql monitor long executions of sql from moat369
 -- SELECT 'N' moat369_tuning_pack_for_sqlmon, '--' skip_sqlmon_exec FROM DUAL
@@ -82,10 +94,10 @@ HOS zip &&moat369_zip_filename. &&moat369_log3..txt > /dev/null
 -- WHERE sql_id = '&&moat369_prev_sql_id.' AND elapsed_time / 1e6 > 60 /* seconds */
 -- /
 -- @@&&skip_tuning.&&skip_sqlmon_exec.sqlmon.sql &&moat369_tuning_pack_for_sqlmon. &&moat369_prev_sql_id.
--- HOS zip -m &&moat369_zip_filename. sqlmon_&&moat369_prev_sql_id._&&current_time..zip >> &&moat369_log3..txt
+-- HOS zip -m &&moat369_zip_filename. sqlmon_&&moat369_prev_sql_id._&&current_time..zip >> &&moat369_log3.
 
 SET TERM ON
-SPO &&moat369_log..txt APP
+SPO &&moat369_log. APP
 PRO
 PRO &&row_num. rows selected.
 SPO OFF
@@ -96,7 +108,7 @@ SPO &&moat369_main_report..html APP;
 PRO <small><em> (&&row_num.)</em></small>
 PRO </li>
 SPO OFF;
-HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3..txt
+HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3.
 
 -- needed reset after eventual sqlmon above
 SET HEA ON

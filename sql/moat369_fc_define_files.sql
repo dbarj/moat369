@@ -11,6 +11,7 @@ DEF fc_get_dbvault_user           = '&&moat369_fdr_sql./moat369_fc_get_dbvault_u
 DEF fc_oracle_version             = '&&moat369_fdr_sql./moat369_fc_oracle_version.sql'
 DEF fc_main_table_name            = '&&moat369_fdr_sql./moat369_fc_main_table_name.sql'
 DEF fc_seq_output_file            = '&&moat369_fdr_sql./moat369_fc_seq_output_file.sql'
+DEF fc_ren_output_file            = '&&moat369_fdr_sql./moat369_fc_ren_output_file.sql'
 DEF fc_check_last_sql_status      = '&&moat369_fdr_sql./moat369_fc_check_last_sql_status.sql'
 DEF fc_call_secion                = '&&moat369_fdr_sql./moat369_fc_call_section.sql'
 DEF fc_section_variables          = '&&moat369_fdr_sql./moat369_fc_section_variables.sql'

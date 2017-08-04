@@ -31,6 +31,8 @@
 @@&&fc_def_empty_var. moat369_sw_copyright
 @@&&fc_def_empty_var. moat369_sw_author
 @@&&fc_def_empty_var. moat369_sw_email
+@@&&fc_def_empty_var. moat369_sw_enc_sql
+@@&&fc_def_empty_var. moat369_sw_dec_cmd
 
 @@&&fc_set_value_var_nvl. 'moat369_sw_misc_fdr' '&&moat369_sw_misc_fdr.' './js'
 @@&&fc_set_value_var_nvl. 'moat369_sw_rpt_cols' '&&moat369_sw_rpt_cols.' '7'
@@ -48,6 +50,9 @@
 
 @@&&fc_validate_variable. moat369_sw_email      LOWER_CASE
 @@&&fc_validate_variable. moat369_sw_author     NOT_NULL
+
+@@&&fc_set_value_var_nvl. 'moat369_sw_enc_sql'  '&&moat369_sw_enc_sql.'  'N'
+@@&&fc_validate_variable. moat369_sw_enc_sql    Y_N
 
 ---------------------------
 
@@ -141,7 +146,7 @@
 @@&&fc_set_value_var_nvl. 'moat369_conf_incl_res'     '&&moat369_conf_incl_res.'     'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_incl_esp'     '&&moat369_conf_incl_esp.'     'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_incl_opatch'  '&&moat369_conf_incl_opatch.'  'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_ask_license' '&&moat369_conf_ask_license.'   'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_ask_license'  '&&moat369_conf_ask_license.'  'N'
 
 @@&&fc_validate_variable. moat369_conf_incl_tkprof  NOT_NULL
 @@&&fc_validate_variable. moat369_conf_incl_wr_data NOT_NULL

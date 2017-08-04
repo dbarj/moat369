@@ -1,6 +1,6 @@
 -- add seq to one_spool_filename
-EXEC :file_seq := :file_seq + 1;
-SELECT LPAD(:file_seq, 5, '0')||'_&&spool_filename.' one_spool_filename FROM DUAL;
+DEF one_spool_filename = '&&spool_filename.'
+@@&&fc_seq_output_file. one_spool_filename
 
 -- Define bar_height and set value if undef
 @@&&fc_def_empty_var. bar_height
@@ -9,7 +9,7 @@ SELECT LPAD(:file_seq, 5, '0')||'_&&spool_filename.' one_spool_filename FROM DUA
 -- display
 SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
 SET TERM ON;
-SPO &&moat369_log..txt APP;
+SPO &&moat369_log. APP;
 PRO &&hh_mm_ss. &&section_id. "&&one_spool_filename._bar_chart.html"
 SPO OFF;
 @@&&fc_set_term_off.
@@ -126,7 +126,7 @@ EXEC :get_time_t1 := DBMS_UTILITY.get_time;
 
 -- update log2
 SET HEA OFF;
-SPO &&moat369_log2..txt APP;
+SPO &&moat369_log2. APP;
 SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
        TO_CHAR((:get_time_t1 - :get_time_t0)/100, '999,999,990.00')||'s , rows:'||
        '&&row_num., &&section_id., &&main_table., &&moat369_prev_sql_id., &&moat369_prev_child_number., &&title_no_spaces., bar , &&one_spool_filename._bar_chart.html'
@@ -138,4 +138,4 @@ SET HEA ON;
 @@&&fc_encrypt_html. &&one_spool_filename._pie_chart.html
 
 -- zip
-HOS zip -m &&moat369_zip_filename. &&one_spool_filename._bar_chart.html >> &&moat369_log3..txt
+HOS zip -m &&moat369_zip_filename. &&one_spool_filename._bar_chart.html >> &&moat369_log3.

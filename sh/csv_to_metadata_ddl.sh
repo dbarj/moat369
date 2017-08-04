@@ -20,7 +20,7 @@ v_field_name=$6
 v_targetzip=$7
 
 v_meta_func="&&fc_gen_object_ddl."
-v_ren_func="&&fc_seq_output_file."
+v_ren_func="&&fc_ren_output_file."
 v_to_html_func="&&fc_convert_txt_to_html."
 v_enc_html_func="&&fc_encrypt_html."
 ###
@@ -49,13 +49,13 @@ do
     v_firstline=false
   else
     echo "@$v_meta_func \"${v_type}\" \"${v_name}\" \"${v_owner}\" \"${v_var_output}\""
-    echo "HOS zip ${v_targetzip} &&${v_var_output}. >> &&moat369_log3..txt"
+    echo "HOS zip ${v_targetzip} &&${v_var_output}. >> &&moat369_log3."
     echo "@$v_ren_func ${v_var_output}"
     echo "@$v_to_html_func ${v_var_output}"
     echo "@$v_enc_html_func &&${v_var_output}."
     echo "insert into plan_table (STATEMENT_ID, OBJECT_OWNER, OBJECT_NAME, OBJECT_TYPE, REMARKS)"
     echo "values ('${v_stm_id}','${v_owner}','${v_name}','${v_type}','&&${v_var_output}.');"
-    echo "HOS zip -m &&moat369_zip_filename. &&${v_var_output}. >> &&moat369_log3..txt"
+    echo "HOS zip -m &&moat369_zip_filename. &&${v_var_output}. >> &&moat369_log3."
     echo "UNDEF ${v_var_output}"
   fi
 done < ${v_sourcecsv}

@@ -20,7 +20,7 @@ FROM DUAL;
 -- display
 SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
 SET TERM ON;
-SPO &&moat369_log..txt APP
+SPO &&moat369_log. APP
 PRO &&hh_mm_ss. &&section_id. "&&one_spool_filename."
 SPO OFF
 @@&&fc_set_term_off.
@@ -43,7 +43,7 @@ HOS echo "DEF row_num = '"$(if [ -f &&one_spool_filename. ]; then cat &&one_spoo
 HOS rm -f &&step_file.
 
 -- get sql_id
---SPO &&moat369_log..txt APP;
+--SPO &&moat369_log. APP;
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
 --SPO &&one_spool_filename.;
@@ -53,7 +53,7 @@ EXEC :get_time_t1 := DBMS_UTILITY.get_time;
 
 -- update log2
 SET HEA OFF;
-SPO &&moat369_log2..txt APP;
+SPO &&moat369_log2. APP;
 SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
        TO_CHAR((:get_time_t1 - :get_time_t0)/100, '999,999,990.00')||'s , rows:'||
        '&&row_num., &&section_id., &&main_table., &&moat369_prev_sql_id., &&moat369_prev_child_number., &&title_no_spaces., txt , &&one_spool_filename.'
@@ -74,6 +74,6 @@ PRO <a href="&&one_spool_filename.">text</a>
 SPO OFF;
 
 -- zip
-HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then zip -m &&moat369_zip_filename. &&one_spool_filename. >> &&moat369_log3..txt; fi
+HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then zip -m &&moat369_zip_filename. &&one_spool_filename. >> &&moat369_log3.; fi
 
 UNDEF one_spool_text_file one_spool_text_file_rename

@@ -8,8 +8,9 @@ DEF step_skip_file_name = '&&fc_skip_script.'
 HOS echo "" > &&step_load_file_name.
 HOS if [ -f &&in_file_name. ]; then echo "DEF step_skip_file_name = ''" > &&step_load_file_name.; fi
 @&&step_load_file_name.
-@&&step_skip_file_name.&&in_file_name.
 HOS rm -f &&step_load_file_name.
+UNDEF step_load_file_name
 
-UNDEF in_file_name
-UNDEF step_load_file_name step_skip_file_name
+@&&step_skip_file_name.&&in_file_name.
+
+UNDEF in_file_name step_skip_file_name

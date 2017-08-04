@@ -10,6 +10,6 @@ COL step_new_file_name clear
 
 HOS mv &&in_file_name. &&step_new_file_name.
 
-HOS zip -m &&moat369_driver. &&step_new_file_name. >> &&moat369_log3..txt
+HOS zip -m &&moat369_driver. &&step_new_file_name. >> &&moat369_log3.
 
 UNDEF in_file_name step_new_file_name

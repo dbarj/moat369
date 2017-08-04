@@ -267,17 +267,32 @@ DEF title_suffix = '';
 COL moat369_file_time NEW_V moat369_file_time FOR A20;
 SELECT TO_CHAR(SYSDATE, 'YYYYMMDD_HH24MI') moat369_file_time FROM DUAL;
 COL moat369_file_time clear
+
+DEF section_id = ''
 DEF common_moat369_prefix = '&&moat369_prefix._&&database_name_short.';
-DEF moat369_main_report = '00001_&&common_moat369_prefix._index';
-DEF moat369_log = '00002_&&common_moat369_prefix._log';
-DEF moat369_log2 = '00003_&&common_moat369_prefix._log2';
-DEF moat369_log3 = '00004_&&common_moat369_prefix._log3';
-DEF moat369_tkprof = '00005_&&common_moat369_prefix._tkprof';
+DEF moat369_main_report = 'index';
+DEF moat369_log         = 'log.txt';
+DEF moat369_log2        = 'time_log.txt';
+DEF moat369_log3        = 'zip_log.txt';
+DEF moat369_tkprof      = 'tkprof';
+DEF moat369_alert       = ''
+DEF moat369_opatch      = 'opatch.zip'
+
 DEF moat369_driver = '99999_&&common_moat369_prefix._drivers.zip';
 DEF moat369_main_filename = '&&common_moat369_prefix._&&host_name_short.';
 DEF moat369_zip_filename = '&&moat369_main_filename._&&moat369_file_time.';
 DEF moat369_tracefile_identifier = '&&common_moat369_prefix.';
-DEF moat369_tar_filename = '00008_&&moat369_zip_filename.';
+
+VAR file_seq NUMBER;
+EXEC :file_seq := 0;
+
+@@&&fc_seq_output_file. moat369_main_report
+@@&&fc_seq_output_file. moat369_log
+@@&&fc_seq_output_file. moat369_log2
+@@&&fc_seq_output_file. moat369_log3
+@@&&fc_seq_output_file. moat369_tkprof
+@@&&fc_seq_output_file. moat369_alert
+@@&&fc_seq_output_file. moat369_opatch
 
 -- get rdbms version
 COL db_version NEW_V db_version;
@@ -560,8 +575,6 @@ EXEC :sql_text_cdb := NULL;
 VAR sql_text_display CLOB;
 VAR driver_seq NUMBER;
 EXEC :driver_seq := 0;
-VAR file_seq NUMBER;
-EXEC :file_seq := 9;
 VAR repo_seq NUMBER;
 EXEC :repo_seq := 1;
 SELECT TO_CHAR(:repo_seq) report_sequence FROM DUAL;
@@ -630,17 +643,17 @@ PRO
 SPO OFF;
 
 -- zip into main the esp zip so far, then remove zip but preserve source esp files. let moat369.sql and run_moat369.sh do the clean up
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m esp_requirements_&&host_name_short..zip cpuinfo_model_name.txt >> &&moat369_log3..txt; else zip -m &&moat369_zip_filename. cpuinfo_model_name.txt >> &&moat369_log3..txt; fi
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3..txt; fi
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m esp_requirements_&&host_name_short..zip cpuinfo_model_name.txt >> &&moat369_log3.; else zip -m &&moat369_zip_filename. cpuinfo_model_name.txt >> &&moat369_log3.; fi
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
 
 -- zip other files
-HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js >> &&moat369_log3..txt
-HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3..txt; fi
-HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3..txt; fi
+HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js >> &&moat369_log3.
+HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
+HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
 
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js   >> &&moat369_log3..txt; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js >> &&moat369_log3..txt; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -m &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3..txt; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js   >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -m &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
 
 --HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
 --HOS zip -mT &&moat369_zip_filename. osw_&&esp_host_name_short..zip

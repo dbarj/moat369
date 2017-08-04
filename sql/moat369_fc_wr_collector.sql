@@ -1,5 +1,5 @@
 -- log header
-SPO &&moat369_log..txt;
+SPO &&moat369_log.;
 PRO begin log
 PRO
 DEF;

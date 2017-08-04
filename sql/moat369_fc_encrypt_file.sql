@@ -8,7 +8,7 @@ HOS echo "DEF in_param_content = '&&""&&in_param..'" > &&step_file.
 
 DEF out_enc_file = '&&in_param_content..enc'
 
-HOS openssl smime -encrypt -binary -aes-256-cbc -in &&in_param_content. -out &&out_enc_file. -outform DER &&moat369_sw_misc_fdr./&&moat369_sw_cert_file.
+HOS openssl smime -encrypt -binary -aes-256-cbc -in &&in_param_content. -out &&out_enc_file. -outform DER &&enc_pub_file.
 HOS if [ -f &&out_enc_file. ]; then rm -f &&in_param_content.; fi
 HOS if [ -f &&out_enc_file. ]; then echo "DEF &&in_param. = '&&""out_enc_file.'" > &&step_file.; fi
 @&&step_file.
