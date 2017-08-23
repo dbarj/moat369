@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1705.29'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2017-05-29)'
+DEF moat369_fw_vYYNN = 'v1708'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2017-08-23)'
 
 COL moat369_fw_vYYYY NEW_V moat369_fw_vYYYY NOPRI
 SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
@@ -474,8 +474,9 @@ SELECT CASE '&&moat369_conf_def_file.'  WHEN 'N' THEN '&&fc_skip_script.' END mo
 DEF top_level_hints = 'NO_MERGE';
 DEF sq_fact_hints = 'MATERIALIZE NO_MERGE';
 DEF ds_hint = 'DYNAMIC_SAMPLING(4)';
-DEF def_max_rows = '10000';
-DEF max_rows = '1e4';
+DEF max_rows     = '&&moat369_def_sql_maxrows.';
+DEF sql_hl       = '&&moat369_def_sql_highlight.';
+DEF sql_format   = '&&moat369_def_sql_format.';
 --
 DEF skip_html       = '&&moat369_def_skip_html.'
 DEF skip_text       = '&&moat369_def_skip_text.'
@@ -577,6 +578,8 @@ VAR driver_seq NUMBER;
 EXEC :driver_seq := 0;
 VAR repo_seq NUMBER;
 EXEC :repo_seq := 1;
+VAR temp_seq NUMBER;
+EXEC :temp_seq := 0;
 SELECT TO_CHAR(:repo_seq) report_sequence FROM DUAL;
 VAR get_time_t0 NUMBER;
 VAR get_time_t1 NUMBER;
@@ -608,7 +611,7 @@ COL moat369_spid clear
 SET HEA ON;
 SET LIN 32767;
 SET NEWP NONE;
-SET PAGES &&def_max_rows.;
+SET PAGES &&max_rows.;
 SET LONG 32000;
 SET LONGC 2000;
 SET WRA ON;
@@ -647,7 +650,10 @@ HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m esp_requireme
 HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
 
 -- zip other files
-HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js >> &&moat369_log3.
+HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js      >> &&moat369_log3.
+HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css            >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_sql_format.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./sql-formatter.js  >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
 

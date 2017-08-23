@@ -33,12 +33,20 @@ function rjorge_decode(secret, onload) {
     }
     else {
       document.getElementById("rjorge_block").innerHTML = dectextutf;
-      var reload_gchart_script = document.getElementById("gchart_script");
-      if (reload_gchart_script!=null && reload_gchart_script!="") eval(reload_gchart_script.text);
-      load_js("sorttable.js");
+      reload_script_section("gchart_script");
+      reload_script_section("sqlfor_script");
+      reload_script_section("sqlhl_script");
+      var newTableObject = document.getElementsByClassName("sortable")[0];
+      if (newTableObject!=null && newTableObject!="") sorttable.makeSortable(newTableObject);
       appendPassURL('decKey',secret);
     }
   }
+}
+
+function reload_script_section(name)
+{
+  var reload_script_sec_name = document.getElementById(name);
+  if (reload_script_sec_name!=null && reload_script_sec_name!="") eval(reload_script_sec_name.text);
 }
 
 function load_js(name)

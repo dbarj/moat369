@@ -60,6 +60,10 @@ PRO <li title="&&main_table.">&&title.
 SPO OFF;
 HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3.
 
+-- Check SQL format and highlight
+@@&&fc_set_value_var_decode. sql_hl     &&moat369_conf_sql_highlight. 'N' 'N' &&sql_hl.
+@@&&fc_set_value_var_decode. sql_format &&moat369_conf_sql_format.    'N' 'N' &&sql_format.
+
 -- Put standard values on skip
 @@&&fc_set_value_var_nvl. skip_html       '&&skip_html.'       '' '&&fc_skip_script.'
 @@&&fc_set_value_var_nvl. skip_text       '&&skip_text.'       '' '&&fc_skip_script.'
@@ -114,7 +118,7 @@ HOS zip &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3.
 SET HEA ON
 SET LIN 32767
 SET NEWP NONE
-SET PAGES &&def_max_rows.
+SET PAGES &&moat369_def_sql_maxrows.
 SET LONG 32000000
 SET LONGC 2000
 SET WRA ON
@@ -136,7 +140,9 @@ DEF abstract = '';
 DEF abstract2 = '';
 DEF main_table = '';
 DEF foot = '';
-DEF max_rows = '&&def_max_rows.';
+DEF max_rows   = '&&moat369_def_sql_maxrows.';
+DEF sql_hl     = '&&moat369_def_sql_highlight.';
+DEF sql_format = '&&moat369_def_sql_format.';
 --
 DEF skip_html       = '&&moat369_def_skip_html.'
 DEF skip_text       = '&&moat369_def_skip_text.'

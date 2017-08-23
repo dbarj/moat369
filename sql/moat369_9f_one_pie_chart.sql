@@ -2,35 +2,11 @@
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
 
--- display
-SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
-SET TERM ON;
-SPO &&moat369_log. APP;
-PRO &&hh_mm_ss. &&section_id. "&&one_spool_filename._pie_chart.html"
-SPO OFF;
-@@&&fc_set_term_off.
+@@moat369_0j_html_topic_intro.sql &&one_spool_filename._pie_chart.html pie
 
--- update main report
-SPO &&moat369_main_report..html APP;
-PRO <a href="&&one_spool_filename._pie_chart.html">pie</a>
-SPO OFF;
-
--- get time t0
-EXEC :get_time_t0 := DBMS_UTILITY.get_time;
-
--- header
-SPO &&one_spool_filename._pie_chart.html;
-@@moat369_0d_html_header.sql
-PRO <!-- &&one_spool_filename._pie_chart.html $ -->
-PRO  </head>
-PRO  <body>
-PRO <h1> <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="46" width="47" /> &&section_id..&&report_sequence.. &&title.&&title_suffix. <em>(&&main_table.)</em></h1>
+SPO &&one_spool_filename._pie_chart.html APP
 PRO <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-PRO <!--BEGIN_SENSITIVE_DATA-->
-PRO <br>
-PRO &&abstract.
-PRO &&abstract2.
-PRO
+
 -- chart header
 PRO    <script type="text/javascript" id="gchart_script">
 PRO      google.charts.load("current", {packages:["corechart"]});
@@ -96,32 +72,10 @@ PRO
 -- footer
 PRO<font class="n">Notes:<br>1) up to &&history_days. days of awr history were considered<br>2) ASH reports are based on number of samples</font>
 PRO<font class="n"><br>3) &&foot.</font>
-PRO <pre>
-SET LIN 80;
-DESC &&main_table.
-SET HEA OFF;
-SET LIN 32767;
-PRINT sql_text_display;
-SET HEA ON;
-PRO &&row_num. rows selected.
-PRO </pre>
-PRO <!--END_SENSITIVE_DATA-->
-@@moat369_0e_html_footer.sql
-SPO OFF;
+PRO
+SPO OFF
 
--- get time t1
-EXEC :get_time_t1 := DBMS_UTILITY.get_time;
-
--- update log2
-SET HEA OFF;
-SPO &&moat369_log2. APP;
-SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
-       TO_CHAR((:get_time_t1 - :get_time_t0)/100, '999,999,990.00')||'s , rows:'||
-       '&&row_num., &&section_id., &&main_table., &&moat369_prev_sql_id., &&moat369_prev_child_number., &&title_no_spaces., pie , &&one_spool_filename._pie_chart.html'
-  FROM DUAL
-/
-SPO OFF;
-SET HEA ON;
+@@moat369_0k_html_topic_end.sql &&one_spool_filename._pie_chart.html pie
 
 @@&&fc_encrypt_html. &&one_spool_filename._pie_chart.html
 

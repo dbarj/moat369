@@ -28,7 +28,7 @@ SPO &&one_spool_filename..csv;
 SET PAGES 50000;
 SET COLSEP '<,>';
 /
-SET PAGES &&def_max_rows.;
+SET PAGES &&moat369_def_sql_maxrows.;
 SET COLSEP ' ';
 
 -- get sql_id
