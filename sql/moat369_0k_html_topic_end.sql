@@ -4,10 +4,8 @@ def 0k_param2 = '&&2.'
 undef 1 2
 @@&&fc_def_empty_var. 3
 @@&&fc_def_empty_var. 4
-def 0k_param3 = '&&3.'
-def 0k_param4 = '&&4.'
-@@&&fc_set_value_var_nvl. '0k_param3' '&&0k_param3.' 'Y'
-@@&&fc_set_value_var_nvl. '0k_param4' '&&0k_param4.' 'Y'
+@@&&fc_set_value_var_nvl. '0k_param3' '&&3.' 'Y'
+@@&&fc_set_value_var_nvl. '0k_param4' '&&4.' 'Y'
 undef 3 4
 
 SPO &&0k_param1. APP

@@ -29,6 +29,7 @@ HOS if [ '&&sql_format.' == 'Y' ]; then echo '<script type="text/javascript" src
 HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<script type="text/javascript" src="highlight.pack.js"></script>' >> &&0j_param1.; fi
 HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<link rel="stylesheet" href="vs.css">' >> &&0j_param1.; fi
 
+@@&&fc_def_empty_var. main_table_print
 @@&&fc_set_value_var_nvl. main_table_print '&&main_table.' '' ' <em>(&&main_table.)</em>'
 
 -- topic begin
