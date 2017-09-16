@@ -30,15 +30,15 @@ SET COLSEP '<,>';
 /
 SET PAGES &&moat369_def_sql_maxrows.;
 SET COLSEP ' ';
+SPO OFF
 
 -- get sql_id
---SPO &&moat369_log. APP;
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
---SPO &&one_spool_filename..csv;
+
+@@&&fc_check_last_sql_status.
 
 -- footer
-SPO OFF;
 
 -- get time t1
 EXEC :get_time_t1 := DBMS_UTILITY.get_time;

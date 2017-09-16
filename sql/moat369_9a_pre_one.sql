@@ -30,6 +30,9 @@ END;
 
 EXEC :sql_text_display := TRIM(CHR(10) FROM :sql_text);
 
+-- Remove spaces before or after
+EXEC :sql_text := TRIM(:sql_text);
+
 -- count
 PRINT sql_text_display;
 --SELECT '0' row_num FROM DUAL;
@@ -49,10 +52,12 @@ HOS zip &&moat369_zip_filename. &&moat369_log. >> &&moat369_log3.
 
 -- spools query
 SPO &&common_moat369_prefix._query.sql;
-SELECT 'SELECT TO_CHAR(ROWNUM) row_num, v0.* FROM /* &&section_id..&&report_sequence. */ (' || REPLACE(CHR(10)||TRIM(CHR(10) FROM :sql_text)||CHR(10),CHR(10)||CHR(10),CHR(10)) || ') v0 WHERE ROWNUM <= &&max_rows.' FROM DUAL;
+SELECT 'SELECT TO_CHAR(ROWNUM) row_num, v0.* FROM /* &&section_id..&&report_sequence. */ (' ||
+        REPLACE(CHR(10) || TRIM(CHR(10) FROM :sql_text) || CHR(10), CHR(10) || CHR(10), CHR(10)) ||
+       ') v0 WHERE ROWNUM <= &&max_rows.'
+FROM DUAL;
 SPO OFF;
 SET HEA ON;
---GET &&common_moat369_prefix._query.sql
 
 -- update main report
 SPO &&moat369_main_report..html APP;
@@ -135,11 +140,11 @@ SET RECSEP OFF
 -- cleanup
 EXEC :sql_text := NULL;
 EXEC :sql_text_cdb := NULL;
-DEF row_num = '0'
-DEF abstract = '';
-DEF abstract2 = '';
+DEF row_num    = '-1'
+DEF abstract   = '';
+DEF abstract2  = '';
 DEF main_table = '';
-DEF foot = '';
+DEF foot       = '';
 DEF max_rows   = '&&moat369_def_sql_maxrows.';
 DEF sql_hl     = '&&moat369_def_sql_highlight.';
 DEF sql_format = '&&moat369_def_sql_format.';

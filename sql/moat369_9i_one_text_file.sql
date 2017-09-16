@@ -43,10 +43,8 @@ HOS echo "DEF row_num = '"$(if [ -f &&one_spool_filename. ]; then cat &&one_spoo
 HOS rm -f &&step_file.
 
 -- get sql_id
---SPO &&moat369_log. APP;
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
---SPO &&one_spool_filename.;
 
 -- get time t1
 EXEC :get_time_t1 := DBMS_UTILITY.get_time;

@@ -12,6 +12,10 @@ PRO
 PRO    <script type="text/javascript" id="gchart_script">
 PRO    var dot = 'digraph dot { ' +
 
+-- Count lines returned by PL/SQL
+VAR row_count NUMBER;
+EXEC :row_count := -1;
+
 -- body
 SET SERVEROUT ON;
 DECLARE
@@ -30,6 +34,7 @@ BEGIN
     EXIT WHEN cur%NOTFOUND;
     DBMS_OUTPUT.PUT_LINE('''' || l_node1 || ' -> ' || l_node2 || ' ' || l_attr || ';'' +');
   END LOOP;
+  :row_count := cur%ROWCOUNT;
   CLOSE cur;
 END;
 /
@@ -38,6 +43,11 @@ SET SERVEROUT OFF;
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+-- Set row_num to row_count;
+COL row_num NOPRI
+select TRIM(:row_count) row_num from dual;
+COL row_num PRI
 
 PRO    '}';
 SET DEF OFF

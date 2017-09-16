@@ -1,11 +1,20 @@
--- This code will check if file has a <pre> tag, representing an ORA- occurred and put row_num = "-1" if it does.
-DEF in_param = "&1."
-UNDEF 1
+-- This code will if row_num is -1 meaning no lines were returned by the sql_text.
+-- If it is, it will count lines on table to ensure it is empty and update to 0.
 
-DEF step_file = 'step_file.sql';
-HOS if [ -f &&in_param. ]; then touch &&step_file.; &&cmd_grep. "<pre>" &&in_param. > /dev/null &&""echo "DEF row_num = '-1'" > &&step_file.; fi
-@&&step_file.
+DEF step_file = 'step_file_recount.sql';
+
+SPO &&step_file.
+PRO COL row_num NOPRI
+PRO GET &&common_moat369_prefix._query.sql
+PRO -- remove rownum
+PRO 1
+PRO c/TO_CHAR(ROWNUM) row_num, v0.*/TRIM(COUNT(*)) row_num
+PRO /
+PRO COL row_num PRI
+SPO OFF
+
+@@&&fc_set_value_var_decode. 'step_file_exec' '&&row_num.' '-1' '&&step_file.' '&&fc_skip_script. &&step_file.'
+
+@&&step_file_exec.
 HOS rm -f &&step_file.
-UNDEF step_file
-
-UNDEF in_param
+UNDEF step_file step_file_exec

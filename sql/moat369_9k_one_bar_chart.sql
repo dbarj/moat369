@@ -18,6 +18,10 @@ PRO      google.charts.setOnLoadCallback(drawChart);
 PRO      function drawChart() {
 PRO        var data = google.visualization.arrayToDataTable([
 
+-- Count lines returned by PL/SQL
+VAR row_count NUMBER;
+EXEC :row_count := -1;
+
 -- body
 SET SERVEROUT ON;
 SET SERVEROUT ON SIZE 1000000;
@@ -43,6 +47,7 @@ BEGIN
       l_others := l_others - l_value;
     END IF;
   END LOOP;
+  :row_count := cur%ROWCOUNT;
   CLOSE cur;
   l_bar := 'The rest ('||l_others||'%)';
   l_value := l_others;
@@ -56,6 +61,11 @@ SET SERVEROUT OFF;
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+-- Set row_num to row_count;
+COL row_num NOPRI
+select TRIM(:row_count) row_num from dual;
+COL row_num PRI
 
 -- bar chart footer
 PRO        ]);;

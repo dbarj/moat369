@@ -4,13 +4,11 @@ DEF one_spool_filename = '&&spool_filename.'
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename..html html
 
--- get sql
 SET HEA OFF
 COL row_num NOPRI
+
+-- get sql
 GET &&common_moat369_prefix._query.sql
--- remove rownum
---1
---c/TO_CHAR(ROWNUM) row_num,/
 
 SPO &&one_spool_filename..html APP
 -- body
@@ -18,11 +16,14 @@ SET MARK HTML OFF HEAD OFF SPOOL OFF
 /
 SPO OFF
 
-@@&&fc_check_last_sql_status. &&one_spool_filename..html
+SET HEA ON
+COL row_num PRI
 
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+@@&&fc_check_last_sql_status.
 
 SPO &&one_spool_filename..html APP
 -- footer
@@ -32,8 +33,6 @@ PRO
 SPO OFF
 
 @@moat369_0k_html_topic_end.sql &&one_spool_filename..html html N
-
-COL row_num PRI
 
 @@&&fc_encrypt_html. &&one_spool_filename..html
 

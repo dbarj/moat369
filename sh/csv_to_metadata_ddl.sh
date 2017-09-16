@@ -44,11 +44,13 @@ do
   v_type=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_type'] }')
   v_owner=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_owner'] }')
   v_name=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_name'] }')
+#  read v_type v_owner v_name <<< $(echo $line | $AWKCMD -F"${v_sep}" '{print $'$v_field_type', $'$v_field_owner', $'$v_field_name'}')
+
   if $v_firstline && $v_ignore_header
   then
     v_firstline=false
   else
-    echo "@$v_meta_func \"${v_type}\" \"${v_name}\" \"${v_owner}\" \"${v_var_output}\""
+    echo "@$v_meta_func \"${v_type// /_}\" \"${v_name}\" \"${v_owner}\" \"${v_var_output}\""
     echo "HOS zip ${v_targetzip} &&${v_var_output}. >> &&moat369_log3."
     echo "@$v_ren_func ${v_var_output}"
     echo "@$v_to_html_func ${v_var_output}"

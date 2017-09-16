@@ -12,8 +12,8 @@ def c_param4 = '&&4.'
 undef 4
 
 col c1 new_v &&c_param1. NOPRI
-select '&&c_param3.' "c1" from dual where '&&c_param2.' is null;
-select '&&c_param4.' "c1" from dual where '&&c_param2.' is not null and '&&c_param4.' is not null;
+select q'[&&c_param3.]' "c1" from dual where q'[&&c_param2.]' is null;
+select q'[&&c_param4.]' "c1" from dual where q'[&&c_param2.]' is not null and q'[&&c_param4.]' is not null;
 col c1 clear
 
 undef c_param1 c_param2 c_param3 c_param4

@@ -39,6 +39,10 @@ PRO      google.charts.setOnLoadCallback(drawChart);
 PRO      function drawChart() {
 PRO        var data = google.visualization.arrayToDataTable([
 
+-- Count lines returned by PL/SQL
+VAR row_count NUMBER;
+EXEC :row_count := -1;
+
 -- body
 SET SERVEROUT ON;
 DECLARE
@@ -171,6 +175,7 @@ BEGIN
       l_line := l_line||']';
       DBMS_OUTPUT.PUT_LINE(l_line);
     END LOOP;
+    :row_count := cur%ROWCOUNT;
     CLOSE cur;
   END IF;
 END;
@@ -178,12 +183,17 @@ END;
 SET SERVEROUT OFF;
 SPO OFF
 
--- If one_spool_line_chart_file is defined and is readable, paste it contents on HTML.
-HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_filename._line_chart.html; fi; fi
-
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+-- Set row_num to row_count;
+COL row_num NOPRI
+select TRIM(:row_count) row_num from dual;
+COL row_num PRI
+
+-- If one_spool_line_chart_file is defined and is readable, paste it contents on HTML.
+HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_filename._line_chart.html; fi; fi
 
 SPO &&one_spool_filename._line_chart.html APP;
 -- chart footer

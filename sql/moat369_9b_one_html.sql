@@ -18,11 +18,11 @@ SET MARK HTML ON TABLE 'class="sortable"' SPOOL OFF
 SET MARK HTML OFF
 SPO OFF
 
-@@&&fc_check_last_sql_status. &&one_spool_filename..html
-
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+@@&&fc_check_last_sql_status.
 
 SPO &&one_spool_filename..html APP
 -- footer

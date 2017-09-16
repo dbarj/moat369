@@ -369,14 +369,14 @@ PRO Please wait ...
 @@&&skip_esp.esp_collect_requirements_statspack.sql
 @@&&fc_set_term_off.
 
-unset skip_res skip_esp
+undef skip_res skip_esp
 
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
-DEF row_num = '0'
+DEF row_num = '-1'
 
 -- Flush unified Audit Trail
 DECLARE
@@ -472,8 +472,8 @@ SELECT CASE '&&moat369_conf_def_graph.' WHEN 'N' THEN '&&fc_skip_script.' END mo
 SELECT CASE '&&moat369_conf_def_file.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
 
 DEF top_level_hints = 'NO_MERGE';
-DEF sq_fact_hints = 'MATERIALIZE NO_MERGE';
-DEF ds_hint = 'DYNAMIC_SAMPLING(4)';
+DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE';
+DEF ds_hint         = 'DYNAMIC_SAMPLING(4)';
 DEF max_rows     = '&&moat369_def_sql_maxrows.';
 DEF sql_hl       = '&&moat369_def_sql_highlight.';
 DEF sql_format   = '&&moat369_def_sql_format.';
@@ -568,17 +568,16 @@ COL title_no_spaces NEW_V title_no_spaces;
 COL spool_filename NEW_V spool_filename;
 COL one_spool_filename NEW_V one_spool_filename;
 COL report_sequence NEW_V report_sequence;
---VAR row_count NUMBER;
 VAR sql_text CLOB;
 VAR sql_text_cdb CLOB;
+VAR sql_text_display CLOB;
 EXEC :sql_text := NULL;
 EXEC :sql_text_cdb := NULL;
-VAR sql_text_display CLOB;
 VAR driver_seq NUMBER;
-EXEC :driver_seq := 0;
 VAR repo_seq NUMBER;
-EXEC :repo_seq := 1;
 VAR temp_seq NUMBER;
+EXEC :driver_seq := 0;
+EXEC :repo_seq := 1;
 EXEC :temp_seq := 0;
 SELECT TO_CHAR(:repo_seq) report_sequence FROM DUAL;
 VAR get_time_t0 NUMBER;

@@ -1,4 +1,8 @@
--- Param1: file_name / Param2: Type / Param3: Print Table (Default Y) / Param4: Print SQL (Default Y)
+-- Param1: file_name 
+-- Param2: Type
+-- Param3: Print Table (Default Y)
+-- Param4: Print SQL (Default Y)
+
 def 0k_param1 = '&&1.'
 def 0k_param2 = '&&2.'
 undef 1 2

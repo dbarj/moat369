@@ -31,13 +31,15 @@ PRO
 
 -- body
 /
+SPO OFF
 
 -- get sql_id
---SPO &&moat369_log. APP;
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
---SPO &&one_spool_filename..txt;
 
+@@&&fc_check_last_sql_status.
+
+SPO &&one_spool_filename..txt APP
 -- footer
 PRO &&foot.
 SET LIN 80;
