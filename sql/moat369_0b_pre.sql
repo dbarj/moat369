@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1708'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2017-08-23)'
+DEF moat369_fw_vYYNN = 'v1709'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2017-09-26)'
 
 COL moat369_fw_vYYYY NEW_V moat369_fw_vYYYY NOPRI
 SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
@@ -659,6 +659,9 @@ HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js   >> &&moat369_log3.; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js >> &&moat369_log3.; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -m &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
+
+HOS cp -av &&moat369_fdr_js./../LICENSE-3RD-PARTY LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 
 --HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
 --HOS zip -mT &&moat369_zip_filename. osw_&&esp_host_name_short..zip

@@ -1,4 +1,4 @@
--- End Time
+ -- End Time
 VAR moat369_main_time1 NUMBER;
 EXEC :moat369_main_time1 := DBMS_UTILITY.GET_TIME;
 

@@ -8,6 +8,7 @@ PRO
 PRO <!-- Based on moat369 framework &&moat369_fw_vrsn. by Rodrigo Jorge -->
 PRO <!-- Copyright (c) &&moat369_fw_vYYYY. - https://github.com/dbarj/moat369 -->
 PRO <!-- moat369 framework was created from edb360 and sqld360 by Carlos Sierra and Mauro Pagano -->
+PRO <!-- For third party javascript license, check file LICENSE-3RD-PARTY.txt -->
 PRO
 PRO <head>
 PRO <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
