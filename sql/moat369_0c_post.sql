@@ -1,4 +1,4 @@
--- End Time
+ -- End Time
 VAR moat369_main_time1 NUMBER;
 EXEC :moat369_main_time1 := DBMS_UTILITY.GET_TIME;
 
@@ -56,26 +56,26 @@ SELECT value background_dump_dest FROM v$parameter WHERE name = 'background_dump
 COL db_name_upper clear
 COL db_name_lower clear
 COL background_dump_dest clear
-HOS cp &&background_dump_dest./alert_&&db_name_upper.*.log . >> &&moat369_log3..txt
-HOS cp &&background_dump_dest./alert_&&db_name_lower.*.log . >> &&moat369_log3..txt
-HOS cp &&background_dump_dest./alert_&&_connect_identifier..log . >> &&moat369_log3..txt
+HOS cp &&background_dump_dest./alert_&&db_name_upper.*.log . >> &&moat369_log3.
+HOS cp &&background_dump_dest./alert_&&db_name_lower.*.log . >> &&moat369_log3.
+HOS cp &&background_dump_dest./alert_&&_connect_identifier..log . >> &&moat369_log3.
 -- Altered to be compatible with SunOS:
--- HOS rename alert_ 00006_&&common_moat369_prefix._alert_ alert_*.log >> &&moat369_log3..txt
-HOS ls -1 alert_*.log | while read line || [ -n "$line" ]; do mv $line 00006_&&common_moat369_prefix._$line; done >> &&moat369_log3..txt
+-- HOS rename alert_ &&moat369_alert._ alert_*.log >> &&moat369_log3.
+HOS ls -1 alert_*.log | while read line || [ -n "$line" ]; do mv $line &&moat369_alert._$line; done >> &&moat369_log3.
 
 -- zip
 HOS rm -f &&enc_key_file.
-HOS zip -m &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3..txt
-HOS zip -d &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. 00006_&&common_moat369_prefix._alert_*.log >> &&moat369_log3..txt
-HOS zip -j 00007_&&common_moat369_prefix._opatch $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. 00007_&&common_moat369_prefix._opatch.zip >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_driver. >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_log2..txt >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_tkprof._sort.txt >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_log..txt >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. 00000_readme_first.txt >> &&moat369_log3..txt
-HOS unzip -l &&moat369_zip_filename. >> &&moat369_log3..txt
-HOS zip -m &&moat369_zip_filename. &&moat369_log3..txt
+HOS zip -m &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3.
+HOS zip -d &&moat369_zip_filename. &&common_moat369_prefix._query.sql >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_alert.*.log >> &&moat369_log3.
+HOS if [ '&&moat369_conf_incl_opatch.' == 'Y' ]; then zip -j &&moat369_opatch. $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3.; fi
+HOS if [ -f &&moat369_opatch. ]; then zip -m &&moat369_zip_filename. &&moat369_opatch. >> &&moat369_log3.; fi
+HOS zip -m &&moat369_zip_filename. &&moat369_driver. >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_log2. >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_tkprof._sort.txt >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_log. >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_main_report..html >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. 00000_readme_first.txt >> &&moat369_log3.
+HOS unzip -l &&moat369_zip_filename. >> &&moat369_log3.
+HOS zip -m &&moat369_zip_filename. &&moat369_log3.
 SET TERM ON;

@@ -14,6 +14,7 @@ v_sourcecsv=$2
 
 test -f $v_sourcecsv || exit 1
 
+echo '<script type="text/javascript" src="sorttable.js"></script>'
 echo "<p>"
 echo "<table class=sortable>"
 

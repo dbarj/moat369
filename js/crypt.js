@@ -33,22 +33,50 @@ function rjorge_decode(secret, onload) {
     }
     else {
       document.getElementById("rjorge_block").innerHTML = dectextutf;
-      var reload_gchart_script = document.getElementById("gchart_script");
-      if (reload_gchart_script!=null && reload_gchart_script!="") eval(reload_gchart_script.text);
-      load_js("sorttable.js");
+      // When HTML is decrypted, <script> sections are ignored. Need to manually reload them:
+      reload_script_section("sqlfor_script");
+      reload_script_section("sqlhl_script");
+      loadJS("sorttable.js", function() {
+        var newTableObject = document.getElementsByClassName("sortable")[0];
+        if (newTableObject!=null && newTableObject!="") sorttable.makeSortable(newTableObject);
+      });
+      loadJS("http://www.gstatic.com/charts/loader.js", function() {
+        reload_script_section("gchart_script");
+      });
+      // Add decKey to all page links
       appendPassURL('decKey',secret);
     }
   }
 }
 
-function load_js(name)
+function reload_script_section(name)
 {
-  var head= document.getElementsByTagName('head')[0];
-  var script= document.createElement('script');
-  script.type= 'text/javascript';
-  script.src= name;
-  head.appendChild(script);
+  var reload_script_sec_name = document.getElementById(name);
+  if (reload_script_sec_name!=null && reload_script_sec_name!="") eval(reload_script_sec_name.text);
 }
+
+/*! loadJS: load a JS file asynchronously. [c]2014 @scottjehl, Filament Group, Inc. (Based on http://goo.gl/REQGQ by Paul Irish). Licensed MIT */
+(function( w ){
+	var loadJS = function( src, cb ){
+		"use strict";
+		var ref = w.document.getElementsByTagName( "script" )[ 0 ];
+		var script = w.document.createElement( "script" );
+		script.src = src;
+		script.async = true;
+		ref.parentNode.insertBefore( script, ref );
+		if (cb && typeof(cb) === "function") {
+			script.onload = cb;
+		}
+		return script;
+	};
+	// commonjs
+	if( typeof module !== "undefined" ){
+		module.exports = loadJS;
+	}
+	else {
+		w.loadJS = loadJS;
+	}
+}( typeof global !== "undefined" ? global : this ));
 
 function isIndexPage() {
   var url = window.location.pathname;

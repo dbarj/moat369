@@ -1,6 +1,6 @@
 -- add seq to one_spool_filename
-EXEC :file_seq := :file_seq + 1;
-SELECT LPAD(:file_seq, 5, '0')||'_&&spool_filename.' one_spool_filename FROM DUAL;
+DEF one_spool_filename = '&&spool_filename.'
+@@&&fc_seq_output_file. one_spool_filename
 
 -- Check mandatory variables
 @@&&fc_def_empty_var. tit_01
@@ -27,41 +27,21 @@ SELECT LPAD(:file_seq, 5, '0')||'_&&spool_filename.' one_spool_filename FROM DUA
 -- Check mandatory variables
 @@&&fc_def_empty_var. one_spool_line_chart_file
 
--- display
-SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
-SET TERM ON;
-SPO &&moat369_log..txt APP;
-PRO &&hh_mm_ss. &&section_id. "&&one_spool_filename._line_chart.html"
-SPO OFF;
-@@&&fc_set_term_off.
+@@moat369_0j_html_topic_intro.sql &&one_spool_filename._line_chart.html line
 
--- update main report
-SPO &&moat369_main_report..html APP;
-PRO <a href="&&one_spool_filename._line_chart.html">line</a>
-SPO OFF;
-
--- get time t0
-EXEC :get_time_t0 := DBMS_UTILITY.get_time;
-
--- header
-SPO &&one_spool_filename._line_chart.html;
-@@moat369_0d_html_header.sql
-PRO <!-- &&one_spool_filename._line_chart.html $ -->
-PRO  </head>
-PRO  <body>
-PRO <h1> <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="46" width="47" /> &&section_id..&&report_sequence.. &&title.&&title_suffix. <em>(&&main_table.)</em></h1>
+SPO &&one_spool_filename._line_chart.html APP;
 PRO <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-PRO <!--BEGIN_SENSITIVE_DATA-->
-PRO <br>
-PRO &&abstract.
-PRO &&abstract2.
-PRO
+
 -- chart header
 PRO    <script type="text/javascript" id="gchart_script">
 PRO      google.charts.load("current", {packages:["corechart"]});
 PRO      google.charts.setOnLoadCallback(drawChart);
 PRO      function drawChart() {
 PRO        var data = google.visualization.arrayToDataTable([
+
+-- Count lines returned by PL/SQL
+VAR row_count NUMBER;
+EXEC :row_count := -1;
 
 -- body
 SET SERVEROUT ON;
@@ -195,6 +175,7 @@ BEGIN
       l_line := l_line||']';
       DBMS_OUTPUT.PUT_LINE(l_line);
     END LOOP;
+    :row_count := cur%ROWCOUNT;
     CLOSE cur;
   END IF;
 END;
@@ -202,12 +183,17 @@ END;
 SET SERVEROUT OFF;
 SPO OFF
 
--- If one_spool_line_chart_file is defined and is readable, paste it contents on HTML.
-HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_filename._line_chart.html; fi; fi
-
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
 /
+
+-- Set row_num to row_count;
+COL row_num NOPRI
+select TRIM(:row_count) row_num from dual;
+COL row_num PRI
+
+-- If one_spool_line_chart_file is defined and is readable, paste it contents on HTML.
+HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_filename._line_chart.html; fi; fi
 
 SPO &&one_spool_filename._line_chart.html APP;
 -- chart footer
@@ -236,36 +222,18 @@ PRO
 -- footer
 PRO<font class="n">Notes:<br>1) drag to zoom, and right click to reset<br>2) up to &&history_days. days of awr history were considered</font>
 PRO<font class="n"><br>3) &&foot.</font>
-PRO <pre>
-SET LIN 80;
-DESC &&main_table.
-SET HEA OFF;
-SET LIN 32767;
-PRINT sql_text_display;
-SET HEA ON;
-PRO &&row_num. rows selected.
-PRO </pre>
-PRO <!--END_SENSITIVE_DATA-->
-@@moat369_0e_html_footer.sql
-SPO OFF;
+PRO
+SPO OFF
 
--- get time t1
-EXEC :get_time_t1 := DBMS_UTILITY.get_time;
+@@&&fc_set_value_var_nvl. hide_sql_print '&&one_spool_line_chart_file.' 'Y' 'N'
 
--- update log2
-SET HEA OFF;
-SPO &&moat369_log2..txt APP;
-SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
-       TO_CHAR((:get_time_t1 - :get_time_t0)/100, '999,999,990.00')||'s , rows:'||
-       '&&row_num., &&section_id., &&main_table., &&moat369_prev_sql_id., &&moat369_prev_child_number., &&title_no_spaces., line , &&one_spool_filename._line_chart.html'
-  FROM DUAL
-/
-SPO OFF;
-SET HEA ON;
+@@moat369_0k_html_topic_end.sql &&one_spool_filename._line_chart.html line &&hide_sql_print. &&hide_sql_print.
+
+undef hide_sql_print
 
 @@&&fc_encrypt_html. &&one_spool_filename._line_chart.html
 
 -- zip
-HOS zip -m &&moat369_zip_filename. &&one_spool_filename._line_chart.html >> &&moat369_log3..txt
+HOS zip -m &&moat369_zip_filename. &&one_spool_filename._line_chart.html >> &&moat369_log3.
 
 undef one_spool_line_chart_file
