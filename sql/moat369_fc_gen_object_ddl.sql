@@ -19,26 +19,26 @@ DEF in_obj_var   = '&4.'
 
 UNDEF 1 2 3 4
 
-DEF sql_meta_file     = '&&in_obj_owner. &&in_obj_name. &&in_obj_type.'
-DEF step_file_meta    = 'step_file_meta.sql'
+@@&&fc_def_output_file. step_file_meta 'step_file_meta.sql'
 DEF exec_file_meta    = '&&step_file_meta.'
-DEF meta_pre_settings = 'moat369_pre_meta_settings'
+@@&&fc_def_output_file. meta_pre_settings 'moat369_pre_meta_settings'
 
 COL exec_file_meta NEW_V exec_file_meta
 SELECT '&&fc_skip_script.' exec_file_meta from dual where '&&in_obj_type.' IS NULL OR '&&in_obj_name.' IS NULL OR '&&in_obj_owner.' IS NULL OR '&&in_obj_var.' IS NULL;
 COL exec_file_meta clear
 
-DEF in_obj_fname_type  = '&&in_obj_type.'
-DEF in_obj_fname_name  = '&&in_obj_name.'
-DEF in_obj_fname_owner = '&&in_obj_owner.'
+-- DEF in_obj_fname_type  = '&&in_obj_type.'
+-- DEF in_obj_fname_name  = '&&in_obj_name.'
+-- DEF in_obj_fname_owner = '&&in_obj_owner.'
 
-@@&&fc_clean_file_name. "sql_meta_file" "sql_meta_file"
-DEF sql_meta_file  = '&&sql_meta_file..sql'
+DEF sqlout_file_meta  = '&&in_obj_owner. &&in_obj_name. &&in_obj_type.'
+@@&&fc_clean_file_name. "sqlout_file_meta" "sqlout_file_meta"
+@@&&fc_def_output_file. sqlout_file_meta '&&sqlout_file_meta..sql'
 
 -- @@&&fc_clean_file_name. "in_obj_fname_type"  "in_obj_fname_type"
 -- @@&&fc_clean_file_name. "in_obj_fname_name"  "in_obj_fname_name"
 -- @@&&fc_clean_file_name. "in_obj_fname_owner" "in_obj_fname_owner"
--- DEF sql_meta_file  = '&&in_obj_fname_owner..&&in_obj_fname_name..&&in_obj_fname_type..sql'
+-- DEF sqlout_file_meta  = '&&in_obj_fname_owner..&&in_obj_fname_name..&&in_obj_fname_type..sql'
 -- 
 -- UNDEF in_obj_fname_type in_obj_fname_name in_obj_fname_owner
 
@@ -60,10 +60,10 @@ SET TIMING OFF
 SET HEAD OFF
 
 SPOOL &&step_file_meta.
-PRO SPO &&sql_meta_file.
+PRO SPO &&sqlout_file_meta.
 PRO SELECT DBMS_METADATA.GET_DDL('&&in_obj_type.','&&in_obj_name.','&&in_obj_owner.') FROM DUAL;;
 PRO SPO OFF
-PRO DEF &&in_obj_var. = '&&sql_meta_file.'
+PRO DEF &&in_obj_var. = '&&sqlout_file_meta.'
 SPO OFF
 
 @&&exec_file_meta.
@@ -72,4 +72,4 @@ HOS rm -f &&step_file_meta.
 HOS rm -f &&meta_pre_settings..sql
 
 UNDEF in_obj_type in_obj_name in_obj_owner in_obj_var
-UNDEF sql_meta_file step_file_meta exec_file_meta meta_pre_settings
+UNDEF sqlout_file_meta step_file_meta exec_file_meta meta_pre_settings

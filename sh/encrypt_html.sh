@@ -41,7 +41,7 @@ test -n "${in_stop_line}" || exit 1
 test -n "${in_last_line}" || exit 1
 test -n "${enc_hash_line}" || exit 1
 test -n "${enc_last_line}" || exit 1
-which openssl >&- 2>&- || exit 1
+which openssl > /dev/null 2>&- || exit 1
 
 rm -f $out_file
 

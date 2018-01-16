@@ -1,6 +1,7 @@
 -- add seq to one_spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
+DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename._line_chart.html'
 
 -- Check mandatory variables
 @@&&fc_def_empty_var. tit_01
@@ -29,7 +30,7 @@ DEF one_spool_filename = '&&spool_filename.'
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._line_chart.html line
 
-SPO &&one_spool_filename._line_chart.html APP;
+SPO &&one_spool_fullpath_filename. APP;
 PRO <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 -- chart header
@@ -184,8 +185,7 @@ SET SERVEROUT OFF;
 SPO OFF
 
 -- get sql_id
-SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
-/
+SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID');
 
 -- Set row_num to row_count;
 COL row_num NOPRI
@@ -193,9 +193,9 @@ select TRIM(:row_count) row_num from dual;
 COL row_num PRI
 
 -- If one_spool_line_chart_file is defined and is readable, paste it contents on HTML.
-HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_filename._line_chart.html; fi; fi
+HOS if [ '&&one_spool_line_chart_file.' != '' ]; then if [ -f &&one_spool_line_chart_file. ]; then cat &&one_spool_line_chart_file. >> &&one_spool_fullpath_filename.; fi; fi
 
-SPO &&one_spool_filename._line_chart.html APP;
+SPO &&one_spool_fullpath_filename. APP;
 -- chart footer
 PRO        ]);;
 PRO        
@@ -225,15 +225,16 @@ PRO<font class="n"><br>3) &&foot.</font>
 PRO
 SPO OFF
 
-@@&&fc_set_value_var_nvl. hide_sql_print '&&one_spool_line_chart_file.' 'Y' 'N'
+@@&&fc_set_value_var_nvl2. hide_sql_print '&&one_spool_line_chart_file.' 'Y' 'N'
 
 @@moat369_0k_html_topic_end.sql &&one_spool_filename._line_chart.html line &&hide_sql_print. &&hide_sql_print.
 
 undef hide_sql_print
 
-@@&&fc_encrypt_html. &&one_spool_filename._line_chart.html
+@@&&fc_encrypt_html. &&one_spool_fullpath_filename.
 
--- zip
-HOS zip -m &&moat369_zip_filename. &&one_spool_filename._line_chart.html >> &&moat369_log3.
+HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
 
 undef one_spool_line_chart_file
+
+UNDEF one_spool_fullpath_filename

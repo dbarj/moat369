@@ -14,29 +14,32 @@ undef 3 4
 @@&&fc_set_value_var_nvl. '0k_param3' '&&0k_param3.' 'Y'
 @@&&fc_set_value_var_nvl. '0k_param4' '&&0k_param4.' 'Y'
 
-SPO &&0k_param1. APP
+-- DOES NOT WORK setting one_spool_fullpath_filename as 1st parameter. Why? IDK..
+def 0k_var1 = '&&moat369_sw_output_fdr./&&0k_param1.'
+
+SPO &&0k_var1. APP
 PRO <pre>
-SPO &&0k_param1..tmp
+SPO &&0k_var1..tmp
 SET LIN 80
 DESC &&main_table.
 SET HEA OFF LIN 32767
 SPO OFF
-HOS if [ '&&0k_param3.' == 'Y' ]; then cat &&0k_param1..tmp >> &&0k_param1.; fi
-SPO &&0k_param1. APP
+HOS if [ '&&0k_param3.' == 'Y' -a -n '&&main_table.' ]; then cat &&0k_var1..tmp >> &&0k_var1.; fi
+SPO &&0k_var1. APP
 PRO <code class="sql" id="SQL_Query">
-SPO &&0k_param1..tmp
+SPO &&0k_var1..tmp
 PRINT sql_text_display
 SPO OFF
-HOS if [ '&&sql_format.' == 'N' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_param1..tmp >> &&0k_param1.; fi
-SPO &&0k_param1. APP
+HOS if [ '&&sql_format.' == 'N' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_var1..tmp >> &&0k_var1.; fi
+SPO &&0k_var1. APP
 PRO </code>
-SPO &&0k_param1..tmp
+SPO &&0k_var1..tmp
 PRO &&row_num. rows selected.
 SPO OFF
-HOS if [ '&&0k_param4.' == 'Y' ]; then cat &&0k_param1..tmp >> &&0k_param1.; fi
-SPO &&0k_param1. APP
+HOS if [ '&&0k_param4.' == 'Y' ]; then cat &&0k_var1..tmp >> &&0k_var1.; fi
+SPO &&0k_var1. APP
 PRO </pre>
-SPO &&0k_param1..tmp
+SPO &&0k_var1..tmp
 PRO <script type="text/javascript" id="sqlfor_script">
 PRO document.getElementById("SQL_Query").innerHTML = window.sqlFormatter.format(" " +
 SELECT 
@@ -46,13 +49,13 @@ SET HEA ON
 PRO " ");
 PRO </script>
 SPO OFF
-HOS if [ '&&sql_format.' == 'Y' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_param1..tmp >> &&0k_param1.; fi
-SPO &&0k_param1..tmp
+HOS if [ '&&sql_format.' == 'Y' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_var1..tmp >> &&0k_var1.; fi
+SPO &&0k_var1..tmp
 PRO <script type="text/javascript" id="sqlhl_script">hljs.initHighlighting();</script>
 SPO OFF
-HOS if [ '&&sql_hl.' == 'Y' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_param1..tmp >> &&0k_param1.; fi
-HOS rm -f &&0k_param1..tmp
-SPO &&0k_param1. APP
+HOS if [ '&&sql_hl.' == 'Y' -a '&&0k_param4.' == 'Y' ]; then cat &&0k_var1..tmp >> &&0k_var1.; fi
+HOS rm -f &&0k_var1..tmp
+SPO &&0k_var1. APP
 PRO <!--END_SENSITIVE_DATA-->
 @@moat369_0e_html_footer.sql
 SPO OFF
@@ -71,4 +74,4 @@ SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
 SPO OFF
 SET HEA ON
 
-undef 0k_param1 0k_param2 0k_param3 0k_param4
+undef 0k_param1 0k_param2 0k_param3 0k_param4 0k_var1

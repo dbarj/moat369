@@ -51,13 +51,13 @@ do
     v_firstline=false
   else
     echo "@$v_meta_func \"${v_type// /_}\" \"${v_name}\" \"${v_owner}\" \"${v_var_output}\""
-    echo "HOS zip ${v_targetzip} &&${v_var_output}. >> &&moat369_log3."
+    echo "HOS zip -j ${v_targetzip} &&${v_var_output}. >> &&moat369_log3."
     echo "@$v_ren_func ${v_var_output}"
     echo "@$v_to_html_func ${v_var_output}"
     echo "@$v_enc_html_func &&${v_var_output}."
     echo "insert into plan_table (STATEMENT_ID, OBJECT_OWNER, OBJECT_NAME, OBJECT_TYPE, REMARKS)"
     echo "values ('${v_stm_id}','${v_owner}','${v_name}','${v_type}','&&${v_var_output}.');"
-    echo "HOS zip -m &&moat369_zip_filename. &&${v_var_output}. >> &&moat369_log3."
+    echo "HOS zip -mj &&moat369_zip_filename. &&${v_var_output}. >> &&moat369_log3."
     echo "UNDEF ${v_var_output}"
   fi
 done < ${v_sourcecsv}

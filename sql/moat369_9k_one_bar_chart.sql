@@ -1,6 +1,7 @@
 -- add seq to one_spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
+DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename._bar_chart.html'
 
 -- Define bar_height and set value if undef
 @@&&fc_def_empty_var. bar_height
@@ -8,7 +9,7 @@ DEF one_spool_filename = '&&spool_filename.'
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._bar_chart.html bar
 
-SPO &&one_spool_filename._bar_chart.html APP
+SPO &&one_spool_fullpath_filename. APP
 PRO <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 -- chart header
@@ -59,8 +60,7 @@ END;
 SET SERVEROUT OFF;
 
 -- get sql_id
-SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
-/
+SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID');
 
 -- Set row_num to row_count;
 COL row_num NOPRI
@@ -98,7 +98,8 @@ SPO OFF
 
 @@moat369_0k_html_topic_end.sql &&one_spool_filename._bar_chart.html bar
 
-@@&&fc_encrypt_html. &&one_spool_filename._bar_chart.html
+@@&&fc_encrypt_html. &&one_spool_fullpath_filename.
 
--- zip
-HOS zip -m &&moat369_zip_filename. &&one_spool_filename._bar_chart.html >> &&moat369_log3.
+HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
+
+UNDEF one_spool_fullpath_filename

@@ -20,7 +20,7 @@ PRO <noscript>JavaScript must be enabled in your browser in order to view the pr
 PRO 
 PRO <div id="rjorge_block">
 PRO <table><tr><td>
-PRO <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="228" width="233" title="&&moat369_sw_logo_title_1.
+PRO <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="228" width="auto" title="&&moat369_sw_logo_title_1.
 PRO &&moat369_sw_logo_title_2.
 PRO &&moat369_sw_logo_title_3.
 PRO &&moat369_sw_logo_title_4.

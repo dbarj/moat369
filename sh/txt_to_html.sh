@@ -26,13 +26,13 @@ test -f $in_file || exit 1
 
 touch $out_file
 
-echo '<html><head></head><body>'                                                     >  $out_file
-echo '<!--BEGIN_SENSITIVE_DATA-->'                                                   >> $out_file
-echo '<pre style="word-wrap: break-word; white-space: pre-wrap;">'                   >> $out_file
-cat $in_file | $SEDCMD 's|&|&amp;|g' | $SEDCMD 's|>|\&gt;|g' | $SEDCMD 's|<|\&lt;|g' >> $out_file
-echo '</pre>'                                                                        >> $out_file
-echo '<!--END_SENSITIVE_DATA-->'                                                     >> $out_file
-echo '</body></html>'                                                                >> $out_file
+echo '<html><head></head><body>'                                                       >  $out_file
+echo '<!--BEGIN_SENSITIVE_DATA-->'                                                     >> $out_file
+echo '<pre style="word-wrap: break-word; white-space: pre-wrap;">'                     >> $out_file
+cat $in_file | $SEDCMD 's|\&|\&amp;|g' | $SEDCMD 's|>|\&gt;|g' | $SEDCMD 's|<|\&lt;|g' >> $out_file
+echo '</pre>'                                                                          >> $out_file
+echo '<!--END_SENSITIVE_DATA-->'                                                       >> $out_file
+echo '</body></html>'                                                                  >> $out_file
 
 test -f $out_file || exit 1
 

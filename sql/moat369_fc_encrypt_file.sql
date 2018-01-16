@@ -2,7 +2,7 @@
 DEF in_param = "&1."
 UNDEF 1
 
-DEF step_file = 'step_file.sql'
+DEF step_file = '&&moat369_sw_output_fdr./step_file.sql'
 HOS echo "DEF in_param_content = '&&""&&in_param..'" > &&step_file.
 @&&step_file.
 
