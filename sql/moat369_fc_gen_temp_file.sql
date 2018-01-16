@@ -12,7 +12,7 @@ undef 2
 EXEC :temp_seq := :temp_seq + 1;
 
 col c1 new_v &&c_param1. NOPRI
-SELECT 'step_file_' || LPAD(:temp_seq, 5, '0') || DECODE('&&c_param2',NULL,'','_&&c_param2.') || '.sql' c1 from dual;
+SELECT '&&moat369_sw_output_fdr./step_file_' || LPAD(:temp_seq, 5, '0') || DECODE('&&c_param2',NULL,'','_&&c_param2.') || '.sql' c1 from dual;
 col c1 clear
 
 undef c_param1 c_param2

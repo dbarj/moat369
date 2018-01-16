@@ -1,9 +1,12 @@
 -- Check for mandatory variables and put their default values if unset or stop the code.
 
--- DEBUG must be the first
+-- moat369_sw_output_fdr must be the first as it is used in fc_validate_variable -> step_file
+@@&&fc_def_empty_var. moat369_sw_output_fdr
+@@&&fc_set_value_var_nvl. 'moat369_sw_output_fdr' '&&moat369_sw_output_fdr.' '.'
+@@&&fc_exit_no_folder_perms.
 
+-- DEBUG must be the second as it is used in fc_validate_variable -> fc_set_term_off
 @@&&fc_def_empty_var. DEBUG
-
 @@&&fc_set_value_var_nvl. 'DEBUG'  '&&DEBUG.'  'OFF'
 
 @@&&fc_validate_variable. DEBUG ON_OFF
@@ -34,8 +37,8 @@
 @@&&fc_def_empty_var. moat369_sw_enc_sql
 @@&&fc_def_empty_var. moat369_sw_dec_cmd
 
-@@&&fc_set_value_var_nvl. 'moat369_sw_misc_fdr' '&&moat369_sw_misc_fdr.' './js'
-@@&&fc_set_value_var_nvl. 'moat369_sw_rpt_cols' '&&moat369_sw_rpt_cols.' '7'
+@@&&fc_set_value_var_nvl. 'moat369_sw_misc_fdr'   '&&moat369_sw_misc_fdr.' 'js'
+@@&&fc_set_value_var_nvl. 'moat369_sw_rpt_cols'   '&&moat369_sw_rpt_cols.' '7'
 
 @@&&fc_validate_variable. moat369_sw_name       NOT_NULL
 @@&&fc_validate_variable. moat369_sw_name       LOWER_CASE

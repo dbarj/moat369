@@ -1,4 +1,4 @@
--- Param1: file_name / Param2: Type / Param3: Print Table (Default Y) / Param4: Print SQL (Default Y)
+-- Param1: file_name / Param2: Type
 def 0j_param1 = '&&1.'
 def 0j_param2 = '&&2.'
 undef 1 2
@@ -12,7 +12,7 @@ SPO OFF
 @@&&fc_set_term_off.
 
 -- update main report
-SPO &&moat369_main_report..html APP
+SPO &&moat369_main_report. APP
 PRO <a href="&&0j_param1.">&&0j_param2.</a>
 SPO OFF
 
@@ -20,20 +20,20 @@ SPO OFF
 EXEC :get_time_t0 := DBMS_UTILITY.get_time;
 
 -- header
-SPO &&0j_param1.
+SPO &&moat369_sw_output_fdr./&&0j_param1.
 @@moat369_0d_html_header.sql
 SPO OFF
 
 -- javascripts
-HOS if [ '&&sql_format.' == 'Y' ]; then echo '<script type="text/javascript" src="sql-formatter.js"></script>' >> &&0j_param1.; fi
-HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<script type="text/javascript" src="highlight.pack.js"></script>' >> &&0j_param1.; fi
-HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<link rel="stylesheet" href="vs.css">' >> &&0j_param1.; fi
+HOS if [ '&&sql_format.' == 'Y' ]; then echo '<script type="text/javascript" src="sql-formatter.js"></script>' >> &&moat369_sw_output_fdr./&&0j_param1.; fi
+HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<script type="text/javascript" src="highlight.pack.js"></script>' >> &&moat369_sw_output_fdr./&&0j_param1.; fi
+HOS if [ '&&sql_hl.' == 'Y' ]; then echo '<link rel="stylesheet" href="vs.css">' >> &&moat369_sw_output_fdr./&&0j_param1.; fi
 
 @@&&fc_def_empty_var. main_table_print
-@@&&fc_set_value_var_nvl. main_table_print '&&main_table.' '' ' <em>(&&main_table.)</em>'
+@@&&fc_set_value_var_nvl2. main_table_print '&&main_table.' ' <em>(&&main_table.)</em>' ''
 
 -- topic begin
-SPO &&0j_param1. APP
+SPO &&moat369_sw_output_fdr./&&0j_param1. APP
 PRO
 PRO <!-- &&0j_param1. $ -->
 PRO </head>
