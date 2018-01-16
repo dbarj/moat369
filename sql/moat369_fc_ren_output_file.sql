@@ -4,7 +4,7 @@
 DEF in_param_ren_file = "&1."
 UNDEF 1
 
-DEF step_ren_file = 'step_ren_file.sql'
+DEF step_ren_file = '&&moat369_sw_output_fdr./step_ren_file.sql'
 HOS echo "DEF in_param_file_old = '&&""&&in_param_ren_file..'" > &&step_ren_file.
 HOS echo "DEF in_param_file_new = '&&""&&in_param_ren_file..'" >> &&step_ren_file.
 @&&step_ren_file.

@@ -15,7 +15,7 @@ SELECT DECODE('&2.','','&&moat369_fdr_sql./moat369_0h_html_encryption.sql','&&mo
 COL enc_html_template_file clear
 UNDEF 2
 
-DEF step_enc_html_file = 'step_enc_html_template.sql'
+DEF step_enc_html_file = '&&moat369_sw_output_fdr./step_enc_html_template.sql'
 SPOOL &&step_enc_html_file.
 @@&&enc_html_template_file.
 SPOOL OFF

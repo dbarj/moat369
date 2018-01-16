@@ -2,7 +2,7 @@
 DEF in_file_name = '&1.'
 UNDEF 1
 
-DEF step_load_file_name = 'step_load_file_name.sql'
+DEF step_load_file_name = '&&moat369_sw_output_fdr./step_load_file_name.sql'
 DEF step_skip_file_name = '&&fc_skip_script.'
 
 HOS echo "" > &&step_load_file_name.

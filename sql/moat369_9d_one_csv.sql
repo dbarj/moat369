@@ -1,6 +1,7 @@
 -- add seq to one_spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
+DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename..csv'
 
 -- display
 SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
@@ -11,7 +12,7 @@ SPO OFF;
 @@&&fc_set_term_off.
 
 -- update main report
-SPO &&moat369_main_report..html APP;
+SPO &&moat369_main_report. APP;
 PRO <a href="&&one_spool_filename..csv">csv</a>
 SPO OFF;
 
@@ -19,10 +20,10 @@ SPO OFF;
 EXEC :get_time_t0 := DBMS_UTILITY.get_time;
 
 -- get sql
-GET &&common_moat369_prefix._query.sql
+GET &&moat369_query.
 
 -- header
-SPO &&one_spool_filename..csv;
+SPO &&one_spool_fullpath_filename.;
 
 -- body
 SET PAGES 50000;
@@ -33,8 +34,7 @@ SET COLSEP ' ';
 SPO OFF
 
 -- get sql_id
-SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')
-/
+SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID');
 
 @@&&fc_check_last_sql_status.
 
@@ -54,5 +54,6 @@ SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
 SPO OFF;
 SET HEA ON;
 
--- zip
-HOS zip -m &&moat369_zip_filename. &&one_spool_filename..csv >> &&moat369_log3.
+HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
+
+UNDEF one_spool_fullpath_filename

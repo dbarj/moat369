@@ -6,18 +6,20 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1709'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2017-09-26)'
-
-COL moat369_fw_vYYYY NEW_V moat369_fw_vYYYY NOPRI
-SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
-COL moat369_fw_vYYYY CLEAR
+DEF moat369_fw_vYYNN = 'v1801'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-01-16)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
 
 -- Exit if not connected to a database
 @@&&fc_exit_not_connected.
+
+SET APPINFO ON
+
+COL moat369_fw_vYYYY NEW_V moat369_fw_vYYYY NOPRI
+SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
+COL moat369_fw_vYYYY CLEAR
 
 -- Check command line parameter - This must come as soon as possible to avoid subsqls from overriding parameters. Do not call any parametered function or fc_set_term_off before.
 COL C1 NEW_V 1 FOR A1
@@ -34,21 +36,20 @@ VAR moat369_main_time0 NUMBER;
 EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 
 -- Define SW folder and load configurations:
+@@&&fc_def_empty_var. moat369_sw_base
+@@&&fc_set_value_var_nvl. 'moat369_sw_base' '&&moat369_sw_base.' './'
+
 @@&&fc_def_empty_var. moat369_sw_folder
-@@&&fc_set_value_var_nvl. 'moat369_sw_folder' '&&moat369_sw_folder.' './sql'
+@@&&fc_set_value_var_nvl. 'moat369_sw_folder' '&&moat369_sw_folder.' '&&moat369_sw_base./sql'
 @@&&moat369_sw_folder./00_config.sql
 
 -- Validate config file -> Must run after variables 1 and 2 are saved.
 @@&&fc_check_config.
 
 -- Check if param1 is license or section
-COL license_pack_param NEW_V license_pack_param nopri
-COL sections_param NEW_V sections_param nopri
-SELECT DECODE('&moat369_conf_ask_license.','Y','&&in_main_param1.','') license_pack_param,
-       DECODE('&moat369_conf_ask_license.','Y','&&in_main_param2.','&&in_main_param1.') sections_param
-FROM   DUAL;
-COL license_pack_param clear
-COL sections_param clear
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_conf_ask_license.' 'Y' '&&in_main_param1.' ''
+@@&&fc_set_value_var_decode. 'sections_param'     '&&moat369_conf_ask_license.' 'Y' '&&in_main_param2.' '&&in_main_param1.'
+
 undef in_main_param1 in_main_param2
 
 -- Override moat369_sections with sections_param if provided
@@ -57,7 +58,7 @@ DEF moat369_sections = '&&sections_param.'
 undef sections_param
 
 -- Start
-DEF step_pre_file_driver = 'step_pre_file_driver.sql'
+@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
 SPO &&step_pre_file_driver.
 PRO SET TERM ON
 PRO PRO If your Database is licensed to use the Oracle Tuning pack please enter T.
@@ -142,10 +143,14 @@ select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip
 COL fc_convert_txt_to_html NEW_V fc_convert_txt_to_html
 select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html   from dual;
 
-DEF enc_key_file = './key.bin'
-DEF enc_pub_file = '&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
+@@&&fc_def_output_file. enc_key_file 'key.bin'
+DEF enc_pub_file = '&&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
 
-HOS if [ '&&moat369_conf_encrypt_html.' == 'ON' ]; then openssl rand -base64 32 -out &&enc_key_file.; fi
+@@&&fc_def_empty_var. moat369_sw_key_file
+@@&&fc_set_value_var_nvl. 'enc_key_file' '&&moat369_sw_key_file.' '&&enc_key_file.'
+ 
+
+HOS if [ ! -f &&enc_key_file. -a '&&moat369_conf_encrypt_html.' == 'ON' ]; then openssl rand -base64 32 -out &&enc_key_file.; fi
 HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&enc_pub_file. -certin -in &&enc_key_file. -out &&enc_key_file..enc; fi
 
 -- End Check Encryption
@@ -270,21 +275,31 @@ COL moat369_file_time clear
 
 DEF section_id = ''
 DEF common_moat369_prefix = '&&moat369_prefix._&&database_name_short.';
-DEF moat369_main_report = 'index';
-DEF moat369_log         = 'log.txt';
-DEF moat369_log2        = 'time_log.txt';
-DEF moat369_log3        = 'zip_log.txt';
-DEF moat369_tkprof      = 'tkprof';
-DEF moat369_alert       = ''
-DEF moat369_opatch      = 'opatch.zip'
 
-DEF moat369_driver = '99999_&&common_moat369_prefix._drivers.zip';
+@@&&fc_def_output_file. moat369_readme      '00000_readme_first.txt'
+@@&&fc_def_output_file. moat369_main_report 'index.html'
+@@&&fc_def_output_file. moat369_log         'log.txt'
+@@&&fc_def_output_file. moat369_log2        'time_log.txt'
+@@&&fc_def_output_file. moat369_log3        'zip_log.txt'
+@@&&fc_def_output_file. moat369_tkprof      'tkprof'
+@@&&fc_def_output_file. moat369_alert       'alert'
+@@&&fc_def_output_file. moat369_opatch      'opatch.zip'
+@@&&fc_def_output_file. moat369_driver      'drivers.zip'
+@@&&fc_def_output_file. moat369_cpuinfo     'cpuinfo_model_name.txt'
+
 DEF moat369_main_filename = '&&common_moat369_prefix._&&host_name_short.';
-DEF moat369_zip_filename = '&&moat369_main_filename._&&moat369_file_time.';
+@@&&fc_def_output_file. moat369_zip_filename '&&moat369_main_filename._&&moat369_file_time.'
 DEF moat369_tracefile_identifier = '&&common_moat369_prefix.';
+@@&&fc_def_output_file. moat369_query '&&common_moat369_prefix._query.sql'
 
-VAR file_seq NUMBER;
-EXEC :file_seq := 0;
+@@&&fc_def_empty_var. moat369_sw_output_file
+@@&&fc_set_value_var_nvl. 'moat369_zip_filename' '&&moat369_sw_output_file.' '&&moat369_zip_filename.'
+
+@@&&fc_def_bind_ifnotdef. "exec_seq"
+EXEC IF :exec_seq IS NULL THEN :exec_seq := 1; ELSE :exec_seq := :exec_seq + 1; END IF;
+
+@@&&fc_def_bind_ifnotdef. "file_seq"
+EXEC IF :file_seq IS NULL THEN :file_seq := 0; END IF;
 
 @@&&fc_seq_output_file. moat369_main_report
 @@&&fc_seq_output_file. moat369_log
@@ -293,6 +308,13 @@ EXEC :file_seq := 0;
 @@&&fc_seq_output_file. moat369_tkprof
 @@&&fc_seq_output_file. moat369_alert
 @@&&fc_seq_output_file. moat369_opatch
+@@&&fc_seq_output_file. moat369_driver
+
+@@&&fc_clean_file_name. "moat369_main_report"  "moat369_main_report_nopath"  "PATH"
+@@&&fc_clean_file_name. "moat369_zip_filename" "moat369_zip_filename_nopath" "PATH"
+
+COL moat369_style_css NEW_V moat369_style_css NOPRI
+SELECT 'style_' || :exec_seq || '.css' moat369_style_css FROM DUAL;
 
 -- get rdbms version
 COL db_version NEW_V db_version;
@@ -346,7 +368,7 @@ SELECT decode(platform_id,
 'cat /proc/cpuinfo | grep -i name | sort | uniq' -- Others
 ) cmd_getcpu from v$database;
 COL cmd_getcpu clear
-HOS &&cmd_getcpu. > cpuinfo_model_name.txt
+HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
 -- esp collection
 COL skip_res NEW_V skip_res
@@ -371,12 +393,19 @@ PRO Please wait ...
 
 undef skip_res skip_esp
 
+@@&&fc_def_output_file. step_ren_cpuinfo 'step_ren_cpuinfo.sql'
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then echo > &&step_ren_cpuinfo.; else echo '@@&&fc_ren_output_file. moat369_cpuinfo' > &&step_ren_cpuinfo.; fi
+@@&&step_ren_cpuinfo.
+HOS rm -f &&step_ren_cpuinfo.
+UNDEF step_ren_cpuinfo
+
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
 DEF row_num = '-1'
+DEF row_num_dif = '0'
 
 -- Flush unified Audit Trail
 DECLARE
@@ -585,11 +614,6 @@ VAR get_time_t1 NUMBER;
 COL moat369_prev_sql_id NEW_V moat369_prev_sql_id NOPRI;
 COL moat369_prev_child_number NEW_V moat369_prev_child_number NOPRI;
 DEF current_time = '';
-COL moat369_tuning_pack_for_sqlmon NEW_V moat369_tuning_pack_for_sqlmon;
-COL skip_sqlmon_exec NEW_V skip_sqlmon_exec;
-COL moat369_sql_text_100 NEW_V moat369_sql_text_100;
-DEF exact_matching_signature = '';
-DEF force_matching_signature = '';
 
 -- get udump directory path
 COL moat369_udump_path NEW_V moat369_udump_path FOR A500;
@@ -632,11 +656,11 @@ COL fc_wr_collector clear
 @@&&fc_wr_collector.
 
 -- main header
-SPO &&moat369_main_report..html;
+SPO &&moat369_main_report.;
 @@moat369_0d_html_header.sql
 PRO </head>
 PRO <body>
-PRO <h1><em><a href="&&moat369_sw_url." target="_blank">&&moat369_sw_name.</a></em> &&moat369_sw_vYYNN.: &&moat369_sw_title_desc. &&db_version.</h1>
+PRO <h1><em><a href="&&moat369_sw_url." target="_blank">&&moat369_sw_name.</a></em> &&moat369_sw_vYYNN.: &&moat369_sw_title_desc. for DB &&db_version.</h1>
 PRO
 PRO <pre>
 PRO Database:&&database_name_short. License:&&license_pack.. This report covers the time interval between &&moat369_date_from. and &&moat369_date_to.. Days:&&history_days.. Timestamp:&&moat369_time_stamp..
@@ -645,23 +669,26 @@ PRO
 SPO OFF;
 
 -- zip into main the esp zip so far, then remove zip but preserve source esp files. let moat369.sql and run_moat369.sh do the clean up
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m esp_requirements_&&host_name_short..zip cpuinfo_model_name.txt >> &&moat369_log3.; else zip -m &&moat369_zip_filename. cpuinfo_model_name.txt >> &&moat369_log3.; fi
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -m &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirements_&&host_name_short..zip &&moat369_cpuinfo. >> &&moat369_log3.; else zip -mj &&moat369_zip_filename. &&moat369_cpuinfo. >> &&moat369_log3.; fi
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
 
 -- zip other files
 HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js      >> &&moat369_log3.
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css            >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_format.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./sql-formatter.js  >> &&moat369_log3.; fi
-HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
-HOS if [ -f &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
+HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
+HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
 
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js   >> &&moat369_log3.; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js >> &&moat369_log3.; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -m &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js    >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js  >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
 
-HOS cp -av &&moat369_fdr_js./../LICENSE-3RD-PARTY LICENSE-3RD-PARTY.txt >> &&moat369_log3.
-HOS zip -m &&moat369_zip_filename. LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS cp -av &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+
+HOS cp -av  &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
+HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 
 --HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
 --HOS zip -mT &&moat369_zip_filename. osw_&&esp_host_name_short..zip
