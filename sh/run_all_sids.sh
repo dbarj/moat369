@@ -6,7 +6,7 @@ then
   TOOLFDR="--"
 elif [ $# -eq 1 ]
 then
-  TOOLFDR="DEF moat369_sw_folder = '$1'"
+  TOOLFDR="DEF moat369_pre_sw_folder = '$1'"
 elif [ $# -ge 2 ]
 then
   echo "Wrong Call."

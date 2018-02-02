@@ -23,7 +23,7 @@ PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 -- readme
 SPO &&moat369_readme.
 PRO 1. Unzip &&moat369_zip_filename_nopath..zip into a directory
-PRO 2. Review &&moat369_main_report.
+PRO 2. Review &&moat369_main_report_nopath.
 SPO OFF;
 
 -- cleanup
@@ -64,7 +64,7 @@ HOS cp &&background_dump_dest./alert_&&_connect_identifier..log &&moat369_sw_out
 HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read line || [ -n "$line" ]; do mv $line &&moat369_alert._$line; done >> &&moat369_log3.
 
 -- zip
-HOS if [ -z '&&moat369_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
+HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_alert.*.log >> &&moat369_log3.
 HOS if [ '&&moat369_conf_incl_opatch.' == 'Y' ]; then zip -j &&moat369_opatch. $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_opatch. ]; then zip -mj &&moat369_zip_filename. &&moat369_opatch. >> &&moat369_log3.; fi

@@ -1,8 +1,9 @@
 -- Check for mandatory variables and put their default values if unset or stop the code.
 
 -- moat369_sw_output_fdr must be the first as it is used in fc_validate_variable -> step_file
+@@&&fc_def_empty_var. moat369_pre_sw_output_fdr
 @@&&fc_def_empty_var. moat369_sw_output_fdr
-@@&&fc_set_value_var_nvl. 'moat369_sw_output_fdr' '&&moat369_sw_output_fdr.' '.'
+@@&&fc_set_value_var_nvl. 'moat369_sw_output_fdr' '&&moat369_pre_sw_output_fdr.' '.'
 @@&&fc_exit_no_folder_perms.
 
 -- DEBUG must be the second as it is used in fc_validate_variable -> fc_set_term_off
@@ -59,8 +60,14 @@
 
 ---------------------------
 
+@@&&fc_def_empty_var. moat369_pre_encrypt_output
+@@&&fc_def_empty_var. moat369_pre_encrypt_html
+
 @@&&fc_def_empty_var. moat369_conf_encrypt_output
 @@&&fc_def_empty_var. moat369_conf_encrypt_html
+
+@@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_output' '&&moat369_pre_encrypt_output.' '&&moat369_conf_encrypt_output.'
+@@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_html'   '&&moat369_pre_encrypt_html.'   '&&moat369_conf_encrypt_html.'  
 
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_output' '&&moat369_conf_encrypt_output.' 'OFF'
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_html'   '&&moat369_conf_encrypt_html.'   'OFF'

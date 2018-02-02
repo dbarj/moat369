@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1801'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-01-16)'
+DEF moat369_fw_vYYNN = 'v1802'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-01-30)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -36,11 +36,13 @@ VAR moat369_main_time0 NUMBER;
 EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 
 -- Define SW folder and load configurations:
+@@&&fc_def_empty_var. moat369_pre_sw_base
 @@&&fc_def_empty_var. moat369_sw_base
-@@&&fc_set_value_var_nvl. 'moat369_sw_base' '&&moat369_sw_base.' './'
+@@&&fc_set_value_var_nvl. 'moat369_sw_base' '&&moat369_pre_sw_base.' './'
 
+@@&&fc_def_empty_var. moat369_pre_sw_folder
 @@&&fc_def_empty_var. moat369_sw_folder
-@@&&fc_set_value_var_nvl. 'moat369_sw_folder' '&&moat369_sw_folder.' '&&moat369_sw_base./sql'
+@@&&fc_set_value_var_nvl. 'moat369_sw_folder' '&&moat369_pre_sw_folder.' '&&moat369_sw_base./sql'
 @@&&moat369_sw_folder./00_config.sql
 
 -- Validate config file -> Must run after variables 1 and 2 are saved.
@@ -143,15 +145,16 @@ select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip
 COL fc_convert_txt_to_html NEW_V fc_convert_txt_to_html
 select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html   from dual;
 
-@@&&fc_def_output_file. enc_key_file 'key.bin'
-DEF enc_pub_file = '&&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
+@@&&fc_def_empty_var. moat369_pre_enc_pub_file
+@@&&fc_set_value_var_nvl. 'moat369_enc_pub_file' '&&moat369_pre_enc_pub_file.' '&&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
 
-@@&&fc_def_empty_var. moat369_sw_key_file
-@@&&fc_set_value_var_nvl. 'enc_key_file' '&&moat369_sw_key_file.' '&&enc_key_file.'
+@@&&fc_def_empty_var. moat369_pre_sw_key_file
+@@&&fc_def_output_file. enc_key_file 'key.bin'
+@@&&fc_set_value_var_nvl. 'enc_key_file' '&&moat369_pre_sw_key_file.' '&&enc_key_file.'
  
 
 HOS if [ ! -f &&enc_key_file. -a '&&moat369_conf_encrypt_html.' == 'ON' ]; then openssl rand -base64 32 -out &&enc_key_file.; fi
-HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&enc_pub_file. -certin -in &&enc_key_file. -out &&enc_key_file..enc; fi
+HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&moat369_enc_pub_file. -certin -in &&enc_key_file. -out &&enc_key_file..enc; fi
 
 -- End Check Encryption
 
@@ -292,8 +295,8 @@ DEF moat369_main_filename = '&&common_moat369_prefix._&&host_name_short.';
 DEF moat369_tracefile_identifier = '&&common_moat369_prefix.';
 @@&&fc_def_output_file. moat369_query '&&common_moat369_prefix._query.sql'
 
-@@&&fc_def_empty_var. moat369_sw_output_file
-@@&&fc_set_value_var_nvl. 'moat369_zip_filename' '&&moat369_sw_output_file.' '&&moat369_zip_filename.'
+@@&&fc_def_empty_var. moat369_pre_sw_output_file
+@@&&fc_set_value_var_nvl. 'moat369_zip_filename' '&&moat369_pre_sw_output_file.' '&&moat369_zip_filename.'
 
 @@&&fc_def_bind_ifnotdef. "exec_seq"
 EXEC IF :exec_seq IS NULL THEN :exec_seq := 1; ELSE :exec_seq := :exec_seq + 1; END IF;
