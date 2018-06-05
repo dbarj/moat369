@@ -63,7 +63,7 @@ PRO<font class="n"><br>3) &&foot.</font>
 PRO
 SPO OFF
 
-@@moat369_0k_html_topic_end.sql &&one_spool_filename._graph_chart.html graph
+@@moat369_0k_html_topic_end.sql &&one_spool_filename._graph_chart.html graph '' &&sql_show.
 
 @@&&fc_encrypt_html. &&one_spool_fullpath_filename.
 

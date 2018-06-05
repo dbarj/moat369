@@ -32,7 +32,7 @@ PRO &&foot.
 PRO
 SPO OFF
 
-@@moat369_0k_html_topic_end.sql &&one_spool_filename..html html N
+@@moat369_0k_html_topic_end.sql &&one_spool_filename..html html N &&sql_show.
 
 @@&&fc_encrypt_html. &&one_spool_fullpath_filename.
 

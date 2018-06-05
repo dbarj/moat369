@@ -28,13 +28,23 @@ BEGIN
 END;
 /
 
-EXEC :sql_text_display := TRIM(CHR(10) FROM :sql_text);
+-- When sql_show is NO, will print sql_text_display only if manually specified.
+BEGIN
+  IF '&&sql_show.' = 'N' then
+    -- SP2-1504: Cannot print uninitialized LOB variable "SQL_TEXT_DISPLAY"
+    :sql_text_display := :sql_text_display;
+  ELSE
+    :sql_text_display := TRIM(CHR(10) FROM :sql_text);
+  END IF;
+END;
+/
+
+PRINT sql_text_display
 
 -- Remove spaces before or after
 EXEC :sql_text := TRIM(:sql_text);
 
 -- count
-PRINT sql_text_display
 --SELECT '0' row_num FROM DUAL;
 PRO &&hh_mm_ss. &&section_id..&&report_sequence.
 EXEC :sql_text_display := REPLACE(REPLACE(TRIM(CHR(10) FROM :sql_text)||';', '<', CHR(38)||'lt;'), '>', CHR(38)||'gt;');
@@ -108,7 +118,8 @@ HOS zip -j &&moat369_zip_filename. &&moat369_log3. > /dev/null
 -- @@&&skip_tuning.&&skip_sqlmon_exec.sqlmon.sql &&moat369_tuning_pack_for_sqlmon. &&moat369_prev_sql_id.
 -- HOS zip -m &&moat369_zip_filename. sqlmon_&&moat369_prev_sql_id._&&current_time..zip >> &&moat369_log3.
 
-select trim(greatest(&&row_num.+(&&row_num_dif.),-1)) row_num from dual;
+-- If row_num is 0, return 0, otherwise subtract row_num_dif giving nothing less than a -1 result.
+select trim(decode(&&row_num.,0,0,greatest(&&row_num.+(&&row_num_dif.),-1))) row_num from dual;
 
 SET TERM ON
 SPO &&moat369_log. APP
@@ -146,6 +157,7 @@ SET RECSEP OFF
 HOS rm -f &&moat369_query.
 EXEC :sql_text := NULL;
 EXEC :sql_text_cdb := NULL;
+EXEC :sql_text_display := NULL;
 DEF row_num    = '-1'
 DEF row_num_dif = 0
 DEF abstract   = ''
@@ -155,6 +167,7 @@ DEF foot       = ''
 DEF max_rows   = '&&moat369_def_sql_maxrows.'
 DEF sql_hl     = '&&moat369_def_sql_highlight.'
 DEF sql_format = '&&moat369_def_sql_format.'
+DEF sql_show   = '&&moat369_def_sql_show.'
 --
 DEF skip_html       = '&&moat369_def_skip_html.'
 DEF skip_text       = '&&moat369_def_skip_text.'

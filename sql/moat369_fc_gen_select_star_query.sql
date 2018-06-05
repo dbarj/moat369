@@ -16,7 +16,7 @@ COL def_sel_star_qry NEW_V def_sel_star_qry
 
 DEF order_by_cdb_flag = ''
 COL order_by_cdb_flag NEW_V order_by_cdb_flag
-SELECT DECODE(REGEXP_REPLACE(UPPER('&&in_table.'),'^CDB\_'),UPPER('&&in_table.'),'','CON_ID, ') order_by_cdb_flag
+SELECT DECODE(REGEXP_REPLACE(UPPER('&&in_table.'),'^CDB_'),UPPER('&&in_table.'),'','CON_ID, ') order_by_cdb_flag
 FROM DUAL;
 
 DEF in_order_by = '&&order_by_cdb_flag.&&in_order_by.'

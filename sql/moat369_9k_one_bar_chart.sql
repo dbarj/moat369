@@ -96,7 +96,7 @@ PRO <font class="n"><br />3) &&foot.</font>
 PRO
 SPO OFF
 
-@@moat369_0k_html_topic_end.sql &&one_spool_filename._bar_chart.html bar
+@@moat369_0k_html_topic_end.sql &&one_spool_filename._bar_chart.html bar '' &&sql_show.
 
 @@&&fc_encrypt_html. &&one_spool_fullpath_filename.
 

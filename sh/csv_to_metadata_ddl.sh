@@ -39,7 +39,7 @@ fi
 
 v_firstline=true
 
-while read line || [ -n "$line" ]
+while read -r line || [ -n "$line" ]
 do
   v_type=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_type'] }')
   v_owner=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_owner'] }')

@@ -185,14 +185,17 @@
 @@&&fc_def_empty_var. moat369_def_sql_format
 @@&&fc_def_empty_var. moat369_def_sql_highlight
 @@&&fc_def_empty_var. moat369_def_sql_maxrows
+@@&&fc_def_empty_var. moat369_def_sql_show
 
 @@&&fc_set_value_var_nvl. 'moat369_def_sql_format'    '&&moat369_def_sql_format.'    'Y'
 @@&&fc_set_value_var_nvl. 'moat369_def_sql_highlight' '&&moat369_def_sql_highlight.' 'Y'
 @@&&fc_set_value_var_nvl. 'moat369_def_sql_maxrows'   '&&moat369_def_sql_maxrows.'   '10000'
+@@&&fc_set_value_var_nvl. 'moat369_def_sql_show'      '&&moat369_def_sql_show.'      'Y'
 
 @@&&fc_validate_variable. moat369_def_sql_format    Y_N
 @@&&fc_validate_variable. moat369_def_sql_highlight Y_N
 @@&&fc_validate_variable. moat369_def_sql_maxrows   IS_NUMBER
+@@&&fc_validate_variable. moat369_def_sql_show      Y_N
 
 ---------------------------
 

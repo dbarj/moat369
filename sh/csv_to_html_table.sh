@@ -33,7 +33,7 @@ AWKCMD_P="-f ${v_awk_func_dir} -v separator=${v_sep} -v enclosure=\""
 SOTYPE=$(uname -s)
 if [ "$SOTYPE" = "SunOS" ]
 then
-  AWKCMD=/usr/xpg4/bin/awk
+  AWKCMD=gawk
   AWKCMD_CSV="${AWKCMD} ${AWKCMD_P}"
   SEDCMD=/usr/xpg4/bin/sed
   # echo -e "xxx" in solaris prints "-e xxx" when using /bin/sh.
@@ -51,7 +51,7 @@ v_head_ncols=$(head -n 1 "${v_sourcecsv}" | ${AWKCMD_CSV} --source '{a=csv_parse
 
 v_count=0
 
-while read line || [ -n "$line" ]
+while read -r line || [ -n "$line" ]
 do
   v_ncols=$(echo "$line" | ${AWKCMD_CSV} --source '{a=csv_parse_record($0, separator, enclosure, csv); print a}')
   if [ $v_head_ncols -ne $v_ncols ]

@@ -36,6 +36,8 @@ DEF fc_wr_collector               = '&&moat369_fdr_sql./moat369_fc_wr_collector.
 DEF fc_def_output_file            = '&&moat369_fdr_sql./moat369_fc_def_output_file.sql'
 DEF fc_mod_state                  = '&&moat369_fdr_sql./moat369_fc_mod_state.sql'
 DEF fc_clear_defs                 = '&&moat369_fdr_sql./moat369_fc_clear_defs.sql'
+DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.sql'
+DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'

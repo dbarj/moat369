@@ -16,6 +16,7 @@ DEF step_file = '&&moat369_sw_output_fdr./step_file.sql';
 HOS echo "DEF row_num = '"$(($(cat &&one_spool_html_file. | grep '<tr>' | wc -l)-1))"'" > &&step_file.
 @&&step_file.
 HOS rm -f &&step_file.
+UNDEF step_file
 
 -- get sql_id
 SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_child_number FROM v$session WHERE sid = SYS_CONTEXT('USERENV', 'SID')

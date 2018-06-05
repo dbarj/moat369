@@ -8,15 +8,18 @@ EXEC DBMS_APPLICATION_INFO.SET_MODULE('&&moat369_prefix.','&&section_id.')
 VAR moat369_total_cols number
 EXEC :moat369_total_cols := &&moat369_sw_rpt_cols.; 
 
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP
 PRO <!--BEGIN_SENSITIVE_DATA-->
 PRO <table><tr class="main">
 SPO OFF
+@@&&fc_spool_end.
 
 DEF step_main_file_driver = '&&moat369_sw_output_fdr./step_main_file_driver_header.sql'
 
 SET SERVEROUT ON
-SET FEED OFF
+
+@@&&fc_spool_start.
 SPO &&step_main_file_driver.
 BEGIN
 FOR I IN 1 .. :moat369_total_cols
@@ -30,15 +33,17 @@ END LOOP;
 END;
 /
 SPO OFF
-SET SERVEROUT OFF
 
 SPO &&moat369_main_report. APP
 @&&step_main_file_driver.
 SPO OFF
+@@&&fc_spool_end.
+
 
 @@&&fc_zip_driver_files. &&step_main_file_driver.
 UNDEF step_main_file_driver
 
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP
 PRO </tr><tr class="main"><td>
 PRO <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="228" width="auto" title="&&moat369_sw_logo_title_1.
@@ -51,14 +56,14 @@ PRO &&moat369_sw_logo_title_7.
 PRO &&moat369_sw_logo_title_8.>"
 PRO <br>
 SPO OFF
+@@&&fc_spool_end.
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 DEF step_main_file_driver = '&&moat369_sw_output_fdr./step_main_file_driver_columns.sql'
 
-SET SERVEROUT ON
-SET FEED OFF
+@@&&fc_spool_start.
 SPO &&step_main_file_driver.
 SET DEF OFF
 DECLARE
@@ -85,13 +90,17 @@ END;
 /
 SPO OFF
 SET DEF ON
-SET SERVEROUT OFF
 
 @&&step_main_file_driver.
+
+@@&&fc_spool_end.
+
+
 @@&&fc_zip_driver_files. &&step_main_file_driver.
 UNDEF step_main_file_driver
 
 -- main footer
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP;
 PRO </tr></table>
 PRO <!--END_SENSITIVE_DATA-->
@@ -107,6 +116,7 @@ SHOW PARAMETERS;
 PRO
 PRO end log
 SPO OFF;
+@@&&fc_spool_end.
 
 DEF section_id = '0c'
 EXEC DBMS_APPLICATION_INFO.SET_MODULE('&&moat369_prefix.','&&section_id.')

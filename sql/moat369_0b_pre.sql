@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1802'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-01-30)'
+DEF moat369_fw_vYYNN = 'v1803'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-03-16)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -47,6 +47,14 @@ EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 
 -- Validate config file -> Must run after variables 1 and 2 are saved.
 @@&&fc_check_config.
+
+-- Define full output folder path.
+@@&&fc_def_output_file. step_full_path_outfdr  'step_full_path_outfdr.sql'
+HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath=$(pwd)" > step_full_path_outfdr.sql
+-- I don't use &&step_full_path_outfdr. as target because of the "cd".
+@&&step_full_path_outfdr.
+HOS rm -f &&step_full_path_outfdr.
+UNDEF step_full_path_outfdr
 
 -- Check if param1 is license or section
 @@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_conf_ask_license.' 'Y' '&&in_main_param1.' ''
@@ -161,13 +169,19 @@ HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&moat369_enc
 -- Define OS binaries
 COL cmd_awk  NEW_V cmd_awk
 COL cmd_grep NEW_V cmd_grep
-SELECT bin_prefix || 'awk'  cmd_awk,
-       bin_prefix || 'grep' cmd_grep
+
+SELECT bin_prefix1 || 'awk'  cmd_awk,
+       bin_prefix2 || 'grep' cmd_grep
 from (
-SELECT decode(platform_id,
+SELECT
+decode(platform_id,
 1,'/usr/xpg4/bin/', -- Solaris[tm] OE (32-bit)
 2,'/usr/xpg4/bin/', -- Solaris[tm] OE (64-bit)
-'') bin_prefix from v$database);
+'') bin_prefix1,
+decode(platform_id,
+1,'/usr/gnu/bin/', -- Solaris[tm] OE (32-bit)
+2,'/usr/gnu/bin/', -- Solaris[tm] OE (64-bit)
+'') bin_prefix2 from v$database);
 COL cmd_awk  NEW_V clear
 COL cmd_grep NEW_V clear
 
@@ -396,12 +410,6 @@ PRO Please wait ...
 
 undef skip_res skip_esp
 
-@@&&fc_def_output_file. step_ren_cpuinfo 'step_ren_cpuinfo.sql'
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then echo > &&step_ren_cpuinfo.; else echo '@@&&fc_ren_output_file. moat369_cpuinfo' > &&step_ren_cpuinfo.; fi
-@@&&step_ren_cpuinfo.
-HOS rm -f &&step_ren_cpuinfo.
-UNDEF step_ren_cpuinfo
-
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
 
@@ -503,12 +511,13 @@ SELECT CASE '&&moat369_conf_def_bar.'   WHEN 'N' THEN '&&fc_skip_script.' END mo
 SELECT CASE '&&moat369_conf_def_graph.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_graph FROM DUAL;
 SELECT CASE '&&moat369_conf_def_file.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
 
-DEF top_level_hints = 'NO_MERGE';
-DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE';
-DEF ds_hint         = 'DYNAMIC_SAMPLING(4)';
-DEF max_rows     = '&&moat369_def_sql_maxrows.';
-DEF sql_hl       = '&&moat369_def_sql_highlight.';
-DEF sql_format   = '&&moat369_def_sql_format.';
+DEF top_level_hints = 'NO_MERGE'
+DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE'
+DEF ds_hint         = 'DYNAMIC_SAMPLING(4)'
+DEF max_rows        = '&&moat369_def_sql_maxrows.'
+DEF sql_hl          = '&&moat369_def_sql_highlight.'
+DEF sql_format      = '&&moat369_def_sql_format.'
+DEF sql_show        = '&&moat369_def_sql_show.'
 --
 DEF skip_html       = '&&moat369_def_skip_html.'
 DEF skip_text       = '&&moat369_def_skip_text.'
@@ -522,47 +531,47 @@ DEF skip_text_file  = '&&fc_skip_script.'
 DEF skip_html_file  = '&&fc_skip_script.'
 DEF skip_all = ''
 
-DEF abstract = '';
-DEF abstract2 = '';
-DEF foot = '';
---DEF sql_text = '';
-COL sql_text FOR A100;
-DEF chartype = '';
-DEF stacked = '';
-DEF haxis = '&&db_version. &&cores_threads_hosts.'
-DEF vaxis = '';
-DEF vbaseline = '';
+DEF abstract  = ''
+DEF abstract2 = ''
+DEF foot      = ''
+--DEF sql_text  = ''
+COL sql_text FOR A100
+DEF chartype  = ''
+DEF stacked   = ''
+DEF haxis     = '&&db_version. &&cores_threads_hosts.'
+DEF vaxis     = ''
+DEF vbaseline = ''
 
-COL tit_01 NEW_V tit_01;
-COL tit_02 NEW_V tit_02;
-COL tit_03 NEW_V tit_03;
-COL tit_04 NEW_V tit_04;
-COL tit_05 NEW_V tit_05;
-COL tit_06 NEW_V tit_06;
-COL tit_07 NEW_V tit_07;
-COL tit_08 NEW_V tit_08;
-COL tit_09 NEW_V tit_09;
-COL tit_10 NEW_V tit_10;
-COL tit_11 NEW_V tit_11;
-COL tit_12 NEW_V tit_12;
-COL tit_13 NEW_V tit_13;
-COL tit_14 NEW_V tit_14;
-COL tit_15 NEW_V tit_15;
-DEF tit_01 = '';
-DEF tit_02 = '';
-DEF tit_03 = '';
-DEF tit_04 = '';
-DEF tit_05 = '';
-DEF tit_06 = '';
-DEF tit_07 = '';
-DEF tit_08 = '';
-DEF tit_09 = '';
-DEF tit_10 = '';
-DEF tit_11 = '';
-DEF tit_12 = '';
-DEF tit_13 = '';
-DEF tit_14 = '';
-DEF tit_15 = '';
+COL tit_01 NEW_V tit_01
+COL tit_02 NEW_V tit_02
+COL tit_03 NEW_V tit_03
+COL tit_04 NEW_V tit_04
+COL tit_05 NEW_V tit_05
+COL tit_06 NEW_V tit_06
+COL tit_07 NEW_V tit_07
+COL tit_08 NEW_V tit_08
+COL tit_09 NEW_V tit_09
+COL tit_10 NEW_V tit_10
+COL tit_11 NEW_V tit_11
+COL tit_12 NEW_V tit_12
+COL tit_13 NEW_V tit_13
+COL tit_14 NEW_V tit_14
+COL tit_15 NEW_V tit_15
+DEF tit_01 = ''
+DEF tit_02 = ''
+DEF tit_03 = ''
+DEF tit_04 = ''
+DEF tit_05 = ''
+DEF tit_06 = ''
+DEF tit_07 = ''
+DEF tit_08 = ''
+DEF tit_09 = ''
+DEF tit_10 = ''
+DEF tit_11 = ''
+DEF tit_12 = ''
+DEF tit_13 = ''
+DEF tit_14 = ''
+DEF tit_15 = ''
 
 DEF exadata = '';
 DEF column_number = '1';
@@ -672,7 +681,13 @@ PRO
 SPO OFF;
 
 -- zip into main the esp zip so far, then remove zip but preserve source esp files. let moat369.sql and run_moat369.sh do the clean up
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirements_&&host_name_short..zip &&moat369_cpuinfo. >> &&moat369_log3.; else zip -mj &&moat369_zip_filename. &&moat369_cpuinfo. >> &&moat369_log3.; fi
+@@&&fc_def_output_file. step_ren_cpuinfo 'step_ren_cpuinfo.sql'
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then echo > &&step_ren_cpuinfo.; else echo '@@&&fc_zip_driver_files. &&moat369_cpuinfo.' > &&step_ren_cpuinfo.; fi
+@@&&step_ren_cpuinfo.
+HOS rm -f &&step_ren_cpuinfo.
+UNDEF step_ren_cpuinfo
+
+HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirements_&&host_name_short..zip &&moat369_cpuinfo. >> &&moat369_log3.; fi
 HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
 
 -- zip other files
@@ -687,10 +702,10 @@ HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js  >> &&moat369_log3.; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
 
-HOS cp -av &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS cp &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 
-HOS cp -av  &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
+HOS cp &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 
 --HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
