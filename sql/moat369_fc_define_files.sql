@@ -4,7 +4,7 @@ DEF moat369_fdr_sh  = '&&moat369_fdr./sh'
 DEF moat369_fdr_js  = '&&moat369_fdr./js'
 
 -- Define Function Files
-DEF fc_encrypt_html               = '&&moat369_fdr_sql./moat369_fc_encrypt_html.sql'
+DEF fc_encode_html                = '&&moat369_fdr_sql./moat369_fc_encode_html.sql'
 DEF fc_encrypt_file               = '&&moat369_fdr_sql./moat369_fc_encrypt_file.sql'
 DEF fc_gen_select_star_query      = '&&moat369_fdr_sql./moat369_fc_gen_select_star_query.sql'
 DEF fc_get_dbvault_user           = '&&moat369_fdr_sql./moat369_fc_get_dbvault_user.sql'

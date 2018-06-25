@@ -24,7 +24,7 @@ SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_
 
 @@moat369_0k_html_topic_end.sql &&one_spool_filename..html html &&one_spool_html_desc_table. N
 
-@@&&fc_encrypt_html. &&one_spool_fullpath_filename.
+@@&&fc_encode_html. &&one_spool_fullpath_filename.
 
 -- zip
 HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.

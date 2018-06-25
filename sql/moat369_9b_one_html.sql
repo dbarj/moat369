@@ -33,7 +33,7 @@ SPO OFF
 
 @@moat369_0k_html_topic_end.sql &&one_spool_filename..html html '' &&sql_show.
 
-@@&&fc_encrypt_html. &&one_spool_fullpath_filename.
+@@&&fc_encode_html. &&one_spool_fullpath_filename.
 
 HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
 

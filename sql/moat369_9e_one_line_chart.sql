@@ -232,7 +232,7 @@ SPO OFF
 
 undef hide_sql_print
 
-@@&&fc_encrypt_html. &&one_spool_fullpath_filename.
+@@&&fc_encode_html. &&one_spool_fullpath_filename.
 
 HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
 

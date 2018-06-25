@@ -12,7 +12,7 @@ SPO &&moat369_main_report. APP;
 SPO OFF;
 @@&&fc_spool_end.
 
-@@&&fc_encrypt_html. &&moat369_main_report. 'INDEX'
+@@&&fc_encode_html. &&moat369_main_report. 'INDEX'
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,6 +67,12 @@ HOS cp &&background_dump_dest./alert_&&_connect_identifier..log &&moat369_sw_out
 -- Altered to be compatible with SunOS:
 -- HOS rename alert_ &&moat369_alert._ alert_*.log >> &&moat369_log3.
 HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read line || [ -n "$line" ]; do mv $line &&moat369_alert._$(basename "$line"); done >> &&moat369_log3.
+
+-- encrypt final files
+--@&&fc_convert_txt_to_html. moat369_log
+--@&&fc_encode_html. &&moat369_log.
+--@&&fc_convert_txt_to_html. moat369_log2
+--@&&fc_encode_html. &&moat369_log2.
 
 -- zip
 HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi

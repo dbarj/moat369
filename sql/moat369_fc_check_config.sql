@@ -62,18 +62,23 @@
 
 @@&&fc_def_empty_var. moat369_pre_encrypt_output
 @@&&fc_def_empty_var. moat369_pre_encrypt_html
+@@&&fc_def_empty_var. moat369_pre_compress_html
 
 @@&&fc_def_empty_var. moat369_conf_encrypt_output
 @@&&fc_def_empty_var. moat369_conf_encrypt_html
+@@&&fc_def_empty_var. moat369_conf_compress_html
 
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_output' '&&moat369_pre_encrypt_output.' '&&moat369_conf_encrypt_output.'
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_html'   '&&moat369_pre_encrypt_html.'   '&&moat369_conf_encrypt_html.'  
+@@&&fc_set_value_var_nvl. 'moat369_conf_compress_html'  '&&moat369_pre_compress_html.'  '&&moat369_conf_compress_html.'  
 
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_output' '&&moat369_conf_encrypt_output.' 'OFF'
 @@&&fc_set_value_var_nvl. 'moat369_conf_encrypt_html'   '&&moat369_conf_encrypt_html.'   'OFF'
+@@&&fc_set_value_var_nvl. 'moat369_conf_compress_html'  '&&moat369_conf_compress_html.'  'OFF'
 
 @@&&fc_validate_variable. moat369_conf_encrypt_output ON_OFF
 @@&&fc_validate_variable. moat369_conf_encrypt_html   ON_OFF
+@@&&fc_validate_variable. moat369_conf_compress_html  ON_OFF
 
 ---------------------------
 

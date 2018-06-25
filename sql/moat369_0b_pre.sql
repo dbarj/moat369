@@ -136,22 +136,24 @@ END;
 /
 @@&&fc_set_term_off.
 
-COL fc_get_dbvault_user NEW_V fc_get_dbvault_user
-select case WHEN COUNT(*) = 1 then '' ELSE '&&fc_skip_script.' END || '&&fc_get_dbvault_user.' fc_get_dbvault_user from v$option where parameter='Oracle Database Vault' and value='TRUE';
-COL fc_get_dbvault_user clear
-@@&&fc_get_dbvault_user.
-
+-- Move it away from here
+-- COL fc_get_dbvault_user NEW_V fc_get_dbvault_user
+-- select case WHEN COUNT(*) = 1 then '' ELSE '&&fc_skip_script.' END || '&&fc_get_dbvault_user.' fc_get_dbvault_user from v$option where parameter='Oracle Database Vault' and value='TRUE';
+-- COL fc_get_dbvault_user clear
+-- @@&&fc_get_dbvault_user.
 
 -- Final file will be only encrypted if defined by parameter
 COL fc_encrypt_output NEW_V fc_encrypt_output
 select case WHEN '&&moat369_conf_encrypt_output.' = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_encrypt_file.'        fc_encrypt_output from dual;
-COL fc_encrypt_html NEW_V fc_encrypt_html
-select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_encrypt_html.'        fc_encrypt_html   from dual;
+COL fc_encrypt_output clear
 -- Mid non-html files and files converted to html are encrypted based on html encryption
 COL fc_encrypt_file NEW_V fc_encrypt_file
 select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_encrypt_file.'        fc_encrypt_file   from dual;
+COL fc_encrypt_file clear
+--
 COL fc_convert_txt_to_html NEW_V fc_convert_txt_to_html
-select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html   from dual;
+select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' OR '&&moat369_conf_compress_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html   from dual;
+COL fc_convert_txt_to_html clear
 
 @@&&fc_def_empty_var. moat369_pre_enc_pub_file
 @@&&fc_set_value_var_nvl. 'moat369_enc_pub_file' '&&moat369_pre_enc_pub_file.' '&&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
@@ -692,15 +694,16 @@ HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zi
 
 -- zip other files
 HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js      >> &&moat369_log3.
-HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js >> &&moat369_log3.; fi
-HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css            >> &&moat369_log3.; fi
-HOS if [ '&&moat369_conf_sql_format.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./sql-formatter.js  >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js  >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css             >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_sql_format.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./sql-formatter.js      >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_compress_html.' == 'ON' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./gunzip.js         >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
 
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js    >> &&moat369_log3.; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./crypt.js  >> &&moat369_log3.; fi
-HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc        >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_compress_html.' == 'ON' -o -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./decode.js  >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js >> &&moat369_log3.; fi
+HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc     >> &&moat369_log3.; fi
 
 HOS cp &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
