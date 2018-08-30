@@ -187,7 +187,7 @@ decode(platform_id,
 COL cmd_awk  NEW_V clear
 COL cmd_grep NEW_V clear
 
--- ENABLE ALL ROLES FOR USER SYS
+-- ENABLE ALL ROLES FOR USER
 SET ROLE ALL;
 
 --PRO
@@ -195,9 +195,11 @@ SET ROLE ALL;
 --PRO
 COL history_days NEW_V history_days;
 -- range: takes at least 31 days and at most as many as actual history, with a default of 31. parameter restricts within that range.
-SELECT TO_CHAR(LEAST(CEIL(SYSDATE - CAST(MIN(begin_interval_time) AS DATE)), GREATEST(31, TO_NUMBER(NVL(TRIM('&&moat369_conf_days.'), '31'))))) history_days FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = (SELECT dbid FROM v$database);
+-- Original query commented. If the tool is AWR based, move and adapt it to pre sql specific of the tool
+--SELECT TO_CHAR(LEAST(CEIL(SYSDATE - CAST(MIN(begin_interval_time) AS DATE)), GREATEST(31, TO_NUMBER(NVL(TRIM('&&moat369_conf_days.'), '31'))))) history_days FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = (SELECT dbid FROM v$database);
+SELECT TO_CHAR(GREATEST(31, TO_NUMBER(NVL(TRIM('&&moat369_conf_days.'), '31')))) history_days FROM DUAL;
 SELECT TO_CHAR(TO_DATE('&&moat369_conf_date_to.', 'YYYY-MM-DD') - TO_DATE('&&moat369_conf_date_from.', 'YYYY-MM-DD') + 1) history_days FROM DUAL WHERE '&&moat369_conf_date_from.' != 'YYYY-MM-DD' AND '&&moat369_conf_date_to.' != 'YYYY-MM-DD';
-SELECT '0' history_days FROM DUAL WHERE NVL(TRIM('&&diagnostics_pack.'), 'N') = 'N';
+--SELECT '0' history_days FROM DUAL WHERE NVL(TRIM('&&diagnostics_pack.'), 'N') = 'N';
 COL history_days clear
 @@&&fc_set_term_off.
 COL hist_work_days NEW_V hist_work_days;
@@ -397,17 +399,31 @@ COL skip_esp NEW_V skip_esp
 SELECT CASE WHEN '&&moat369_conf_incl_esp.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_esp FROM DUAL;
 COL skip_esp clear
 
-SET TERM ON
-PRO
-PRO Getting resources_requirements
-PRO Please wait ...
-@@&&skip_res.&&skip_diagnostics.resources_requirements_awr.sql
-@@&&skip_res.resources_requirements_statspack.sql
-SET TERM ON
-PRO Getting esp_collect_requirements
-PRO Please wait ...
-@@&&skip_esp.&&skip_diagnostics.esp_collect_requirements_awr.sql
-@@&&skip_esp.esp_collect_requirements_statspack.sql
+@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
+SPO &&step_pre_file_driver.
+PRO SET TERM ON
+PRO PRO
+PRO PRO Getting resources_requirements
+PRO PRO Please wait ...
+PRO @@&&skip_res.&&skip_diagnostics.resources_requirements_awr.sql
+PRO @@&&skip_res.resources_requirements_statspack.sql
+SPO OFF
+
+@&&skip_res.&&step_pre_file_driver.
+HOS rm -f &&step_pre_file_driver
+
+@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
+SPO &&step_pre_file_driver.
+PRO SET TERM ON
+PRO PRO Getting esp_collect_requirements
+PRO PRO Please wait ...
+PRO @@&&skip_esp.&&skip_diagnostics.esp_collect_requirements_awr.sql
+PRO @@&&skip_esp.esp_collect_requirements_statspack.sql
+SPO OFF
+
+@&&skip_esp.&&step_pre_file_driver.
+HOS rm -f &&step_pre_file_driver
+
 @@&&fc_set_term_off.
 
 undef skip_res skip_esp
@@ -469,14 +485,17 @@ SELECT TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS') tool_sysdate FROM DUAL;
 COL between_times NEW_V between_times;
 COL between_dates NEW_V between_dates;
 SELECT ', between &&moat369_date_from. and &&moat369_date_to.' between_dates FROM DUAL;
-COL minimum_snap_id NEW_V minimum_snap_id;
-SELECT NVL(TO_CHAR(MIN(snap_id)), '0') minimum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND begin_interval_time > TO_DATE('&&moat369_date_from.', 'YYYY-MM-DD');
-SELECT '-1' minimum_snap_id FROM DUAL WHERE TRIM('&&minimum_snap_id.') IS NULL;
-COL minimum_snap_id clear
-COL maximum_snap_id NEW_V maximum_snap_id;
-SELECT NVL(TO_CHAR(MAX(snap_id)), '&&minimum_snap_id.') maximum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND end_interval_time < TO_DATE('&&moat369_date_to.', 'YYYY-MM-DD') + 1;
-SELECT '-1' maximum_snap_id FROM DUAL WHERE TRIM('&&maximum_snap_id.') IS NULL;
-COL maximum_snap_id clear
+
+-- Move it away from here
+--COL minimum_snap_id NEW_V minimum_snap_id;
+--SELECT NVL(TO_CHAR(MIN(snap_id)), '0') minimum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND begin_interval_time > TO_DATE('&&moat369_date_from.', 'YYYY-MM-DD');
+--SELECT '-1' minimum_snap_id FROM DUAL WHERE TRIM('&&minimum_snap_id.') IS NULL;
+--COL minimum_snap_id clear
+--COL maximum_snap_id NEW_V maximum_snap_id;
+--SELECT NVL(TO_CHAR(MAX(snap_id)), '&&minimum_snap_id.') maximum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND end_interval_time < TO_DATE('&&moat369_date_to.', 'YYYY-MM-DD') + 1;
+--SELECT '-1' maximum_snap_id FROM DUAL WHERE TRIM('&&maximum_snap_id.') IS NULL;
+--COL maximum_snap_id clear
+
 -- inclusion config determine skip flags
 COL moat369_skip_html  NEW_V moat369_skip_html;
 COL moat369_skip_text  NEW_V moat369_skip_text;

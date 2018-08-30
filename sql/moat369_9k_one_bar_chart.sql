@@ -7,6 +7,9 @@ DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename
 @@&&fc_def_empty_var. bar_height
 @@&&fc_set_value_var_nvl. 'bar_height' '&&bar_height.' '65%'
 
+@@&&fc_def_empty_var. bar_minperc
+@@&&fc_set_value_var_nvl. 'bar_minperc' '&&bar_minperc.' '5'
+
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._bar_chart.html bar
 
 SPO &&one_spool_fullpath_filename. APP
@@ -43,7 +46,7 @@ BEGIN
   LOOP
     FETCH cur INTO l_bar, l_value, l_style, l_tooltip;
     EXIT WHEN cur%NOTFOUND;
-    IF l_value >= 5 THEN
+    IF l_value >= &&bar_minperc. THEN
       DBMS_OUTPUT.PUT_LINE(',['''||l_bar||''', '||l_value||', '''||l_style||''', '''||l_tooltip||''']');
       l_others := l_others - l_value;
     END IF;
@@ -101,5 +104,7 @@ SPO OFF
 @@&&fc_encode_html. &&one_spool_fullpath_filename.
 
 HOS zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.
+
+UNDEF bar_height bar_minperc
 
 UNDEF one_spool_fullpath_filename

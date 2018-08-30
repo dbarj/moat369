@@ -1,3 +1,4 @@
+-- This module will prepare SQL*Plus when SPOOL ends
 -- This module will turn term output off only if debug mode is not enabled.
 COL c_spool_end NEW_V c_spool_end NOPRI
 DEF c_spool_end = 'TERM OFF ECHO OFF FEED OFF VER OFF HEAD OFF'
