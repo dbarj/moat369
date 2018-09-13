@@ -497,40 +497,69 @@ SELECT ', between &&moat369_date_from. and &&moat369_date_to.' between_dates FRO
 --COL maximum_snap_id clear
 
 -- inclusion config determine skip flags
-COL moat369_skip_html  NEW_V moat369_skip_html;
-COL moat369_skip_text  NEW_V moat369_skip_text;
-COL moat369_skip_csv   NEW_V moat369_skip_csv;
-COL moat369_skip_line  NEW_V moat369_skip_line;
-COL moat369_skip_pie   NEW_V moat369_skip_pie;
-COL moat369_skip_bar   NEW_V moat369_skip_bar;
-COL moat369_skip_graph NEW_V moat369_skip_graph;
-COL moat369_skip_file  NEW_V moat369_skip_file;
-SELECT CASE '&&moat369_conf_incl_html.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_html  FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_text.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_text  FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_csv.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_csv   FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_line.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_line  FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_pie.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_pie   FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_bar.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_bar   FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_graph.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_graph FROM DUAL;
-SELECT CASE '&&moat369_conf_incl_file.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file  FROM DUAL;
+COL moat369_skip_html    NEW_V moat369_skip_html;
+COL moat369_skip_text    NEW_V moat369_skip_text;
+COL moat369_skip_csv     NEW_V moat369_skip_csv;
+COL moat369_skip_line    NEW_V moat369_skip_line;
+COL moat369_skip_pie     NEW_V moat369_skip_pie;
+COL moat369_skip_bar     NEW_V moat369_skip_bar;
+COL moat369_skip_graph   NEW_V moat369_skip_graph;
+COL moat369_skip_map     NEW_V moat369_skip_map;
+COL moat369_skip_treemap NEW_V moat369_skip_treemap;
+COL moat369_skip_file    NEW_V moat369_skip_file;
+SELECT CASE '&&moat369_conf_incl_html.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_html    ,
+       CASE '&&moat369_conf_incl_text.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_text    ,
+       CASE '&&moat369_conf_incl_csv.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_csv     ,
+       CASE '&&moat369_conf_incl_line.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_line    ,
+       CASE '&&moat369_conf_incl_pie.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_pie     ,
+       CASE '&&moat369_conf_incl_bar.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_bar     ,
+       CASE '&&moat369_conf_incl_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_graph   ,
+       CASE '&&moat369_conf_incl_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_map     ,
+       CASE '&&moat369_conf_incl_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_treemap ,
+       CASE '&&moat369_conf_incl_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file  FROM DUAL;
+COL moat369_skip_html    CLEAR
+COL moat369_skip_text    CLEAR
+COL moat369_skip_csv     CLEAR
+COL moat369_skip_line    CLEAR
+COL moat369_skip_pie     CLEAR
+COL moat369_skip_bar     CLEAR
+COL moat369_skip_graph   CLEAR
+COL moat369_skip_map     CLEAR
+COL moat369_skip_treemap CLEAR
+COL moat369_skip_file    CLEAR
 
 -- inclusion config determine skip flags
-COL moat369_def_skip_html  NEW_V moat369_def_skip_html;
-COL moat369_def_skip_text  NEW_V moat369_def_skip_text;
-COL moat369_def_skip_csv   NEW_V moat369_def_skip_csv;
-COL moat369_def_skip_line  NEW_V moat369_def_skip_line;
-COL moat369_def_skip_pie   NEW_V moat369_def_skip_pie;
-COL moat369_def_skip_bar   NEW_V moat369_def_skip_bar;
-COL moat369_def_skip_graph NEW_V moat369_def_skip_graph;
-COL moat369_def_skip_file  NEW_V moat369_def_skip_file;
-SELECT CASE '&&moat369_conf_def_html.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_html  FROM DUAL;
-SELECT CASE '&&moat369_conf_def_text.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_text  FROM DUAL;
-SELECT CASE '&&moat369_conf_def_csv.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_csv   FROM DUAL;
-SELECT CASE '&&moat369_conf_def_line.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_line  FROM DUAL;
-SELECT CASE '&&moat369_conf_def_pie.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_pie   FROM DUAL;
-SELECT CASE '&&moat369_conf_def_bar.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_bar   FROM DUAL;
-SELECT CASE '&&moat369_conf_def_graph.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_graph FROM DUAL;
-SELECT CASE '&&moat369_conf_def_file.'  WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
+COL moat369_def_skip_html    NEW_V moat369_def_skip_html;
+COL moat369_def_skip_text    NEW_V moat369_def_skip_text;
+COL moat369_def_skip_csv     NEW_V moat369_def_skip_csv;
+COL moat369_def_skip_line    NEW_V moat369_def_skip_line;
+COL moat369_def_skip_pie     NEW_V moat369_def_skip_pie;
+COL moat369_def_skip_bar     NEW_V moat369_def_skip_bar;
+COL moat369_def_skip_graph   NEW_V moat369_def_skip_graph;
+COL moat369_def_skip_map     NEW_V moat369_def_skip_map;
+COL moat369_def_skip_treemap NEW_V moat369_def_skip_treemap;
+COL moat369_def_skip_file    NEW_V moat369_def_skip_file;
+SELECT CASE '&&moat369_conf_def_html.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_html    ,
+       CASE '&&moat369_conf_def_text.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_text    ,
+       CASE '&&moat369_conf_def_csv.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_csv     ,
+       CASE '&&moat369_conf_def_line.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_line    ,
+       CASE '&&moat369_conf_def_pie.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_pie     ,
+       CASE '&&moat369_conf_def_bar.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_bar     ,
+       CASE '&&moat369_conf_def_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_graph   ,
+       CASE '&&moat369_conf_def_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_map     ,
+       CASE '&&moat369_conf_def_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_treemap ,
+       CASE '&&moat369_conf_def_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
+COL moat369_def_skip_html    CLEAR
+COL moat369_def_skip_text    CLEAR
+COL moat369_def_skip_csv     CLEAR
+COL moat369_def_skip_line    CLEAR
+COL moat369_def_skip_pie     CLEAR
+COL moat369_def_skip_bar     CLEAR
+COL moat369_def_skip_graph   CLEAR
+COL moat369_def_skip_map     CLEAR
+COL moat369_def_skip_treemap CLEAR
+COL moat369_def_skip_file    CLEAR
+
 
 DEF top_level_hints = 'NO_MERGE'
 DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE'
@@ -547,6 +576,8 @@ DEF skip_lch        = '&&moat369_def_skip_line.'
 DEF skip_pch        = '&&moat369_def_skip_pie.'
 DEF skip_bch        = '&&moat369_def_skip_bar.'
 DEF skip_graph      = '&&moat369_def_skip_graph.'
+DEF skip_map        = '&&moat369_def_skip_map.'
+DEF skip_treemap    = '&&moat369_def_skip_treemap.'
 DEF skip_html_spool = '&&fc_skip_script.'
 DEF skip_text_file  = '&&fc_skip_script.'
 DEF skip_html_file  = '&&fc_skip_script.'
@@ -599,14 +630,14 @@ DEF column_number = '1';
 COL recovery NEW_V recovery;
 SELECT CHR(38)||' recovery' recovery FROM DUAL;
 -- this above is to handle event "RMAN backup & recovery I/O"
-COL skip_html  NEW_V skip_html;
-COL skip_text  NEW_V skip_text;
-COL skip_csv   NEW_V skip_csv;
-COL skip_lch   NEW_V skip_lch;
-COL skip_pch   NEW_V skip_pch;
-COL skip_bch   NEW_V skip_bch;
-COL skip_graph NEW_V skip_graph;
-COL skip_all   NEW_V skip_all;
+-- COL skip_html  NEW_V skip_html;
+-- COL skip_text  NEW_V skip_text;
+-- COL skip_csv   NEW_V skip_csv;
+-- COL skip_lch   NEW_V skip_lch;
+-- COL skip_pch   NEW_V skip_pch;
+-- COL skip_bch   NEW_V skip_bch;
+-- COL skip_graph NEW_V skip_graph;
+-- COL skip_all   NEW_V skip_all;
 COL dummy_01 NOPRI;
 COL dummy_02 NOPRI;
 COL dummy_03 NOPRI;
@@ -688,18 +719,31 @@ SELECT CASE WHEN '&moat369_conf_incl_wr_data.' = 'Y' THEN '' ELSE '&&fc_skip_scr
 COL fc_wr_collector clear
 @@&&fc_wr_collector.
 
+-- Print Database and License info only if it is a DB tool.
+COL db_lic_info NEW_V db_lic_info NOPRI
+COL db_ver_info NEW_V db_ver_info NOPRI
+SELECT 'Database:&&database_name_short. License:&&license_pack..' db_lic_info,
+       ' for DB &&db_version' db_ver_info
+FROM    DUAL
+WHERE   '&&moat369_sw_dbtool.'='Y';
+COL db_lic_info CLEAR
+COL db_ver_info CLEAR
+
 -- main header
 SPO &&moat369_main_report.;
 @@moat369_0d_html_header.sql
 PRO </head>
 PRO <body>
-PRO <h1><em><a href="&&moat369_sw_url." target="_blank">&&moat369_sw_name.</a></em> &&moat369_sw_vYYNN.: &&moat369_sw_title_desc. for DB &&db_version.</h1>
+PRO <h1><em><a href="&&moat369_sw_url." target="_blank">&&moat369_sw_name.</a></em> &&moat369_sw_vYYNN.: &&moat369_sw_title_desc.&&db_ver_info..</h1>
 PRO
 PRO <pre>
-PRO Database:&&database_name_short. License:&&license_pack.. This report covers the time interval between &&moat369_date_from. and &&moat369_date_to.. Days:&&history_days.. Timestamp:&&moat369_time_stamp..
+PRO &&db_lic_info. This report covers the time interval between &&moat369_date_from. and &&moat369_date_to.. Days:&&history_days.. Timestamp:&&moat369_time_stamp..
 PRO </pre>
 PRO
 SPO OFF;
+
+UNDEF db_lic_info
+UNDEF db_ver_info
 
 -- zip into main the esp zip so far, then remove zip but preserve source esp files. let moat369.sql and run_moat369.sh do the clean up
 @@&&fc_def_output_file. step_ren_cpuinfo 'step_ren_cpuinfo.sql'

@@ -82,10 +82,10 @@ PRO          legend: {position: 'none'},
 PRO          vAxis: {minValue: 0, title: '&&vaxis.', titleTextStyle: {fontSize: 16, bold: false}}, 
 PRO          hAxis: {title: '&&haxis.', titleTextStyle: {fontSize: 16, bold: false}},
 PRO          tooltip: {textStyle: {fontSize: 14}}
-PRO        };
+PRO        };;
 PRO
-PRO        var chart = new google.visualization.ColumnChart(document.getElementById('barchart'));
-PRO        chart.draw(data, options);
+PRO        var chart = new google.visualization.ColumnChart(document.getElementById('barchart'));;
+PRO        chart.draw(data, options);;
 PRO      }
 PRO    </script>
 PRO

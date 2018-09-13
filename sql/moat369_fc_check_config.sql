@@ -35,6 +35,7 @@
 @@&&fc_def_empty_var. moat369_sw_copyright
 @@&&fc_def_empty_var. moat369_sw_author
 @@&&fc_def_empty_var. moat369_sw_email
+@@&&fc_def_empty_var. moat369_sw_dbtool
 @@&&fc_def_empty_var. moat369_sw_enc_sql
 @@&&fc_def_empty_var. moat369_sw_dec_cmd
 
@@ -46,7 +47,6 @@
 @@&&fc_validate_variable. moat369_sw_title_desc NOT_NULL
 @@&&fc_validate_variable. moat369_sw_vYYNN      NOT_NULL
 @@&&fc_validate_variable. moat369_sw_vrsn       NOT_NULL
-@@&&fc_validate_variable. moat369_sw_rpt_cols   NOT_NULL
 @@&&fc_validate_variable. moat369_sw_rpt_cols   IS_NUMBER
 
 @@&&fc_set_value_var_nvl. 'moat369_sw_copyright' '&&moat369_sw_copyright.' '&&moat369_sw_name. (c) &&moat369_fw_vYYYY., All rights reserved.'
@@ -54,6 +54,10 @@
 
 @@&&fc_validate_variable. moat369_sw_email      LOWER_CASE
 @@&&fc_validate_variable. moat369_sw_author     NOT_NULL
+
+-- moat369_sw_dbtool defines if the API is being used primarily for a database or is just a interface to other calls.
+@@&&fc_set_value_var_nvl. 'moat369_sw_dbtool'  '&&moat369_sw_dbtool.'    'Y'
+@@&&fc_validate_variable. moat369_sw_dbtool    Y_N
 
 @@&&fc_set_value_var_nvl. 'moat369_sw_enc_sql'  '&&moat369_sw_enc_sql.'  'N'
 @@&&fc_validate_variable. moat369_sw_enc_sql    Y_N
@@ -89,34 +93,31 @@
 @@&&fc_def_empty_var. moat369_conf_incl_pie
 @@&&fc_def_empty_var. moat369_conf_incl_bar
 @@&&fc_def_empty_var. moat369_conf_incl_graph
+@@&&fc_def_empty_var. moat369_conf_incl_map
+@@&&fc_def_empty_var. moat369_conf_incl_treemap
 @@&&fc_def_empty_var. moat369_conf_incl_file
 
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_html'  '&&moat369_conf_incl_html.'  'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_text'  '&&moat369_conf_incl_text.'  'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_csv'   '&&moat369_conf_incl_csv.'   'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_line'  '&&moat369_conf_incl_line.'  'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_pie'   '&&moat369_conf_incl_pie.'   'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_bar'   '&&moat369_conf_incl_bar.'   'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_graph' '&&moat369_conf_incl_graph.' 'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_incl_file'  '&&moat369_conf_incl_file.'  'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_html'    '&&moat369_conf_incl_html.'    'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_text'    '&&moat369_conf_incl_text.'    'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_csv'     '&&moat369_conf_incl_csv.'     'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_line'    '&&moat369_conf_incl_line.'    'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_pie'     '&&moat369_conf_incl_pie.'     'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_bar'     '&&moat369_conf_incl_bar.'     'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_graph'   '&&moat369_conf_incl_graph.'   'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_map'     '&&moat369_conf_incl_map.'     'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_treemap' '&&moat369_conf_incl_treemap.' 'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_incl_file'    '&&moat369_conf_incl_file.'    'Y'
 
-@@&&fc_validate_variable. moat369_conf_incl_html  NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_text  NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_csv   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_line  NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_pie   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_bar   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_graph NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_file  NOT_NULL
-
-@@&&fc_validate_variable. moat369_conf_incl_html  Y_N
-@@&&fc_validate_variable. moat369_conf_incl_text  Y_N
-@@&&fc_validate_variable. moat369_conf_incl_csv   Y_N
-@@&&fc_validate_variable. moat369_conf_incl_line  Y_N
-@@&&fc_validate_variable. moat369_conf_incl_pie   Y_N
-@@&&fc_validate_variable. moat369_conf_incl_bar   Y_N
-@@&&fc_validate_variable. moat369_conf_incl_graph Y_N
-@@&&fc_validate_variable. moat369_conf_incl_file  Y_N
+@@&&fc_validate_variable. moat369_conf_incl_html    Y_N
+@@&&fc_validate_variable. moat369_conf_incl_text    Y_N
+@@&&fc_validate_variable. moat369_conf_incl_csv     Y_N
+@@&&fc_validate_variable. moat369_conf_incl_line    Y_N
+@@&&fc_validate_variable. moat369_conf_incl_pie     Y_N
+@@&&fc_validate_variable. moat369_conf_incl_bar     Y_N
+@@&&fc_validate_variable. moat369_conf_incl_graph   Y_N
+@@&&fc_validate_variable. moat369_conf_incl_map     Y_N
+@@&&fc_validate_variable. moat369_conf_incl_treemap Y_N
+@@&&fc_validate_variable. moat369_conf_incl_file    Y_N
 
 ---------------------------
 
@@ -127,25 +128,31 @@
 @@&&fc_def_empty_var. moat369_conf_def_pie
 @@&&fc_def_empty_var. moat369_conf_def_bar
 @@&&fc_def_empty_var. moat369_conf_def_graph
+@@&&fc_def_empty_var. moat369_conf_def_map
+@@&&fc_def_empty_var. moat369_conf_def_treemap
 @@&&fc_def_empty_var. moat369_conf_def_file
 
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_html'  '&&moat369_conf_def_html.'  'Y'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_text'  '&&moat369_conf_def_text.'  'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_csv'   '&&moat369_conf_def_csv.'   'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_line'  '&&moat369_conf_def_line.'  'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_pie'   '&&moat369_conf_def_pie.'   'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_bar'   '&&moat369_conf_def_bar.'   'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_graph' '&&moat369_conf_def_graph.' 'N'
-@@&&fc_set_value_var_nvl. 'moat369_conf_def_file'  '&&moat369_conf_def_file.'  'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_html'    '&&moat369_conf_def_html.'    'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_text'    '&&moat369_conf_def_text.'    'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_csv'     '&&moat369_conf_def_csv.'     'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_line'    '&&moat369_conf_def_line.'    'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_pie'     '&&moat369_conf_def_pie.'     'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_bar'     '&&moat369_conf_def_bar.'     'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_graph'   '&&moat369_conf_def_graph.'   'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_map'     '&&moat369_conf_def_map.'     'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_treemap' '&&moat369_conf_def_treemap.' 'N'
+@@&&fc_set_value_var_nvl. 'moat369_conf_def_file'    '&&moat369_conf_def_file.'    'N'
 
-@@&&fc_validate_variable. moat369_conf_def_html  Y_N
-@@&&fc_validate_variable. moat369_conf_def_text  Y_N
-@@&&fc_validate_variable. moat369_conf_def_csv   Y_N
-@@&&fc_validate_variable. moat369_conf_def_line  Y_N
-@@&&fc_validate_variable. moat369_conf_def_pie   Y_N
-@@&&fc_validate_variable. moat369_conf_def_bar   Y_N
-@@&&fc_validate_variable. moat369_conf_def_graph Y_N
-@@&&fc_validate_variable. moat369_conf_def_file  Y_N
+@@&&fc_validate_variable. moat369_conf_def_html    Y_N
+@@&&fc_validate_variable. moat369_conf_def_text    Y_N
+@@&&fc_validate_variable. moat369_conf_def_csv     Y_N
+@@&&fc_validate_variable. moat369_conf_def_line    Y_N
+@@&&fc_validate_variable. moat369_conf_def_pie     Y_N
+@@&&fc_validate_variable. moat369_conf_def_bar     Y_N
+@@&&fc_validate_variable. moat369_conf_def_graph   Y_N
+@@&&fc_validate_variable. moat369_conf_def_map     Y_N
+@@&&fc_validate_variable. moat369_conf_def_treemap Y_N
+@@&&fc_validate_variable. moat369_conf_def_file    Y_N
 
 ---------------------------
 
@@ -166,15 +173,6 @@
 @@&&fc_set_value_var_nvl. 'moat369_conf_ask_license'   '&&moat369_conf_ask_license.'   'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_sql_format'    '&&moat369_conf_sql_format.'    'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_sql_highlight' '&&moat369_conf_sql_highlight.' 'Y'
-
-@@&&fc_validate_variable. moat369_conf_incl_tkprof   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_wr_data  NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_res      NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_esp      NOT_NULL
-@@&&fc_validate_variable. moat369_conf_incl_opatch   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_ask_license   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_sql_format    NOT_NULL
-@@&&fc_validate_variable. moat369_conf_sql_highlight NOT_NULL
 
 @@&&fc_validate_variable. moat369_conf_incl_tkprof   Y_N
 @@&&fc_validate_variable. moat369_conf_incl_wr_data  Y_N
@@ -223,14 +221,6 @@
 @@&&fc_set_value_var_nvl. 'moat369_conf_work_time_to'   '&&moat369_conf_work_time_to.'   '1930'
 @@&&fc_set_value_var_nvl. 'moat369_conf_work_day_from'  '&&moat369_conf_work_day_from.'  '2'
 @@&&fc_set_value_var_nvl. 'moat369_conf_work_day_to'    '&&moat369_conf_work_day_to.'    '6'
-
-@@&&fc_validate_variable. moat369_conf_days           NOT_NULL
-@@&&fc_validate_variable. moat369_conf_date_from      NOT_NULL
-@@&&fc_validate_variable. moat369_conf_date_to        NOT_NULL
-@@&&fc_validate_variable. moat369_conf_work_time_from NOT_NULL
-@@&&fc_validate_variable. moat369_conf_work_time_to   NOT_NULL
-@@&&fc_validate_variable. moat369_conf_work_day_from  NOT_NULL
-@@&&fc_validate_variable. moat369_conf_work_day_to    NOT_NULL
 
 @@&&fc_validate_variable. moat369_conf_days           IS_NUMBER
 @@&&fc_validate_variable. moat369_conf_work_time_from IS_NUMBER

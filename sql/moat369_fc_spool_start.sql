@@ -3,7 +3,7 @@
 COL c_spool_end NEW_V c_spool_end NOPRI
 DEF c_spool_end = 'TERM OFF ECHO OFF FEED OFF VER OFF HEAD OFF'
 
-SELECT 'TERM ON ECHO ON FEED ON VER ON HEAD ON' c_spool_end FROM DUAL WHERE UPPER(TRIM('&&DEBUG.')) = 'ON';
+SELECT 'TERM ON ECHO OFF FEED OFF VER OFF HEAD OFF' c_spool_end FROM DUAL WHERE UPPER(TRIM('&&DEBUG.')) = 'ON';
 SET &&c_spool_end.
 
 COL c_spool_end clear
