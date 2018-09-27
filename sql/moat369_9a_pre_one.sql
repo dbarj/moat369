@@ -97,15 +97,15 @@ HOS zip -j &&moat369_zip_filename. &&moat369_main_report. >> &&moat369_log3.
 @@&&skip_html.&&moat369_skip_html.moat369_9b_one_html.sql
 @@&&skip_text.&&moat369_skip_text.moat369_9c_one_text.sql
 @@&&skip_csv.&&moat369_skip_csv.moat369_9d_one_csv.sql
-@@&&skip_lch.&&moat369_skip_line.moat369_9e_one_line_chart.sql
-@@&&skip_pch.&&moat369_skip_pie.moat369_9f_one_pie_chart.sql
-@@&&skip_bch.&&moat369_skip_bar.moat369_9k_one_bar_chart.sql
-@@&&skip_graph.&&moat369_skip_graph.moat369_9g_one_graphviz_chart.sql
-@@&&skip_map.&&moat369_skip_map.moat369_9l_one_map_chart.sql
-@@&&skip_treemap.&&moat369_skip_treemap.moat369_9m_one_treemap_chart.sql
-@@&&skip_html_spool.&&moat369_skip_html.moat369_9h_one_html_spool.sql
-@@&&skip_text_file.&&moat369_skip_file.moat369_9i_one_text_file.sql
-@@&&skip_html_file.&&moat369_skip_html.moat369_9j_one_html_file.sql
+@@&&skip_lch.&&moat369_skip_line.moat369_gc_line_chart.sql
+@@&&skip_pch.&&moat369_skip_pie.moat369_gc_pie_chart.sql
+@@&&skip_bch.&&moat369_skip_bar.moat369_gc_bar_chart.sql
+@@&&skip_graph.&&moat369_skip_graph.moat369_gc_graphviz_chart.sql
+@@&&skip_map.&&moat369_skip_map.moat369_gc_map_chart.sql
+@@&&skip_treemap.&&moat369_skip_treemap.moat369_gc_treemap_chart.sql
+@@&&skip_html_spool.&&moat369_skip_html.moat369_9e_one_html_spool.sql
+@@&&skip_text_file.&&moat369_skip_file.moat369_9f_one_text_file.sql
+@@&&skip_html_file.&&moat369_skip_html.moat369_9g_one_html_file.sql
 --
 HOS zip -j &&moat369_zip_filename. &&moat369_log2. >> &&moat369_log3.
 HOS zip -j &&moat369_zip_filename. &&moat369_log3. > /dev/null
