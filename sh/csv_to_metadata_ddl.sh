@@ -22,7 +22,7 @@ v_targetzip=$7
 v_meta_func="&&fc_gen_object_ddl."
 v_ren_func="&&fc_ren_output_file."
 v_to_html_func="&&fc_convert_txt_to_html."
-v_enc_html_func="&&fc_encrypt_html."
+v_enc_html_func="&&fc_encode_html."
 ###
 v_var_output="out_filename"
 v_stm_id="META_OBJCTS"
@@ -39,7 +39,7 @@ fi
 
 v_firstline=true
 
-while read line || [ -n "$line" ]
+while read -r line || [ -n "$line" ]
 do
   v_type=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_type'] }')
   v_owner=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print array['$v_field_owner'] }')

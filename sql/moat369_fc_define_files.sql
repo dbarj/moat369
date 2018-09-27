@@ -4,7 +4,7 @@ DEF moat369_fdr_sh  = '&&moat369_fdr./sh'
 DEF moat369_fdr_js  = '&&moat369_fdr./js'
 
 -- Define Function Files
-DEF fc_encrypt_html               = '&&moat369_fdr_sql./moat369_fc_encrypt_html.sql'
+DEF fc_encode_html                = '&&moat369_fdr_sql./moat369_fc_encode_html.sql'
 DEF fc_encrypt_file               = '&&moat369_fdr_sql./moat369_fc_encrypt_file.sql'
 DEF fc_gen_select_star_query      = '&&moat369_fdr_sql./moat369_fc_gen_select_star_query.sql'
 DEF fc_get_dbvault_user           = '&&moat369_fdr_sql./moat369_fc_get_dbvault_user.sql'
@@ -36,6 +36,8 @@ DEF fc_wr_collector               = '&&moat369_fdr_sql./moat369_fc_wr_collector.
 DEF fc_def_output_file            = '&&moat369_fdr_sql./moat369_fc_def_output_file.sql'
 DEF fc_mod_state                  = '&&moat369_fdr_sql./moat369_fc_mod_state.sql'
 DEF fc_clear_defs                 = '&&moat369_fdr_sql./moat369_fc_clear_defs.sql'
+DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.sql'
+DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'

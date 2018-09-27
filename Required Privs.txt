@@ -1,0 +1,13 @@
+gv$instance
+gv$osstat
+gv$system_parameter2
+v$database
+v$diag_info
+v$instance
+v$option
+v$parameter
+v$parameter2
+v$process
+v$session
+v$sql
+v$system_parameter2

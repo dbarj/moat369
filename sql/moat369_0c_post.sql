@@ -6,11 +6,13 @@ COL total_hours NEW_V total_hours;
 SELECT 'Tool execution hours: '||TO_CHAR(ROUND((:moat369_main_time1 - :moat369_main_time0) / 100 / 3600, 3), '990.000')||'.' total_hours FROM DUAL;
 COL total_hours clear
 
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP;
 @@moat369_0e_html_footer.sql
 SPO OFF;
+@@&&fc_spool_end.
 
-@@&&fc_encrypt_html. &&moat369_main_report. 'INDEX'
+@@&&fc_encode_html. &&moat369_main_report. 'INDEX'
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -20,11 +22,14 @@ ALTER SESSION SET SQL_TRACE = FALSE;
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+@@&&fc_spool_start.
 -- readme
 SPO &&moat369_readme.
 PRO 1. Unzip &&moat369_zip_filename_nopath..zip into a directory
-PRO 2. Review &&moat369_main_report.
+PRO 2. Review &&moat369_main_report_nopath.
 SPO OFF;
+@@&&fc_spool_end.
 
 -- cleanup
 SET HEA ON;
@@ -61,10 +66,16 @@ HOS cp &&background_dump_dest./alert_&&db_name_lower.*.log &&moat369_sw_output_f
 HOS cp &&background_dump_dest./alert_&&_connect_identifier..log &&moat369_sw_output_fdr./ >> &&moat369_log3. 2> &&moat369_log3.
 -- Altered to be compatible with SunOS:
 -- HOS rename alert_ &&moat369_alert._ alert_*.log >> &&moat369_log3.
-HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read line || [ -n "$line" ]; do mv $line &&moat369_alert._$line; done >> &&moat369_log3.
+HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read line || [ -n "$line" ]; do mv $line &&moat369_alert._$(basename "$line"); done >> &&moat369_log3.
+
+-- encrypt final files
+--@&&fc_convert_txt_to_html. moat369_log
+--@&&fc_encode_html. &&moat369_log.
+--@&&fc_convert_txt_to_html. moat369_log2
+--@&&fc_encode_html. &&moat369_log2.
 
 -- zip
-HOS if [ -z '&&moat369_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
+HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_alert.*.log >> &&moat369_log3.
 HOS if [ '&&moat369_conf_incl_opatch.' == 'Y' ]; then zip -j &&moat369_opatch. $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_opatch. ]; then zip -mj &&moat369_zip_filename. &&moat369_opatch. >> &&moat369_log3.; fi

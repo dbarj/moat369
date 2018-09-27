@@ -44,7 +44,7 @@ v_tot=$(cat $v_sourcecsv | wc -l | $AWKCMD '{print $1}')
 
 v_count=0
 
-while read line || [ -n "$line" ]
+while read -r line || [ -n "$line" ]
 do
   v_ncols=$(echo $line | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print n }')
   if [ $v_head_ncols -ne $v_ncols ]

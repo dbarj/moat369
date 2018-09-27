@@ -16,7 +16,29 @@ function get_param( name, url ) {
     return results == null ? null : results[1];
 }
 
-function rjorge_decode(secret, onload) {
+function decompText (compressedtext) {
+  try {
+    // Decode base64 (convert ascii to binary)
+    var strData = atob(compressedtext);
+    // Convert binary string to character-number array
+    var charData = strData.split('').map(function(x){return x.charCodeAt(0);});
+    // Turn number array into byte-array
+    var binData = new Uint8Array(charData);
+    // Gunzip
+    var gunzip = new Zlib.Gunzip(binData);
+    var data = gunzip.decompress();
+    // Convert gunzipped byteArray back to ascii string:
+    // Broken for long strings
+    // return String.fromCharCode.apply(null, new Uint16Array(data));
+    var strOut = new TextDecoder("utf-8").decode(data);
+    return strOut;
+  }
+  catch(err) {
+    return compressedtext;
+  }
+}
+
+function rjorge_decrypt(secret, onload) {
   if (!secret) secret = get_password();
   var dectext = "";
   if (secret!=null && secret!="") dectext = CryptoJS.AES.decrypt(enctext, secret);
@@ -28,29 +50,41 @@ function rjorge_decode(secret, onload) {
       if (!onload) alert ('Wrong Passphrase');
       return;
     }
+    if (enctext_comp)
+      var dectextuncomp = decompText(dectextutf);
+    else
+      var dectextuncomp = dectextutf;
     if (!onload && isIndexPage()) {
       setParamCurURL ('decKey',secret);
     }
     else {
-      document.getElementById("rjorge_block").innerHTML = dectextutf;
-      // When HTML is decrypted, <script> sections are ignored. Need to manually reload them:
-      reload_script_section("sqlfor_script");
-      reload_script_section("sqlhl_script");
-      loadJS("sorttable.js", function() {
-        var newTableObject = document.getElementsByClassName("sortable")[0];
-        if (newTableObject!=null && newTableObject!="") sorttable.makeSortable(newTableObject);
-      });
-      loadJS("http://www.gstatic.com/charts/loader.js", function() {
-        reload_script_section("gchart_script");
-      });
+      loadHTML(dectextuncomp);
       // Add decKey to all page links
       appendPassURL('decKey',secret);
     }
   }
 }
 
-function reload_script_section(name)
-{
+function rjorge_decomp() {
+  var dectextuncomp = decompText(enctext);
+  loadHTML(dectextuncomp);
+}
+
+function loadHTML(htmltext) {
+  document.getElementById("rjorge_block").innerHTML = htmltext;
+  // When HTML is decoded, <script> sections are ignored. Need to manually reload them:
+  reload_script_section("sqlfor_script");
+  reload_script_section("sqlhl_script");
+  loadJS("sorttable.js", function() {
+    var newTableObject = document.getElementsByClassName("sortable")[0];
+    if (newTableObject!=null && newTableObject!="") sorttable.makeSortable(newTableObject);
+  });
+  loadJS("http://www.gstatic.com/charts/loader.js", function() {
+    reload_script_section("gchart_script");
+  });
+}
+
+function reload_script_section(name) {
   var reload_script_sec_name = document.getElementById(name);
   if (reload_script_sec_name!=null && reload_script_sec_name!="") eval(reload_script_sec_name.text);
 }
@@ -93,8 +127,7 @@ function appendPassURL(paramName, paramValue) {
   }
 }
 
-function setParamCurURL(paramName, paramValue)
-{
+function setParamCurURL(paramName, paramValue) {
     var url = window.location.href;
     var hash = location.hash;
     url = url.replace(hash, '');
@@ -116,7 +149,12 @@ function setParamCurURL(paramName, paramValue)
     window.location.href = url + hash;
 }
 
-window.onload = function(){
-  var secret = get_param('decKey');
-  if (secret!=null && secret!="") rjorge_decode(decodeURIComponent(secret), true);
+window.onload = function() {
+  if (enctext_encr) {
+    var secret = get_param('decKey');
+    if (secret!=null && secret!="") rjorge_decrypt(decodeURIComponent(secret), true);
+  }
+  else {
+    if (enctext_comp) rjorge_decomp();
+  }
 }

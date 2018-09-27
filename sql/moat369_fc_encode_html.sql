@@ -11,16 +11,17 @@ COL C2 clear
 
 DEF enc_html_template_file = ''
 COL enc_html_template_file NEW_V enc_html_template_file 
-SELECT DECODE('&2.','','&&moat369_fdr_sql./moat369_0h_html_encryption.sql','&&moat369_fdr_sql./moat369_0i_html_encryption_index.sql') enc_html_template_file FROM DUAL;
+SELECT DECODE('&2.','','&&moat369_fdr_sql./moat369_0h_html_encoded.sql','&&moat369_fdr_sql./moat369_0i_html_encoded_index.sql') enc_html_template_file FROM DUAL;
 COL enc_html_template_file clear
 UNDEF 2
 
+-- This is necessary to resolve the variables inside the enc_html_template_file.
 DEF step_enc_html_file = '&&moat369_sw_output_fdr./step_enc_html_template.sql'
 SPOOL &&step_enc_html_file.
 @@&&enc_html_template_file.
 SPOOL OFF
 
-HOS sh &&moat369_fdr_sh./encrypt_html.sh &&in_enc_html_src_file. &&step_enc_html_file. &&enc_key_file. ### Encrypt file.
+HOS sh &&moat369_fdr_sh./encode_html.sh '&&in_enc_html_src_file.' '&&step_enc_html_file.' '&&enc_key_file.' '&&moat369_conf_encrypt_html.' '&&moat369_conf_compress_html.' ### Encode html.
 
 UNDEF in_enc_html_src_file enc_html_template_file
 

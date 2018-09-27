@@ -43,11 +43,9 @@ test -n "${enc_hash_line}" || exit 1
 test -n "${enc_last_line}" || exit 1
 which openssl > /dev/null 2>&- || exit 1
 
-rm -f $out_file
-
-$AWKCMD "NR >= 1 && NR < $in_start_line {print;}" $in_file >> $out_file
+$AWKCMD "NR >= 1 && NR < $in_start_line {print;}" $in_file > $out_file
 $AWKCMD "NR >= 1 && NR < $enc_hash_line {print;}" $enc_file >> $out_file
-$AWKCMD "NR > $in_start_line && NR < $in_stop_line {print;}" $in_file | openssl enc -aes256 -a -salt -pass file:$x_file | $SEDCMD "s/^/'/" | $SEDCMD "s/$/'/" | $SEDCMD -e 's/$/,/' -e '$s/,$//' >> $out_file
+$AWKCMD "NR > $in_start_line && NR < $in_stop_line {print;}" $in_file | openssl enc -aes256 -a -salt -pass file:$x_file | $SEDCMD "s/^/'/" | $SEDCMD "s/$/'/" | $SEDCMD -e 's/$/ +/' -e '$s/ +$//' >> $out_file
 $AWKCMD "NR > $enc_hash_line && NR <= $enc_last_line {print;}" $enc_file >> $out_file
 $AWKCMD "NR > $in_stop_line && NR <= $in_last_line {print;}" $in_file >> $out_file
 mv $out_file $in_file
