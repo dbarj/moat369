@@ -122,7 +122,7 @@ PRO
 
 -- footer
 PRO <br />
-PRO <font class="n">Notes:<br>1) Values are approximated<br>2) Clicking the treemap show more info.</font>
+PRO <font class="n">Notes:<br>1) Values are approximated<br>2) Left-click a node to move down the tree and right-click to move up.</font>
 PRO <font class="n"><br />3) &&foot.</font>
 PRO
 SPO OFF
