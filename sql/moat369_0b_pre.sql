@@ -294,8 +294,16 @@ COL moat369_file_time NEW_V moat369_file_time FOR A20;
 SELECT TO_CHAR(SYSDATE, 'YYYYMMDD_HH24MI') moat369_file_time FROM DUAL;
 COL moat369_file_time clear
 
+COL common_moat369_prefix_dbname NEW_V common_moat369_prefix_dbname NOPRI
+SELECT q'[_&&database_name_short.]' common_moat369_prefix_dbname
+FROM   DUAL
+WHERE  '&&moat369_sw_dbtool.'='Y';
+COL common_moat369_prefix_dbname CLEAR
+
 DEF section_id = ''
-DEF common_moat369_prefix = '&&moat369_prefix._&&database_name_short.';
+DEF common_moat369_prefix = '&&moat369_prefix.&&common_moat369_prefix_dbname.';
+
+UNDEF common_moat369_prefix_dbname
 
 @@&&fc_def_output_file. moat369_readme      '00000_readme_first.txt'
 @@&&fc_def_output_file. moat369_main_report 'index.html'
