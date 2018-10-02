@@ -75,6 +75,12 @@ HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read l
 --@&&fc_encode_html. &&moat369_log2.
 
 -- zip
+@@&&fc_def_empty_var. moat369_d3_usage
+HOS if [ '&&moat369_d3_usage.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./d3.min.js >> &&moat369_log3.; fi
+
+@@&&fc_def_empty_var. moat369_tf_usage
+HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then (cd "&&moat369_sw_output_fdr."; curfdr=$(pwd); cd - > /dev/null; cd "&&moat369_fdr_js."; zip -qr "${curfdr}"/&&moat369_zip_filename_nopath. tablefilter/); fi 
+
 HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_alert.*.log >> &&moat369_log3.
 HOS if [ '&&moat369_conf_incl_opatch.' == 'Y' ]; then zip -j &&moat369_opatch. $ORACLE_HOME/cfgtoollogs/opatch/opatch* >> &&moat369_log3.; fi

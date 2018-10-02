@@ -5,16 +5,13 @@ DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename..html html
 
-SPO &&one_spool_fullpath_filename. APP
-PRO <script type="text/javascript" src="sorttable.js"></script>
-SPO OFF
-
 -- get sql
 GET &&moat369_query.
 
 SPO &&one_spool_fullpath_filename. APP
 -- body
-SET MARK HTML ON TABLE 'class="sortable"' SPOOL OFF
+SET HEA ON
+SET MARK HTML ON TABLE 'id="maintable"' SPOOL OFF
 /
 SET MARK HTML OFF
 SPO OFF
@@ -24,10 +21,11 @@ SELECT prev_sql_id moat369_prev_sql_id, TO_CHAR(prev_child_number) moat369_prev_
 
 @@&&fc_check_last_sql_status.
 
+@@&&fc_add_tablefilter. &&one_spool_fullpath_filename.
+
 SPO &&one_spool_fullpath_filename. APP
 -- footer
 PRO &&foot.
-PRO #: click on a column heading to sort on it
 PRO
 SPO OFF
 

@@ -1,6 +1,6 @@
 PRO <script src="aes.js"></script>
 PRO <script src="gunzip.js"></script>
-PRO <script src="decode.js"></script>
+PRO <script src="decode.min.js"></script>
 PRO
 PRO <script>
 PRO

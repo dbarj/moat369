@@ -17,6 +17,7 @@ undef 3 4
 -- DOES NOT WORK setting one_spool_fullpath_filename as 1st parameter. Why? IDK..
 def 0k_var1 = '&&moat369_sw_output_fdr./&&0k_param1.'
 
+@@&&fc_spool_start.
 SPO &&0k_var1. APP
 PRO <pre>
 SPO &&0k_var1..tmp
@@ -59,6 +60,7 @@ SPO &&0k_var1. APP
 PRO <!--END_SENSITIVE_DATA-->
 @@moat369_0e_html_footer.sql
 SPO OFF
+@@&&fc_spool_end.
 
 -- get time t1
 EXEC :get_time_t1 := DBMS_UTILITY.get_time;

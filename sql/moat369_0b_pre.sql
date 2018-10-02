@@ -50,7 +50,7 @@ EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 
 -- Define full output folder path.
 @@&&fc_def_output_file. step_full_path_outfdr  'step_full_path_outfdr.sql'
-HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath=$(pwd)" > step_full_path_outfdr.sql
+HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath='$(pwd)'" > step_full_path_outfdr.sql
 -- I don't use &&step_full_path_outfdr. as target because of the "cd".
 @&&step_full_path_outfdr.
 HOS rm -f &&step_full_path_outfdr.
@@ -152,8 +152,10 @@ select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' then '' ELSE '&&fc_skip
 COL fc_encrypt_file clear
 --
 COL fc_convert_txt_to_html NEW_V fc_convert_txt_to_html
-select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' OR '&&moat369_conf_compress_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html   from dual;
+select case WHEN '&&moat369_conf_encrypt_html.'   = 'ON' OR '&&moat369_conf_compress_html.'   = 'ON' then '' ELSE '&&fc_skip_script.' END || '&&fc_convert_txt_to_html.' fc_convert_txt_to_html from dual;
 COL fc_convert_txt_to_html clear
+--
+@@&&fc_set_value_var_decode. 'fc_add_tablefilter' '&&moat369_conf_tablefilter.' 'Y' '&&fc_add_tablefilter.' '&&fc_skip_script.&&fc_add_tablefilter.'
 
 @@&&fc_def_empty_var. moat369_pre_enc_pub_file
 @@&&fc_set_value_var_nvl. 'moat369_enc_pub_file' '&&moat369_pre_enc_pub_file.' '&&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_cert_file.'
@@ -316,7 +318,10 @@ UNDEF common_moat369_prefix_dbname
 @@&&fc_def_output_file. moat369_driver      'drivers.zip'
 @@&&fc_def_output_file. moat369_cpuinfo     'cpuinfo_model_name.txt'
 
-DEF moat369_main_filename = '&&common_moat369_prefix._&&host_name_short.';
+COL moat369_main_filename NEW_V moat369_main_filename NOPRI
+SELECT q'[&&common_moat369_prefix.]' || DECODE(q'[&&moat369_sw_dbtool.]','Y',q'[_&&host_name_short.]','') moat369_main_filename FROM DUAL;
+COL moat369_main_filename CLEAR
+
 @@&&fc_def_output_file. moat369_zip_filename '&&moat369_main_filename._&&moat369_file_time.'
 DEF moat369_tracefile_identifier = '&&common_moat369_prefix.';
 @@&&fc_def_output_file. moat369_query '&&common_moat369_prefix._query.sql'
@@ -764,7 +769,6 @@ HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirem
 HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
 
 -- zip other files
-HOS zip -j &&moat369_zip_filename. &&moat369_fdr_js./sorttable.js      >> &&moat369_log3.
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js  >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css             >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_format.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./sql-formatter.js      >> &&moat369_log3.; fi
@@ -772,7 +776,7 @@ HOS if [ '&&moat369_conf_compress_html.' == 'ON' ]; then zip -j &&moat369_zip_fi
 HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_logo_file. >> &&moat369_log3.; fi
 HOS if [ -f &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. ]; then zip -j &&moat369_zip_filename. &&moat369_sw_base./&&moat369_sw_misc_fdr./&&moat369_sw_icon_file. >> &&moat369_log3.; fi
 
-HOS if [ '&&moat369_conf_compress_html.' == 'ON' -o -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./decode.js  >> &&moat369_log3.; fi
+HOS if [ '&&moat369_conf_compress_html.' == 'ON' -o -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./decode.min.js  >> &&moat369_log3.; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./aes.js >> &&moat369_log3.; fi
 HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc     >> &&moat369_log3.; fi
 
