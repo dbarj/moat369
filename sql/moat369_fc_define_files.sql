@@ -14,6 +14,7 @@ DEF fc_seq_output_file            = '&&moat369_fdr_sql./moat369_fc_seq_output_fi
 DEF fc_ren_output_file            = '&&moat369_fdr_sql./moat369_fc_ren_output_file.sql'
 DEF fc_check_last_sql_status      = '&&moat369_fdr_sql./moat369_fc_check_last_sql_status.sql'
 DEF fc_call_secion                = '&&moat369_fdr_sql./moat369_fc_call_section.sql'
+DEF fc_call_secion_sub            = '&&moat369_fdr_sql./moat369_fc_call_section_sub.sql'
 DEF fc_section_variables          = '&&moat369_fdr_sql./moat369_fc_section_variables.sql'
 DEF fc_load_column                = '&&moat369_fdr_sql./moat369_fc_load_column.sql'
 DEF fc_convert_txt_to_html        = '&&moat369_fdr_sql./moat369_fc_convert_txt_to_html.sql'
@@ -38,6 +39,7 @@ DEF fc_mod_state                  = '&&moat369_fdr_sql./moat369_fc_mod_state.sql
 DEF fc_clear_defs                 = '&&moat369_fdr_sql./moat369_fc_clear_defs.sql'
 DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.sql'
 DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
+DEF fc_add_tablefilter            = '&&moat369_fdr_sql./moat369_fc_add_tablefilter.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'

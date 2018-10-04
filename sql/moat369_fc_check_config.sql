@@ -164,6 +164,7 @@
 @@&&fc_def_empty_var. moat369_conf_ask_license
 @@&&fc_def_empty_var. moat369_conf_sql_format
 @@&&fc_def_empty_var. moat369_conf_sql_highlight
+@@&&fc_def_empty_var. moat369_conf_tablefilter
 
 @@&&fc_set_value_var_nvl. 'moat369_conf_incl_tkprof'   '&&moat369_conf_incl_tkprof.'   'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_incl_wr_data'  '&&moat369_conf_incl_wr_data.'  'N'
@@ -173,6 +174,7 @@
 @@&&fc_set_value_var_nvl. 'moat369_conf_ask_license'   '&&moat369_conf_ask_license.'   'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_sql_format'    '&&moat369_conf_sql_format.'    'N'
 @@&&fc_set_value_var_nvl. 'moat369_conf_sql_highlight' '&&moat369_conf_sql_highlight.' 'Y'
+@@&&fc_set_value_var_nvl. 'moat369_conf_tablefilter'   '&&moat369_conf_tablefilter.'   'Y'
 
 @@&&fc_validate_variable. moat369_conf_incl_tkprof   Y_N
 @@&&fc_validate_variable. moat369_conf_incl_wr_data  Y_N
@@ -182,6 +184,7 @@
 @@&&fc_validate_variable. moat369_conf_ask_license   Y_N
 @@&&fc_validate_variable. moat369_conf_sql_format    Y_N
 @@&&fc_validate_variable. moat369_conf_sql_highlight Y_N
+@@&&fc_validate_variable. moat369_conf_tablefilter   Y_N
 
 ---------------------------
 

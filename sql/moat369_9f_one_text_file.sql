@@ -83,9 +83,11 @@ select substr(word,1,instr(word,'/',-1)) PATH, substr(word,instr(word,'/',-1)+1)
 from (select '&&one_spool_fullpath_filename.' word from dual));
 
 -- update main report
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP;
 PRO <a href="&&one_spool_filename.">&&one_spool_text_file_type.</a>
 SPO OFF;
+@@&&fc_spool_end.
 
 HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then zip -mj &&moat369_zip_filename. &&one_spool_fullpath_filename. >> &&moat369_log3.; fi
 

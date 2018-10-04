@@ -76,6 +76,7 @@ FOR I IN 1 .. :moat369_total_cols
 LOOP
 	put_line('@@&&fc_load_column. ' || I);
 	put_line('PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
+	put_line('@@&&fc_spool_start.');
 	put_line('SPO &&moat369_main_report. APP');
 	put_line('PRO');
 	IF I < :moat369_total_cols THEN
@@ -85,6 +86,7 @@ LOOP
     END IF;
 	put_line('PRO');
 	put_line('SPO OFF');
+	put_line('@@&&fc_spool_end.');
 END LOOP;
 END;
 /
