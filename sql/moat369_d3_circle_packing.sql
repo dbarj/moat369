@@ -40,7 +40,7 @@ PRO </style>
 PRO <svg id="chart_div" width="900" height="900"></svg>
 
 -- chart header
-PRO <script type="text/javascript" id="gchart_script">
+PRO <script type="text/javascript" id="d3_script">
 PRO var jsonText = '' +
 
 -- Count lines returned by PL/SQL

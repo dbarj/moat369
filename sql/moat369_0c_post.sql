@@ -79,7 +79,8 @@ HOS ls -1 &&moat369_sw_output_fdr./alert_*.log 2> &&moat369_log3. | while read l
 HOS if [ '&&moat369_d3_usage.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./d3.min.js >> &&moat369_log3.; fi
 
 @@&&fc_def_empty_var. moat369_tf_usage
-HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then (cd "&&moat369_sw_output_fdr."; curfdr=$(pwd); cd - > /dev/null; cd "&&moat369_fdr_js."; zip -qr "${curfdr}"/&&moat369_zip_filename_nopath. tablefilter/); fi 
+HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then cp -av &&moat369_fdr_js./tablefilter/ ./ >> &&moat369_log3.; zip -rm &&moat369_zip_filename. tablefilter/ >> &&moat369_log3.; fi 
+-- Fix above cmd as cur folder can be RO
 
 HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_alert.*.log >> &&moat369_log3.
