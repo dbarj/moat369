@@ -17,9 +17,8 @@ v_awk_func_dir="./moat369/sh/csv-parser.awk"
 
 test -f "${v_sourcecsv}" || exit 1
 
-echo '<script type="text/javascript" src="sorttable.js"></script>' >> "${v_out_html}"
 echo "<p>" >> "${v_out_html}"
-echo "<table class=sortable>" >> "${v_out_html}"
+echo '<table id="maintable">' >> "${v_out_html}"
 
 v_fcol_tag_o='<th scope="col">'
 v_fcol_tag_c="</th>"
@@ -51,6 +50,11 @@ v_head_ncols=$(head -n 1 "${v_sourcecsv}" | ${AWKCMD_CSV} --source '{a=csv_parse
 
 v_count=0
 
+remove_html_tags()
+{
+  echo "$1" | $SEDCMD 's|&|&amp;|g' | $SEDCMD 's|>|\&gt;|g' | $SEDCMD 's|<|\&lt;|g'
+} 
+
 while read -r line || [ -n "$line" ]
 do
   v_ncols=$(echo "$line" | ${AWKCMD_CSV} --source '{a=csv_parse_record($0, separator, enclosure, csv); print a}')
@@ -62,11 +66,11 @@ do
   $ECHO_E "$f_line_o\\c" >> "${v_out_html}"
   if $v_firstline
   then
-    v_linerep=$(echo "$line" | $SEDCMD 's|&|&amp;|g' | $SEDCMD 's|>|\&gt;|g' | $SEDCMD 's|<|\&lt;|g' | ${AWKCMD_CSV} -v outsep="${v_fcol_tag_c}${v_fcol_tag_o}" --source '{csv_parse_and_display($0, separator, enclosure, outsep)}')
+    v_linerep=$(remove_html_tags "$line" | ${AWKCMD_CSV} -v outsep="${v_fcol_tag_c}${v_fcol_tag_o}" --source '{csv_parse_and_display($0, separator, enclosure, outsep)}')
     $ECHO_E "${v_fcol_tag_o}#${v_fcol_tag_c}${v_fcol_tag_o}${v_linerep}${v_fcol_tag_c}\\c" >> "${v_out_html}"
     v_firstline=false
   else
-    v_linerep=$(echo "$line" | $SEDCMD 's|&|&amp;|g' | $SEDCMD 's|>|\&gt;|g' | $SEDCMD 's|<|\&lt;|g' | ${AWKCMD_CSV} -v outsep="${v_acol_tag_c}${v_acol_tag_o}" --source '{csv_parse_and_display($0, separator, enclosure, outsep)}')
+    v_linerep=$(remove_html_tags "$line" | ${AWKCMD_CSV} -v outsep="${v_acol_tag_c}${v_acol_tag_o}" --source '{csv_parse_and_display($0, separator, enclosure, outsep)}')
     $ECHO_E "${v_acol_tag_o}${v_count}${v_acol_tag_c}${v_acol_tag_o}${v_linerep}${v_acol_tag_c}\\c" >> "${v_out_html}"
   fi
   echo "$f_line_c" >> "${v_out_html}"

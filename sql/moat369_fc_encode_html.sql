@@ -17,9 +17,11 @@ UNDEF 2
 
 -- This is necessary to resolve the variables inside the enc_html_template_file.
 DEF step_enc_html_file = '&&moat369_sw_output_fdr./step_enc_html_template.sql'
+@@&&fc_spool_start.
 SPOOL &&step_enc_html_file.
 @@&&enc_html_template_file.
 SPOOL OFF
+@@&&fc_spool_end.
 
 HOS sh &&moat369_fdr_sh./encode_html.sh '&&in_enc_html_src_file.' '&&step_enc_html_file.' '&&enc_key_file.' '&&moat369_conf_encrypt_html.' '&&moat369_conf_compress_html.' ### Encode html.
 

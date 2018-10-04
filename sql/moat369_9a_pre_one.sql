@@ -1,4 +1,4 @@
--- setup
+-- SETUP
 SET VER OFF
 SET FEED OFF
 SET ECHO OFF
@@ -97,15 +97,30 @@ HOS zip -j &&moat369_zip_filename. &&moat369_main_report. >> &&moat369_log3.
 @@&&skip_html.&&moat369_skip_html.moat369_9b_one_html.sql
 @@&&skip_text.&&moat369_skip_text.moat369_9c_one_text.sql
 @@&&skip_csv.&&moat369_skip_csv.moat369_9d_one_csv.sql
-@@&&skip_lch.&&moat369_skip_line.moat369_9e_one_line_chart.sql
-@@&&skip_pch.&&moat369_skip_pie.moat369_9f_one_pie_chart.sql
-@@&&skip_bch.&&moat369_skip_bar.moat369_9k_one_bar_chart.sql
-@@&&skip_graph.&&moat369_skip_graph.moat369_9g_one_graphviz_chart.sql
-@@&&skip_map.&&moat369_skip_map.moat369_9l_one_map_chart.sql
-@@&&skip_treemap.&&moat369_skip_treemap.moat369_9m_one_treemap_chart.sql
-@@&&skip_html_spool.&&moat369_skip_html.moat369_9h_one_html_spool.sql
-@@&&skip_text_file.&&moat369_skip_file.moat369_9i_one_text_file.sql
-@@&&skip_html_file.&&moat369_skip_html.moat369_9j_one_html_file.sql
+@@&&skip_lch.&&moat369_skip_line.moat369_gc_line_chart.sql
+@@&&skip_pch.&&moat369_skip_pie.moat369_gc_pie_chart.sql
+@@&&skip_bch.&&moat369_skip_bar.moat369_gc_bar_chart.sql
+@@&&skip_graph.&&moat369_skip_graph.moat369_gc_graphviz_chart.sql
+@@&&skip_map.&&moat369_skip_map.moat369_gc_map_chart.sql
+@@&&skip_treemap.&&moat369_skip_treemap.moat369_gc_treemap_chart.sql
+@@&&skip_html_spool.&&moat369_skip_html.moat369_9e_one_html_spool.sql
+@@&&skip_text_file.&&moat369_skip_file.moat369_9f_one_text_file.sql
+@@&&skip_html_file.&&moat369_skip_html.moat369_9g_one_html_file.sql
+
+-- Check D3 Graphs
+DEF moat369_d3_graph_valid_opts='|circle_packing|'
+@@&&fc_def_empty_var. moat369_d3_graph_skip
+@@&&fc_def_empty_var. d3_graph
+
+COL skip_moat369_d3_graph NEW_V skip_moat369_d3_graph NOPRI
+SELECT '&&fc_skip_script.' skip_moat369_d3_graph
+FROM   DUAL
+WHERE '&&d3_graph.' IS NULL
+OR    '&&moat369_d3_graph_skip.' LIKE '%|&&d3_graph.|%'
+OR    '&&moat369_d3_graph_valid_opts.' NOT LIKE '%|&&d3_graph.|%';
+COL skip_moat369_d3_graph CLEAR
+@@&&skip_moat369_d3_graph.moat369_d3_&&d3_graph..sql
+UNDEF skip_moat369_d3_graph
 --
 HOS zip -j &&moat369_zip_filename. &&moat369_log2. >> &&moat369_log3.
 HOS zip -j &&moat369_zip_filename. &&moat369_log3. > /dev/null
@@ -133,10 +148,12 @@ SPO OFF
 @@&&fc_set_term_off.
 
 -- update main report
+@@&&fc_spool_start.
 SPO &&moat369_main_report. APP
 PRO <small><em> (&&row_num.)</em></small>
 PRO </li>
 SPO OFF
+@@&&fc_spool_end.
 HOS zip -j &&moat369_zip_filename. &&moat369_main_report. >> &&moat369_log3.
 
 -- needed reset after eventual sqlmon above
@@ -185,6 +202,7 @@ DEF skip_treemap    = '&&moat369_def_skip_treemap.'
 DEF skip_html_spool = '&&fc_skip_script.'
 DEF skip_text_file  = '&&fc_skip_script.'
 DEF skip_html_file  = '&&fc_skip_script.'
+DEF d3_graph = ''
 --
 DEF title_suffix = ''
 DEF haxis = '&&db_version. &&cores_threads_hosts.'
