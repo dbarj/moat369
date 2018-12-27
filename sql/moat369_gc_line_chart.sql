@@ -225,12 +225,12 @@ PRO<font class="n"><br>3) &&foot.</font>
 PRO
 SPO OFF
 
-@@&&fc_set_value_var_nvl2. hide_sql_print '&&one_spool_line_chart_file.' 'Y' 'N'
-@@&&fc_set_value_var_decode. hide_sql_print '&&sql_show.' 'N' 'N' '&&hide_sql_print.'
+@@&&fc_set_value_var_nvl2. exec_sql_print '&&one_spool_line_chart_file.' 'N' 'Y'
+@@&&fc_set_value_var_decode. exec_sql_print '&&sql_show.' 'N' 'N' '&&exec_sql_print.'
 
-@@moat369_0k_html_topic_end.sql &&one_spool_filename._line_chart.html line &&hide_sql_print. &&hide_sql_print.
+@@moat369_0k_html_topic_end.sql &&one_spool_filename._line_chart.html line &&exec_sql_print. &&exec_sql_print.
 
-undef hide_sql_print
+undef exec_sql_print
 
 @@&&fc_encode_html. &&one_spool_fullpath_filename.
 

@@ -28,13 +28,23 @@ BEGIN
 END;
 /
 
+EXEC :sql_with_clause := TRIM(:sql_with_clause);
+EXEC :sql_with_clause := TRIM(CHR(10) FROM :sql_with_clause);
+
+BEGIN
+  IF :sql_with_clause IS NOT NULL then
+    :sql_with_clause := :sql_with_clause || CHR(10);
+  END IF;
+END;
+/
+
 -- When sql_show is NO, will print sql_text_display only if manually specified.
 BEGIN
   IF '&&sql_show.' = 'N' then
     -- SP2-1504: Cannot print uninitialized LOB variable "SQL_TEXT_DISPLAY"
     :sql_text_display := :sql_text_display;
   ELSE
-    :sql_text_display := TRIM(CHR(10) FROM :sql_text);
+    :sql_text_display := :sql_with_clause || TRIM(CHR(10) FROM :sql_text);
   END IF;
 END;
 /
@@ -47,7 +57,7 @@ EXEC :sql_text := TRIM(:sql_text);
 -- count
 --SELECT '0' row_num FROM DUAL;
 PRO &&hh_mm_ss. &&section_id..&&report_sequence.
-EXEC :sql_text_display := REPLACE(REPLACE(TRIM(CHR(10) FROM :sql_text)||';', '<', CHR(38)||'lt;'), '>', CHR(38)||'gt;');
+EXEC :sql_text_display := REPLACE(REPLACE(:sql_text_display || ';', '<', CHR(38)||'lt;'), '>', CHR(38)||'gt;');
 --SET TIMI ON
 --SET SERVEROUT ON
 
@@ -61,12 +71,14 @@ SPO OFF
 HOS zip -j &&moat369_zip_filename. &&moat369_log. >> &&moat369_log3.
 
 -- spools query
+@@&&fc_spool_start.
 SPO &&moat369_query.
-SELECT 'SELECT TO_CHAR(ROWNUM) row_num, v0.* FROM /* &&section_id..&&report_sequence. */ (' ||
+SELECT :sql_with_clause || 'SELECT TO_CHAR(ROWNUM) row_num, v0.* FROM /* &&section_id..&&report_sequence. */ (' ||
         REPLACE(CHR(10) || TRIM(CHR(10) FROM :sql_text) || CHR(10), CHR(10) || CHR(10), CHR(10)) ||
        ') v0 WHERE ROWNUM <= &&max_rows.'
 FROM DUAL;
 SPO OFF
+@@&&fc_spool_end.
 SET HEA ON
 
 -- update main report
@@ -179,6 +191,7 @@ HOS rm -f &&moat369_query.
 EXEC :sql_text := NULL;
 EXEC :sql_text_cdb := NULL;
 EXEC :sql_text_display := NULL;
+EXEC :sql_with_clause := NULL;
 DEF row_num    = '-1'
 DEF row_num_dif = 0
 DEF abstract   = ''

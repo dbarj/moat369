@@ -3,18 +3,25 @@
 
 DEF step_file = '&&moat369_sw_output_fdr./step_file_recount.sql';
 
+-- Define SELECT start line. Var used in cfc_check_last_sql_status
+COL line_no NEW_V moat369_select_start_line
+SELECT NVL(LENGTH(:sql_with_clause) - LENGTH(REPLACE(:sql_with_clause, CHR(10), '')),0)+1 line_no from dual;
+COL line_no clear
+
+@@&&fc_spool_start.
 SPO &&step_file.
 PRO COL row_num NOPRI
 PRO GET &&moat369_query.
 PRO -- remove rownum
-PRO 1
+PRO &&moat369_select_start_line.
 PRO c/TO_CHAR(ROWNUM) row_num, v0.*/TRIM(COUNT(*)) row_num
 PRO /
 PRO COL row_num PRI
 SPO OFF
+@@&&fc_spool_end.
 
 @@&&fc_set_value_var_decode. 'step_file_exec' '&&row_num.' '-1' '&&step_file.' '&&fc_skip_script. &&step_file.'
 
 @&&step_file_exec.
 HOS rm -f &&step_file.
-UNDEF step_file step_file_exec
+UNDEF step_file step_file_exec moat369_select_start_line
