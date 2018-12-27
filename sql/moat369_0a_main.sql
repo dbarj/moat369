@@ -46,14 +46,15 @@ UNDEF step_main_file_driver
 @@&&fc_spool_start.
 SPO &&moat369_main_report. APP
 PRO </tr><tr class="main"><td>
-PRO <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="228" width="auto" title="&&moat369_sw_logo_title_1.
+PRO <img src="&&moat369_sw_logo_file." alt="&&moat369_sw_name." height="228" width="auto"
+PRO title="&&moat369_sw_logo_title_1.
 PRO &&moat369_sw_logo_title_2.
 PRO &&moat369_sw_logo_title_3.
 PRO &&moat369_sw_logo_title_4.
 PRO &&moat369_sw_logo_title_5.
 PRO &&moat369_sw_logo_title_6.
 PRO &&moat369_sw_logo_title_7.
-PRO &&moat369_sw_logo_title_8.>"
+PRO &&moat369_sw_logo_title_8.">
 PRO <br>
 SPO OFF
 @@&&fc_spool_end.

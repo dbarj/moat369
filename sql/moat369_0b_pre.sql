@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1809'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-09-28)'
+DEF moat369_fw_vYYNN = 'v1810'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-12-27)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -677,8 +677,10 @@ COL report_sequence NEW_V report_sequence;
 VAR sql_text CLOB;
 VAR sql_text_cdb CLOB;
 VAR sql_text_display CLOB;
+VAR sql_with_clause CLOB;
 EXEC :sql_text := NULL;
 EXEC :sql_text_cdb := NULL;
+EXEC :sql_with_clause := NULL;
 VAR driver_seq NUMBER;
 VAR repo_seq NUMBER;
 VAR temp_seq NUMBER;
