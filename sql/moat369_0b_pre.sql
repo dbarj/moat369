@@ -257,8 +257,6 @@ SELECT CASE '&&moat369_conf_incl_tkprof.' WHEN 'Y' THEN 'moat369_0g_' ELSE '&&fc
 COL moat369_prefix NEW_V moat369_prefix;
 SELECT '&&moat369_sw_name.' || CASE WHEN NOT (:moat369_sec_from = '1a' AND :moat369_sec_to = '9z') THEN '_' || :moat369_sec_from || '_' || :moat369_sec_to END moat369_prefix FROM DUAL;
 COL moat369_prefix clear
--- esp init
--- DEF rr_host_name_short = '';
 
 -- get dbid
 COL moat369_dbid NEW_V moat369_dbid;
@@ -413,16 +411,6 @@ COL row_num NEW_V row_num HEA '#' PRI
 DEF row_num = '-1'
 DEF row_num_dif = '0'
 
--- Flush unified Audit Trail
-DECLARE
-  V_CMD VARCHAR2(100) := q'[BEGIN SYS.DBMS_AUDIT_MGMT.FLUSH_UNIFIED_AUDIT_TRAIL; END;]';
-BEGIN
-  IF '&&is_ver_ge_12.' = 'Y' THEN
-    EXECUTE IMMEDIATE V_CMD;
-  END IF;
-END;
-/
-
 -- get average number of CPUs
 COL avg_cpu_count NEW_V avg_cpu_count FOR A6;
 SELECT TO_CHAR(ROUND(AVG(TO_NUMBER(value)),1)) avg_cpu_count FROM gv$system_parameter2 WHERE name = 'cpu_count';
@@ -463,16 +451,6 @@ COL between_times NEW_V between_times;
 COL between_dates NEW_V between_dates;
 SELECT ', between &&moat369_date_from. and &&moat369_date_to.' between_dates FROM DUAL;
 
--- Move it away from here
---COL minimum_snap_id NEW_V minimum_snap_id;
---SELECT NVL(TO_CHAR(MIN(snap_id)), '0') minimum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND begin_interval_time > TO_DATE('&&moat369_date_from.', 'YYYY-MM-DD');
---SELECT '-1' minimum_snap_id FROM DUAL WHERE TRIM('&&minimum_snap_id.') IS NULL;
---COL minimum_snap_id clear
---COL maximum_snap_id NEW_V maximum_snap_id;
---SELECT NVL(TO_CHAR(MAX(snap_id)), '&&minimum_snap_id.') maximum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND end_interval_time < TO_DATE('&&moat369_date_to.', 'YYYY-MM-DD') + 1;
---SELECT '-1' maximum_snap_id FROM DUAL WHERE TRIM('&&maximum_snap_id.') IS NULL;
---COL maximum_snap_id clear
-
 -- inclusion config determine skip flags
 COL moat369_skip_html    NEW_V moat369_skip_html;
 COL moat369_skip_text    NEW_V moat369_skip_text;
@@ -493,7 +471,8 @@ SELECT CASE '&&moat369_conf_incl_html.'    WHEN 'N' THEN '&&fc_skip_script.' END
        CASE '&&moat369_conf_incl_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_graph   ,
        CASE '&&moat369_conf_incl_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_map     ,
        CASE '&&moat369_conf_incl_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_treemap ,
-       CASE '&&moat369_conf_incl_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file  FROM DUAL;
+       CASE '&&moat369_conf_incl_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file
+FROM   DUAL;
 COL moat369_skip_html    CLEAR
 COL moat369_skip_text    CLEAR
 COL moat369_skip_csv     CLEAR
@@ -744,7 +723,7 @@ HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_ke
 HOS cp &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 
-HOS cp &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
+HOS cp &&moat369_fdr_js./style.css  &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 
 --WHENEVER SQLERROR CONTINUE;
