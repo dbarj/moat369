@@ -1,30 +1,4 @@
 -- Set version variables. Value will be 'Y' or 'N'
-DEF is_ver_le_9_1  = ''
-DEF is_ver_le_9_2  = ''
-DEF is_ver_le_9    = ''
-DEF is_ver_le_10_1 = ''
-DEF is_ver_le_10_2 = ''
-DEF is_ver_le_10   = ''
-DEF is_ver_le_11_1 = ''
-DEF is_ver_le_11_2 = ''
-DEF is_ver_le_11   = ''
-DEF is_ver_le_12_1 = ''
-DEF is_ver_le_12_2 = ''
-DEF is_ver_le_12   = ''
---
-DEF is_ver_ge_9_1  = ''
-DEF is_ver_ge_9_2  = ''
-DEF is_ver_ge_9    = ''
-DEF is_ver_ge_10_1 = ''
-DEF is_ver_ge_10_2 = ''
-DEF is_ver_ge_10   = ''
-DEF is_ver_ge_11_1 = ''
-DEF is_ver_ge_11_2 = ''
-DEF is_ver_ge_11   = ''
-DEF is_ver_ge_12_1 = ''
-DEF is_ver_ge_12_2 = ''
-DEF is_ver_ge_12   = ''
-
 COL is_ver_le_9_1  new_v is_ver_le_9_1  nopri
 COL is_ver_le_9_2  new_v is_ver_le_9_2  nopri
 COL is_ver_le_9    new_v is_ver_le_9    nopri
@@ -52,32 +26,6 @@ COL is_ver_ge_12_2 new_v is_ver_ge_12_2 nopri
 COL is_ver_ge_12   new_v is_ver_ge_12   nopri
 
 -- Set skip version variables. Value will be '--' when version is the corresponding.
-DEF skip_ver_le_9_1  = ''
-DEF skip_ver_le_9_2  = ''
-DEF skip_ver_le_9    = ''
-DEF skip_ver_le_10_1 = ''
-DEF skip_ver_le_10_2 = ''
-DEF skip_ver_le_10   = ''
-DEF skip_ver_le_11_1 = ''
-DEF skip_ver_le_11_2 = ''
-DEF skip_ver_le_11   = ''
-DEF skip_ver_le_12_1 = ''
-DEF skip_ver_le_12_2 = ''
-DEF skip_ver_le_12   = ''
---
-DEF skip_ver_ge_9_1  = ''
-DEF skip_ver_ge_9_2  = ''
-DEF skip_ver_ge_9    = ''
-DEF skip_ver_ge_10_1 = ''
-DEF skip_ver_ge_10_2 = ''
-DEF skip_ver_ge_10   = ''
-DEF skip_ver_ge_11_1 = ''
-DEF skip_ver_ge_11_2 = ''
-DEF skip_ver_ge_11   = ''
-DEF skip_ver_ge_12_1 = ''
-DEF skip_ver_ge_12_2 = ''
-DEF skip_ver_ge_12   = ''
-
 COL skip_ver_le_9_1  new_v skip_ver_le_9_1  nopri
 COL skip_ver_le_9_2  new_v skip_ver_le_9_2  nopri
 COL skip_ver_le_9    new_v skip_ver_le_9    nopri
@@ -225,3 +173,18 @@ select substr(&&is_cdb_temp_col.,1,1) is_cdb from v$database;
 COL is_cdb new_v clear
 
 UNDEF is_cdb_temp_col
+
+-------------------------------
+
+COL skip_cdb     new_v skip_cdb     nopri
+COL skip_noncdb  new_v skip_noncdb  nopri
+
+select
+decode('&&is_cdb.','Y','','N','--') skip_cdb,
+decode('&&is_cdb.','Y','--','N','') skip_noncdb
+from dual;
+
+COL skip_cdb    clear
+COL skip_noncdb clear
+
+-------------------------------

@@ -259,7 +259,6 @@ SELECT '&&moat369_sw_name.' || CASE WHEN NOT (:moat369_sec_from = '1a' AND :moat
 COL moat369_prefix clear
 -- esp init
 -- DEF rr_host_name_short = '';
--- DEF esp_host_name_short = '';
 
 -- get dbid
 COL moat369_dbid NEW_V moat369_dbid;
@@ -404,42 +403,7 @@ SELECT decode(platform_id,
 COL cmd_getcpu clear
 HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
--- esp collection
-COL skip_res NEW_V skip_res
-SELECT CASE WHEN '&&moat369_conf_incl_res.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_res FROM DUAL;
-COL skip_res clear
-COL skip_esp NEW_V skip_esp
-SELECT CASE WHEN '&&moat369_conf_incl_esp.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_esp FROM DUAL;
-COL skip_esp clear
-
-@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
-SPO &&step_pre_file_driver.
-PRO SET TERM ON
-PRO PRO
-PRO PRO Getting resources_requirements
-PRO PRO Please wait ...
-PRO @@&&skip_res.&&skip_diagnostics.resources_requirements_awr.sql
-PRO @@&&skip_res.resources_requirements_statspack.sql
-SPO OFF
-
-@&&skip_res.&&step_pre_file_driver.
-HOS rm -f &&step_pre_file_driver
-
-@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
-SPO &&step_pre_file_driver.
-PRO SET TERM ON
-PRO PRO Getting esp_collect_requirements
-PRO PRO Please wait ...
-PRO @@&&skip_esp.&&skip_diagnostics.esp_collect_requirements_awr.sql
-PRO @@&&skip_esp.esp_collect_requirements_statspack.sql
-SPO OFF
-
-@&&skip_esp.&&step_pre_file_driver.
-HOS rm -f &&step_pre_file_driver
-
 @@&&fc_set_term_off.
-
-undef skip_res skip_esp
 
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
@@ -729,11 +693,6 @@ SET RECSEP OFF;
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-COL fc_wr_collector NEW_V fc_wr_collector
-SELECT CASE WHEN '&moat369_conf_incl_wr_data.' = 'Y' THEN '' ELSE '&&fc_skip_script.' END || '&&fc_wr_collector.' "fc_wr_collector" FROM DUAL;
-COL fc_wr_collector clear
-@@&&fc_wr_collector.
-
 -- Print Database and License info only if it is a DB tool.
 COL db_lic_info NEW_V db_lic_info NOPRI
 COL db_ver_info NEW_V db_ver_info NOPRI
@@ -787,8 +746,5 @@ HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.t
 
 HOS cp &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
-
---HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
---HOS zip -mT &&moat369_zip_filename. osw_&&esp_host_name_short..zip
 
 --WHENEVER SQLERROR CONTINUE;
