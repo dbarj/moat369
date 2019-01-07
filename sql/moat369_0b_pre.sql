@@ -705,9 +705,6 @@ HOS if [ -f esp_requirements_&&host_name_short..zip ]; then echo > &&step_ren_cp
 HOS rm -f &&step_ren_cpuinfo.
 UNDEF step_ren_cpuinfo
 
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirements_&&host_name_short..zip &&moat369_cpuinfo. >> &&moat369_log3.; fi
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
-
 -- zip other files
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js  >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css             >> &&moat369_log3.; fi

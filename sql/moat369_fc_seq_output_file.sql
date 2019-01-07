@@ -4,12 +4,11 @@
 DEF in_param = "&1."
 UNDEF 1
 
-DEF step_file_seq_out = '&&moat369_sw_output_fdr./step_file_seq_out.sql'
+@@&&fc_def_output_file. step_file_seq_out 'step_file_seq_out.sql'
 HOS echo "DEF in_param_content = '&&""&&in_param..'" > &&step_file_seq_out.
 @&&step_file_seq_out.
 HOS rm -f &&step_file_seq_out.
 UNDEF step_file_seq_out
-
 
 EXEC :file_seq := :file_seq + 1;
 

@@ -16,7 +16,7 @@ COL enc_html_template_file clear
 UNDEF 2
 
 -- This is necessary to resolve the variables inside the enc_html_template_file.
-DEF step_enc_html_file = '&&moat369_sw_output_fdr./step_enc_html_template.sql'
+@@&&fc_def_output_file. step_enc_html_file 'step_enc_html_template.sql'
 @@&&fc_spool_start.
 SPOOL &&step_enc_html_file.
 @@&&enc_html_template_file.

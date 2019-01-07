@@ -37,7 +37,6 @@
 @@&&fc_def_empty_var. moat369_sw_email
 @@&&fc_def_empty_var. moat369_sw_dbtool
 @@&&fc_def_empty_var. moat369_sw_enc_sql
-@@&&fc_def_empty_var. moat369_sw_dec_cmd
 
 @@&&fc_set_value_var_nvl. 'moat369_sw_misc_fdr'   '&&moat369_sw_misc_fdr.' 'js'
 @@&&fc_set_value_var_nvl. 'moat369_sw_rpt_cols'   '&&moat369_sw_rpt_cols.' '7'

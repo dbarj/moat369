@@ -1,10 +1,10 @@
 -- Function that will check if passed variable in parameter 1 has the condition of parameter 2. Exit code if condition is not met.
 -- Valid conditions for parameter 2 are: "Y_N", "ON_OFF", "NOT_NULL", "UPPER_CASE", "LOWER_CASE", "T_D_N", "IS_NUMBER"
-DEF step_file = '&&moat369_sw_output_fdr./step_file.sql'
-
 DEF in_param = "&1."
 DEF in_cond  = "&2."
 UNDEF 1 2
+
+@@&&fc_def_output_file. step_file 'step_file.sql'
 
 SPOOL &&step_file.
 PRO DEF in_param_content = '&&&&in_param..'

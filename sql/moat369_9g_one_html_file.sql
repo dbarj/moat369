@@ -1,7 +1,7 @@
 -- add seq to spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
-DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename..html'
+@@&&fc_def_output_file. one_spool_fullpath_filename '&&one_spool_filename..html'
 
 -- Check mandatory variables
 @@&&fc_def_empty_var. one_spool_html_file
@@ -12,7 +12,7 @@ DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename
 
 HOS cat &&one_spool_html_file. >> &&one_spool_fullpath_filename.
 
-DEF step_file = '&&moat369_sw_output_fdr./step_file.sql';
+@@&&fc_def_output_file. step_file 'step_file.sql'
 HOS echo "DEF row_num = '"$(($(cat &&one_spool_html_file. | grep '<tr>' | wc -l)-1))"'" > &&step_file.
 @&&step_file.
 HOS rm -f &&step_file.

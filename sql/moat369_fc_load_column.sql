@@ -7,7 +7,7 @@ DEF moat369_sections_file  = '&&moat369_sw_folder./00_sections.csv'
 -- The variable below will be changed to YES if the code ever enter in 9a
 DEF moat369_column_print = 'NO'
 
-DEF moat369_col_temp_file = '&&moat369_sw_output_fdr./moat369_temp_onload_section_&&moat369_cur_col_id..sql'
+@@&&fc_def_output_file. moat369_col_temp_file 'moat369_temp_onload_section_&&moat369_cur_col_id..sql'
 HOS &&cmd_grep. -e "^&&moat369_cur_col_id." &&moat369_sections_file. | while read line || [ -n "$line" ]; do echo $line | &&cmd_awk. -F',' '{printf("@"$4"&&""&&moat369_sw_name._"$1".&&""fc_call_secion. "$1" &&moat369_sw_name._"$1"_"$2" "$3"\n")}'; done > &&moat369_col_temp_file.
 @&&moat369_col_temp_file.
 @@&&fc_zip_driver_files. &&moat369_col_temp_file.

@@ -19,7 +19,7 @@ PRO <ol start="&&report_sequence.">
 SPO OFF;
 @@&&fc_spool_end.
 
-DEF sub_section_fifo = '&&moat369_sw_output_fdr./&&moat369_subsec_id._fifo.sql'
+@@&&fc_def_output_file. sub_section_fifo '&&moat369_subsec_id._fifo.sql'
 HOS mkfifo &&sub_section_fifo.
 set define ^ 
 HOS [ '^^moat369_sw_enc_sql.' == 'Y' ] && (cat ^^moat369_sw_folder./^^moat369_subsec_fl. | openssl enc -d -aes256 -a -salt -pass file:^^moat369_enc_pub_file. > ^^sub_section_fifo. &) || (cat ^^moat369_sw_folder./^^moat369_subsec_fl. > ^^sub_section_fifo. &)
