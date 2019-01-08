@@ -20,9 +20,10 @@ SPO OFF;
 @@&&fc_spool_end.
 
 @@&&fc_def_output_file. section_fifo '&&moat369_sec_id._fifo.sql'
-HOS mkfifo &&section_fifo.
-set define ^ 
-HOS [ '^^moat369_sw_enc_sql.' == 'Y' ] && (cat ^^moat369_sw_folder./^^moat369_sec_fl. | openssl enc -d -aes256 -a -salt -pass file:^^moat369_enc_pub_file. > ^^section_fifo. &) || (cat ^^moat369_sw_folder./^^moat369_sec_fl. > ^^section_fifo. &)
+-- HOS mkfifo &&section_fifo.
+set define ^
+HOS [ '^^moat369_sw_enc_sql.' == 'Y' ] && (cat ^^moat369_sw_folder./^^moat369_sec_fl. | openssl enc -d -aes256 -a -salt -pass file:^^moat369_enc_pub_file. > ^^section_fifo.)
+HOS [ '^^moat369_sw_enc_sql.' != 'Y' ] && (echo "@@^^moat369_sw_folder./^^moat369_sec_fl." > ^^section_fifo.)
 set define &
 
 @&&section_fifo.
