@@ -36,6 +36,7 @@ DEF fc_load_file_ifexist          = '&&moat369_fdr_sql./moat369_fc_load_file_ife
 DEF fc_def_output_file            = '&&moat369_fdr_sql./moat369_fc_def_output_file.sql'
 DEF fc_mod_state                  = '&&moat369_fdr_sql./moat369_fc_mod_state.sql'
 DEF fc_clear_defs                 = '&&moat369_fdr_sql./moat369_fc_clear_defs.sql'
+DEF fc_reset_defs                 = '&&moat369_fdr_sql./moat369_fc_reset_defs.sql'
 DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.sql'
 DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
 DEF fc_add_tablefilter            = '&&moat369_fdr_sql./moat369_fc_add_tablefilter.sql'

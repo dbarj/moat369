@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1810'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-12-27)'
+DEF moat369_fw_vYYNN = 'v1901'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2019-01-10)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -284,7 +284,6 @@ SELECT TRANSLATE('&&host_name_short.',
 COL host_name_short clear
 -- setup
 DEF sql_trace_level = '1';
-DEF main_table = '';
 DEF title = '';
 DEF title_no_spaces = '';
 DEF title_suffix = '';
@@ -408,8 +407,6 @@ HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
-DEF row_num = '-1'
-DEF row_num_dif = '0'
 
 -- get average number of CPUs
 COL avg_cpu_count NEW_V avg_cpu_count FOR A6;
@@ -504,7 +501,8 @@ SELECT CASE '&&moat369_conf_def_html.'    WHEN 'N' THEN '&&fc_skip_script.' END 
        CASE '&&moat369_conf_def_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_graph   ,
        CASE '&&moat369_conf_def_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_map     ,
        CASE '&&moat369_conf_def_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_treemap ,
-       CASE '&&moat369_conf_def_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
+       CASE '&&moat369_conf_def_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file
+FROM   DUAL;
 COL moat369_def_skip_html    CLEAR
 COL moat369_def_skip_text    CLEAR
 COL moat369_def_skip_csv     CLEAR
@@ -516,33 +514,12 @@ COL moat369_def_skip_map     CLEAR
 COL moat369_def_skip_treemap CLEAR
 COL moat369_def_skip_file    CLEAR
 
-
 DEF top_level_hints = 'NO_MERGE'
 DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE'
 DEF ds_hint         = 'DYNAMIC_SAMPLING(4)'
-DEF max_rows        = '&&moat369_def_sql_maxrows.'
-DEF sql_hl          = '&&moat369_def_sql_highlight.'
-DEF sql_format      = '&&moat369_def_sql_format.'
-DEF sql_show        = '&&moat369_def_sql_show.'
 --
-DEF skip_html       = '&&moat369_def_skip_html.'
-DEF skip_text       = '&&moat369_def_skip_text.'
-DEF skip_csv        = '&&moat369_def_skip_csv.'
-DEF skip_lch        = '&&moat369_def_skip_line.'
-DEF skip_pch        = '&&moat369_def_skip_pie.'
-DEF skip_bch        = '&&moat369_def_skip_bar.'
-DEF skip_graph      = '&&moat369_def_skip_graph.'
-DEF skip_map        = '&&moat369_def_skip_map.'
-DEF skip_treemap    = '&&moat369_def_skip_treemap.'
-DEF skip_html_spool = '&&fc_skip_script.'
-DEF skip_text_file  = '&&fc_skip_script.'
-DEF skip_html_file  = '&&fc_skip_script.'
 DEF skip_all = ''
 
-DEF abstract  = ''
-DEF abstract2 = ''
-DEF foot      = ''
---DEF sql_text  = ''
 COL sql_text FOR A100
 DEF chartype  = ''
 DEF stacked   = ''
@@ -586,14 +563,6 @@ DEF column_number = '1';
 COL recovery NEW_V recovery;
 SELECT CHR(38)||' recovery' recovery FROM DUAL;
 -- this above is to handle event "RMAN backup & recovery I/O"
--- COL skip_html  NEW_V skip_html;
--- COL skip_text  NEW_V skip_text;
--- COL skip_csv   NEW_V skip_csv;
--- COL skip_lch   NEW_V skip_lch;
--- COL skip_pch   NEW_V skip_pch;
--- COL skip_bch   NEW_V skip_bch;
--- COL skip_graph NEW_V skip_graph;
--- COL skip_all   NEW_V skip_all;
 COL dummy_01 NOPRI;
 COL dummy_02 NOPRI;
 COL dummy_03 NOPRI;
@@ -621,9 +590,6 @@ VAR sql_text CLOB;
 VAR sql_text_cdb CLOB;
 VAR sql_text_display CLOB;
 VAR sql_with_clause CLOB;
-EXEC :sql_text := NULL;
-EXEC :sql_text_cdb := NULL;
-EXEC :sql_with_clause := NULL;
 VAR driver_seq NUMBER;
 VAR repo_seq NUMBER;
 VAR temp_seq NUMBER;
@@ -653,22 +619,6 @@ COL moat369_spid clear
 @@&&fc_section_variables.
 
 @@&&fc_set_term_off.
-SET HEA ON;
-SET LIN 32767;
-SET NEWP NONE;
-SET PAGES &&max_rows.;
-SET LONG 32000;
-SET LONGC 2000;
-SET WRA ON;
-SET TRIMS ON;
-SET TRIM ON;
-SET TI OFF;
-SET TIMI OFF;
-SET ARRAY 1000;
-SET NUM 20;
-SET SQLBL ON;
-SET BLO .;
-SET RECSEP OFF;
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -19,6 +19,9 @@ PRO <ol start="&&report_sequence.">
 SPO OFF;
 @@&&fc_spool_end.
 
+-- Reset section related DEFs
+@@&&fc_reset_defs.
+
 @@&&fc_def_output_file. section_fifo '&&moat369_sec_id._fifo.sql'
 -- HOS mkfifo &&section_fifo.
 set define ^
