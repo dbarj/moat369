@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1901'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2019-01-10)'
+DEF moat369_fw_vYYNN = 'v1902'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2019-01-17)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -22,14 +22,23 @@ SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
 COL moat369_fw_vYYYY CLEAR
 
 -- Check command line parameter - This must come as soon as possible to avoid subsqls from overriding parameters. Do not call any parametered function or fc_set_term_off before.
-COL C1 NEW_V 1 FOR A1
+COL C1 NEW_V 1
 COL C2 NEW_V 2
-SELECT '' "C1", '' "C2" from dual WHERE ROWNUM = 0;
+COL C3 NEW_V 3
+COL C4 NEW_V 4
+COL C5 NEW_V 5
+SELECT '' "C1", '' "C2", '' "C3", '' "C4", '' "C5" from dual WHERE ROWNUM = 0;
 COL C1 clear
 COL C2 clear
+COL C3 clear
+COL C4 clear
+COL C5 clear
 DEF in_main_param1 = '&1'
 DEF in_main_param2 = '&2'
-UNDEF 1 2
+DEF in_main_param3 = '&3'
+DEF in_main_param4 = '&4'
+DEF in_main_param5 = '&5'
+UNDEF 1 2 3 4 5
 
 -- Start Time - Do not move it to the beggining, b4 we must ensure we are connected.
 VAR moat369_main_time0 NUMBER;
@@ -49,18 +58,17 @@ EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 @@&&fc_check_config.
 
 -- Define full output folder path.
-@@&&fc_def_output_file. step_full_path_outfdr  'step_full_path_outfdr.sql'
-HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath='$(pwd)'" > step_full_path_outfdr.sql
+DEF step_full_path_name = 'step_full_path_outfdr.sql'
+@@&&fc_def_output_file. step_full_path_outfdr  '&&step_full_path_name.'
+HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath='$(pwd)'" > &&step_full_path_name.
 -- I don't use &&step_full_path_outfdr. as target because of the "cd".
 @&&step_full_path_outfdr.
 HOS rm -f &&step_full_path_outfdr.
-UNDEF step_full_path_outfdr
+UNDEF step_full_path_name step_full_path_outfdr
 
--- Check if param1 is license or section
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_conf_ask_license.' 'Y' '&&in_main_param1.' ''
-@@&&fc_set_value_var_decode. 'sections_param'     '&&moat369_conf_ask_license.' 'Y' '&&in_main_param2.' '&&in_main_param1.'
-
-undef in_main_param1 in_main_param2
+-- Parse parameters
+@@&&fc_parse_parameters.
+undef in_main_param1 in_main_param2 in_main_param3 in_main_param4 in_main_param5
 
 -- Override moat369_sections with sections_param if provided
 @@&&fc_set_value_var_nvl. 'sections_param' '&&sections_param.' '&&moat369_sections.'
@@ -668,6 +676,7 @@ HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369
 HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc     >> &&moat369_log3.; fi
 
 HOS cp &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS if [ -f &&moat369_sw_base./LICENSE-3RD-PARTY ]; then cat &&moat369_sw_base./LICENSE-3RD-PARTY >> &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 
 HOS cp &&moat369_fdr_js./style.css  &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.

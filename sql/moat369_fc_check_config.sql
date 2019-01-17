@@ -63,6 +63,32 @@
 
 ---------------------------
 
+@@&&fc_def_empty_var. moat369_sw_param1
+@@&&fc_def_empty_var. moat369_sw_param2
+@@&&fc_def_empty_var. moat369_sw_param3
+@@&&fc_def_empty_var. moat369_sw_param4
+@@&&fc_def_empty_var. moat369_sw_param5
+
+@@&&fc_def_empty_var. moat369_sw_param1_var
+@@&&fc_def_empty_var. moat369_sw_param2_var
+@@&&fc_def_empty_var. moat369_sw_param3_var
+@@&&fc_def_empty_var. moat369_sw_param4_var
+@@&&fc_def_empty_var. moat369_sw_param5_var
+
+@@&&fc_set_value_var_nvl. 'moat369_sw_param1' '&&moat369_sw_param1.' 'section'
+@@&&fc_set_value_var_nvl. 'moat369_sw_param2' '&&moat369_sw_param2.' 'null'
+@@&&fc_set_value_var_nvl. 'moat369_sw_param3' '&&moat369_sw_param3.' 'null'
+@@&&fc_set_value_var_nvl. 'moat369_sw_param4' '&&moat369_sw_param4.' 'null'
+@@&&fc_set_value_var_nvl. 'moat369_sw_param5' '&&moat369_sw_param5.' 'null'
+
+@@&&fc_validate_variable. moat369_sw_param1 RANGE 'license,section,custom,null'
+@@&&fc_validate_variable. moat369_sw_param2 RANGE 'license,section,custom,null'
+@@&&fc_validate_variable. moat369_sw_param3 RANGE 'license,section,custom,null'
+@@&&fc_validate_variable. moat369_sw_param4 RANGE 'license,section,custom,null'
+@@&&fc_validate_variable. moat369_sw_param5 RANGE 'license,section,custom,null'
+
+---------------------------
+
 @@&&fc_def_empty_var. moat369_pre_encrypt_output
 @@&&fc_def_empty_var. moat369_pre_encrypt_html
 @@&&fc_def_empty_var. moat369_pre_compress_html
