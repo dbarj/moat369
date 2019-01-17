@@ -19,7 +19,7 @@ FROM (
 select substr(word,1,instr(word,'/',-1)) PATH, substr(word,instr(word,'/',-1)+1) FILE_NAME
 from (select '&&one_spool_text_file.' word from dual));
 
-DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename.'
+@@&&fc_def_output_file. one_spool_fullpath_filename '&&one_spool_filename.'
 
 -- display
 SELECT TO_CHAR(SYSDATE, 'HH24:MI:SS') hh_mm_ss FROM DUAL;
@@ -46,7 +46,7 @@ HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then touch &&one_spool_fullpa
 HOS if [ '&&one_spool_text_file_rename.' == 'Y' -a -f &&one_spool_text_file. -a '&&one_spool_text_file_chk.' == 'OK' ]; then mv &&one_spool_text_file. &&one_spool_fullpath_filename.; fi
 UNDEF one_spool_text_file_chk
 
-DEF step_file = '&&moat369_sw_output_fdr./step_file.sql';
+@@&&fc_def_output_file. step_file 'step_file.sql'
 HOS echo "DEF row_num = '"$(if [ -f &&one_spool_fullpath_filename. ]; then cat &&one_spool_fullpath_filename. | wc -l | tr -d '[:space:]'; else echo -1; fi)"'" > &&step_file.
 @&&step_file.
 HOS rm -f &&step_file.
@@ -69,7 +69,7 @@ SELECT TO_CHAR(SYSDATE, '&&moat369_date_format.')||' , '||
 SPO OFF;
 SET HEA ON;
 
-DEF step_file = '&&moat369_sw_output_fdr./step_file.sql';
+@@&&fc_def_output_file. step_file 'step_file.sql'
 HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then echo "@&&fc_convert_txt_to_html. one_spool_fullpath_filename" > &&step_file.; fi
 HOS if [ '&&one_spool_text_file_rename.' == 'Y' ]; then echo "@&&fc_encode_html. &&""one_spool_fullpath_filename." >> &&step_file.; fi
 @&&step_file.

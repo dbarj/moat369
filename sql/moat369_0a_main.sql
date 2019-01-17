@@ -15,7 +15,7 @@ PRO <table><tr class="main">
 SPO OFF
 @@&&fc_spool_end.
 
-DEF step_main_file_driver = '&&moat369_sw_output_fdr./step_main_file_driver_header.sql'
+@@&&fc_def_output_file. step_main_file_driver 'step_main_file_driver_header.sql'
 
 SET SERVEROUT ON
 
@@ -62,7 +62,7 @@ SPO OFF
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-DEF step_main_file_driver = '&&moat369_sw_output_fdr./step_main_file_driver_columns.sql'
+@@&&fc_def_output_file. step_main_file_driver 'step_main_file_driver_columns.sql'
 
 @@&&fc_spool_start.
 SPO &&step_main_file_driver.

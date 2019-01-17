@@ -1,7 +1,7 @@
 -- add seq to one_spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
-DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename._pie_chart.html'
+@@&&fc_def_output_file. one_spool_fullpath_filename '&&one_spool_filename._pie_chart.html'
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._pie_chart.html pie
 

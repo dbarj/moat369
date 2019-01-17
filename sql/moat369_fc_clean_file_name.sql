@@ -11,7 +11,7 @@ UNDEF 1 2
 def type_param = '&&3.'
 undef 3
 
-DEF step_file = '&&moat369_sw_output_fdr./step_file.sql'
+@@&&fc_def_output_file. step_file 'step_file.sql'
 @@&&fc_spool_start.
 SPOOL &&step_file.
 PRO DEF in_param_content = '&&&&in_param..'

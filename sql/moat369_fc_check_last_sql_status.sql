@@ -1,7 +1,7 @@
 -- This code will if row_num is -1 meaning no lines were returned by the sql_text.
 -- If it is, it will count lines on table to ensure it is empty and update to 0.
 
-DEF step_file = '&&moat369_sw_output_fdr./step_file_recount.sql';
+@@&&fc_def_output_file. step_file  'step_file_recount.sql'
 
 -- Define SELECT start line. Var used in cfc_check_last_sql_status
 COL line_no NEW_V moat369_select_start_line

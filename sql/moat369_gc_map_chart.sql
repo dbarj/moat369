@@ -1,19 +1,26 @@
 -- add seq to one_spool_filename
 DEF one_spool_filename = '&&spool_filename.'
 @@&&fc_seq_output_file. one_spool_filename
-DEF one_spool_fullpath_filename = '&&moat369_sw_output_fdr./&&one_spool_filename._map_chart.html'
+@@&&fc_def_output_file. one_spool_fullpath_filename '&&one_spool_filename._map_chart.html'
 
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._map_chart.html map
 
 SPO &&one_spool_fullpath_filename. APP
-PRO <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+PRO <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+PRO   integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+PRO   crossorigin=""/>
+PRO <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+PRO   integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+PRO   crossorigin=""></script>
+PRO <script type="text/javascript" src="http://maps.stamen.com/js/tile.stamen.js?v1.3.0"></script>
 
 -- chart header
+PRO    <div id="chart_div" class="google-chart"></div>
 PRO    <script type="text/javascript" id="gchart_script">
-PRO      google.load('visualization', '1', { 'packages': ['map'] });
-PRO      google.setOnLoadCallback(drawChart);
-PRO      function drawChart() {
-PRO        var data = google.visualization.arrayToDataTable([
+PRO      var mymap = L.map('chart_div').setView([0, 0], 2);;
+PRO      var layer = new L.StamenTileLayer("terrain");;
+PRO      mymap.addLayer(layer);;
+PRO      var arrayOfLatLngs = [];;
 
 -- Count lines returned by PL/SQL
 VAR row_count NUMBER;
@@ -29,15 +36,19 @@ DECLARE
   l_lat VARCHAR2(1000);
   l_long VARCHAR2(1000);
   l_sql_text VARCHAR2(32767);
+  l_i number := 1;
 BEGIN
-  DBMS_OUTPUT.PUT_LINE('[''Latitude'', ''Longitude'', ''Name'']');
   --OPEN cur FOR :sql_text;
   l_sql_text := DBMS_LOB.SUBSTR(:sql_text); -- needed for 10g
   OPEN cur FOR l_sql_text; -- needed for 10g
   LOOP
     FETCH cur INTO l_name, l_lat, l_long;
     EXIT WHEN cur%NOTFOUND;
-    DBMS_OUTPUT.PUT_LINE(',['||l_lat||', '||l_long||', '''||l_name||''']');
+    DBMS_OUTPUT.PUT_LINE('var c_'||l_i||' = ['||l_lat||', '||l_long||'];');
+    DBMS_OUTPUT.PUT_LINE('arrayOfLatLngs.push([c_'||l_i||']);');
+    DBMS_OUTPUT.PUT_LINE('var v_'||l_i||' = L.marker(c_'||l_i||').addTo(mymap);');
+    DBMS_OUTPUT.PUT_LINE('v_'||l_i||'.bindPopup("<b>'||l_name||'</b>", {closeOnClick: false, autoClose: false}).openPopup();');
+    l_i := l_i + 1;
   END LOOP;
   :row_count := cur%ROWCOUNT;
   CLOSE cur;
@@ -54,23 +65,9 @@ select TRIM(:row_count) row_num from dual;
 COL row_num PRI
 
 -- map chart footer
-PRO        ]);;
-PRO        var geoView = new google.visualization.DataView(data);;
-PRO        
-PRO        var options = {
-PRO              showTooltip: true,
-PRO              showInfoWindow: true,
-PRO              useMapTypeControl: true
-PRO            };;
-PRO        
-PRO        var map = new google.visualization.Map(document.getElementById('chart_div'));;
-PRO        map.draw(geoView, options);;
-PRO
-PRO      }
+PRO      var bounds = new L.LatLngBounds(arrayOfLatLngs).pad(0.5);;
+PRO      mymap.fitBounds(bounds);;
 PRO    </script>
-PRO
-PRO    <div id="chart_div" class="google-chart"></div>
-
 
 -- footer
 PRO <br />

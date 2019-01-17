@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v1810'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2018-12-27)'
+DEF moat369_fw_vYYNN = 'v1902'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2019-01-17)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -22,14 +22,23 @@ SELECT TO_CHAR(SYSDATE,'YYYY') moat369_fw_vYYYY FROM DUAL;
 COL moat369_fw_vYYYY CLEAR
 
 -- Check command line parameter - This must come as soon as possible to avoid subsqls from overriding parameters. Do not call any parametered function or fc_set_term_off before.
-COL C1 NEW_V 1 FOR A1
+COL C1 NEW_V 1
 COL C2 NEW_V 2
-SELECT '' "C1", '' "C2" from dual WHERE ROWNUM = 0;
+COL C3 NEW_V 3
+COL C4 NEW_V 4
+COL C5 NEW_V 5
+SELECT '' "C1", '' "C2", '' "C3", '' "C4", '' "C5" from dual WHERE ROWNUM = 0;
 COL C1 clear
 COL C2 clear
+COL C3 clear
+COL C4 clear
+COL C5 clear
 DEF in_main_param1 = '&1'
 DEF in_main_param2 = '&2'
-UNDEF 1 2
+DEF in_main_param3 = '&3'
+DEF in_main_param4 = '&4'
+DEF in_main_param5 = '&5'
+UNDEF 1 2 3 4 5
 
 -- Start Time - Do not move it to the beggining, b4 we must ensure we are connected.
 VAR moat369_main_time0 NUMBER;
@@ -49,18 +58,17 @@ EXEC :moat369_main_time0 := DBMS_UTILITY.GET_TIME;
 @@&&fc_check_config.
 
 -- Define full output folder path.
-@@&&fc_def_output_file. step_full_path_outfdr  'step_full_path_outfdr.sql'
-HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath='$(pwd)'" > step_full_path_outfdr.sql
+DEF step_full_path_name = 'step_full_path_outfdr.sql'
+@@&&fc_def_output_file. step_full_path_outfdr  '&&step_full_path_name.'
+HOS cd &&moat369_sw_output_fdr.; echo "DEF moat369_sw_output_fdr_fpath='$(pwd)'" > &&step_full_path_name.
 -- I don't use &&step_full_path_outfdr. as target because of the "cd".
 @&&step_full_path_outfdr.
 HOS rm -f &&step_full_path_outfdr.
-UNDEF step_full_path_outfdr
+UNDEF step_full_path_name step_full_path_outfdr
 
--- Check if param1 is license or section
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_conf_ask_license.' 'Y' '&&in_main_param1.' ''
-@@&&fc_set_value_var_decode. 'sections_param'     '&&moat369_conf_ask_license.' 'Y' '&&in_main_param2.' '&&in_main_param1.'
-
-undef in_main_param1 in_main_param2
+-- Parse parameters
+@@&&fc_parse_parameters.
+undef in_main_param1 in_main_param2 in_main_param3 in_main_param4 in_main_param5
 
 -- Override moat369_sections with sections_param if provided
 @@&&fc_set_value_var_nvl. 'sections_param' '&&sections_param.' '&&moat369_sections.'
@@ -257,9 +265,6 @@ SELECT CASE '&&moat369_conf_incl_tkprof.' WHEN 'Y' THEN 'moat369_0g_' ELSE '&&fc
 COL moat369_prefix NEW_V moat369_prefix;
 SELECT '&&moat369_sw_name.' || CASE WHEN NOT (:moat369_sec_from = '1a' AND :moat369_sec_to = '9z') THEN '_' || :moat369_sec_from || '_' || :moat369_sec_to END moat369_prefix FROM DUAL;
 COL moat369_prefix clear
--- esp init
--- DEF rr_host_name_short = '';
--- DEF esp_host_name_short = '';
 
 -- get dbid
 COL moat369_dbid NEW_V moat369_dbid;
@@ -287,7 +292,6 @@ SELECT TRANSLATE('&&host_name_short.',
 COL host_name_short clear
 -- setup
 DEF sql_trace_level = '1';
-DEF main_table = '';
 DEF title = '';
 DEF title_no_spaces = '';
 DEF title_suffix = '';
@@ -404,60 +408,13 @@ SELECT decode(platform_id,
 COL cmd_getcpu clear
 HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
--- esp collection
-COL skip_res NEW_V skip_res
-SELECT CASE WHEN '&&moat369_conf_incl_res.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_res FROM DUAL;
-COL skip_res clear
-COL skip_esp NEW_V skip_esp
-SELECT CASE WHEN '&&moat369_conf_incl_esp.' = 'Y' THEN NULL ELSE '&&fc_skip_script.' END skip_esp FROM DUAL;
-COL skip_esp clear
-
-@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
-SPO &&step_pre_file_driver.
-PRO SET TERM ON
-PRO PRO
-PRO PRO Getting resources_requirements
-PRO PRO Please wait ...
-PRO @@&&skip_res.&&skip_diagnostics.resources_requirements_awr.sql
-PRO @@&&skip_res.resources_requirements_statspack.sql
-SPO OFF
-
-@&&skip_res.&&step_pre_file_driver.
-HOS rm -f &&step_pre_file_driver
-
-@@&&fc_def_output_file. step_pre_file_driver 'step_pre_file_driver.sql'
-SPO &&step_pre_file_driver.
-PRO SET TERM ON
-PRO PRO Getting esp_collect_requirements
-PRO PRO Please wait ...
-PRO @@&&skip_esp.&&skip_diagnostics.esp_collect_requirements_awr.sql
-PRO @@&&skip_esp.esp_collect_requirements_statspack.sql
-SPO OFF
-
-@&&skip_esp.&&step_pre_file_driver.
-HOS rm -f &&step_pre_file_driver
-
 @@&&fc_set_term_off.
-
-undef skip_res skip_esp
 
 -- zip esp files but preserve original files on file system until moat369 completes (one database or multiple)
 -- ( MOVED TO RES AND ESP FILES )
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
-DEF row_num = '-1'
-DEF row_num_dif = '0'
-
--- Flush unified Audit Trail
-DECLARE
-  V_CMD VARCHAR2(100) := q'[BEGIN SYS.DBMS_AUDIT_MGMT.FLUSH_UNIFIED_AUDIT_TRAIL; END;]';
-BEGIN
-  IF '&&is_ver_ge_12.' = 'Y' THEN
-    EXECUTE IMMEDIATE V_CMD;
-  END IF;
-END;
-/
 
 -- get average number of CPUs
 COL avg_cpu_count NEW_V avg_cpu_count FOR A6;
@@ -499,16 +456,6 @@ COL between_times NEW_V between_times;
 COL between_dates NEW_V between_dates;
 SELECT ', between &&moat369_date_from. and &&moat369_date_to.' between_dates FROM DUAL;
 
--- Move it away from here
---COL minimum_snap_id NEW_V minimum_snap_id;
---SELECT NVL(TO_CHAR(MIN(snap_id)), '0') minimum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND begin_interval_time > TO_DATE('&&moat369_date_from.', 'YYYY-MM-DD');
---SELECT '-1' minimum_snap_id FROM DUAL WHERE TRIM('&&minimum_snap_id.') IS NULL;
---COL minimum_snap_id clear
---COL maximum_snap_id NEW_V maximum_snap_id;
---SELECT NVL(TO_CHAR(MAX(snap_id)), '&&minimum_snap_id.') maximum_snap_id FROM dba_hist_snapshot WHERE '&&diagnostics_pack.' = 'Y' AND dbid = &&moat369_dbid. AND end_interval_time < TO_DATE('&&moat369_date_to.', 'YYYY-MM-DD') + 1;
---SELECT '-1' maximum_snap_id FROM DUAL WHERE TRIM('&&maximum_snap_id.') IS NULL;
---COL maximum_snap_id clear
-
 -- inclusion config determine skip flags
 COL moat369_skip_html    NEW_V moat369_skip_html;
 COL moat369_skip_text    NEW_V moat369_skip_text;
@@ -529,7 +476,8 @@ SELECT CASE '&&moat369_conf_incl_html.'    WHEN 'N' THEN '&&fc_skip_script.' END
        CASE '&&moat369_conf_incl_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_graph   ,
        CASE '&&moat369_conf_incl_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_map     ,
        CASE '&&moat369_conf_incl_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_treemap ,
-       CASE '&&moat369_conf_incl_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file  FROM DUAL;
+       CASE '&&moat369_conf_incl_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_skip_file
+FROM   DUAL;
 COL moat369_skip_html    CLEAR
 COL moat369_skip_text    CLEAR
 COL moat369_skip_csv     CLEAR
@@ -561,7 +509,8 @@ SELECT CASE '&&moat369_conf_def_html.'    WHEN 'N' THEN '&&fc_skip_script.' END 
        CASE '&&moat369_conf_def_graph.'   WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_graph   ,
        CASE '&&moat369_conf_def_map.'     WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_map     ,
        CASE '&&moat369_conf_def_treemap.' WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_treemap ,
-       CASE '&&moat369_conf_def_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file  FROM DUAL;
+       CASE '&&moat369_conf_def_file.'    WHEN 'N' THEN '&&fc_skip_script.' END moat369_def_skip_file
+FROM   DUAL;
 COL moat369_def_skip_html    CLEAR
 COL moat369_def_skip_text    CLEAR
 COL moat369_def_skip_csv     CLEAR
@@ -573,33 +522,12 @@ COL moat369_def_skip_map     CLEAR
 COL moat369_def_skip_treemap CLEAR
 COL moat369_def_skip_file    CLEAR
 
-
 DEF top_level_hints = 'NO_MERGE'
 DEF sq_fact_hints   = 'MATERIALIZE NO_MERGE'
 DEF ds_hint         = 'DYNAMIC_SAMPLING(4)'
-DEF max_rows        = '&&moat369_def_sql_maxrows.'
-DEF sql_hl          = '&&moat369_def_sql_highlight.'
-DEF sql_format      = '&&moat369_def_sql_format.'
-DEF sql_show        = '&&moat369_def_sql_show.'
 --
-DEF skip_html       = '&&moat369_def_skip_html.'
-DEF skip_text       = '&&moat369_def_skip_text.'
-DEF skip_csv        = '&&moat369_def_skip_csv.'
-DEF skip_lch        = '&&moat369_def_skip_line.'
-DEF skip_pch        = '&&moat369_def_skip_pie.'
-DEF skip_bch        = '&&moat369_def_skip_bar.'
-DEF skip_graph      = '&&moat369_def_skip_graph.'
-DEF skip_map        = '&&moat369_def_skip_map.'
-DEF skip_treemap    = '&&moat369_def_skip_treemap.'
-DEF skip_html_spool = '&&fc_skip_script.'
-DEF skip_text_file  = '&&fc_skip_script.'
-DEF skip_html_file  = '&&fc_skip_script.'
 DEF skip_all = ''
 
-DEF abstract  = ''
-DEF abstract2 = ''
-DEF foot      = ''
---DEF sql_text  = ''
 COL sql_text FOR A100
 DEF chartype  = ''
 DEF stacked   = ''
@@ -643,14 +571,6 @@ DEF column_number = '1';
 COL recovery NEW_V recovery;
 SELECT CHR(38)||' recovery' recovery FROM DUAL;
 -- this above is to handle event "RMAN backup & recovery I/O"
--- COL skip_html  NEW_V skip_html;
--- COL skip_text  NEW_V skip_text;
--- COL skip_csv   NEW_V skip_csv;
--- COL skip_lch   NEW_V skip_lch;
--- COL skip_pch   NEW_V skip_pch;
--- COL skip_bch   NEW_V skip_bch;
--- COL skip_graph NEW_V skip_graph;
--- COL skip_all   NEW_V skip_all;
 COL dummy_01 NOPRI;
 COL dummy_02 NOPRI;
 COL dummy_03 NOPRI;
@@ -678,9 +598,6 @@ VAR sql_text CLOB;
 VAR sql_text_cdb CLOB;
 VAR sql_text_display CLOB;
 VAR sql_with_clause CLOB;
-EXEC :sql_text := NULL;
-EXEC :sql_text_cdb := NULL;
-EXEC :sql_with_clause := NULL;
 VAR driver_seq NUMBER;
 VAR repo_seq NUMBER;
 VAR temp_seq NUMBER;
@@ -710,29 +627,8 @@ COL moat369_spid clear
 @@&&fc_section_variables.
 
 @@&&fc_set_term_off.
-SET HEA ON;
-SET LIN 32767;
-SET NEWP NONE;
-SET PAGES &&max_rows.;
-SET LONG 32000;
-SET LONGC 2000;
-SET WRA ON;
-SET TRIMS ON;
-SET TRIM ON;
-SET TI OFF;
-SET TIMI OFF;
-SET ARRAY 1000;
-SET NUM 20;
-SET SQLBL ON;
-SET BLO .;
-SET RECSEP OFF;
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-COL fc_wr_collector NEW_V fc_wr_collector
-SELECT CASE WHEN '&moat369_conf_incl_wr_data.' = 'Y' THEN '' ELSE '&&fc_skip_script.' END || '&&fc_wr_collector.' "fc_wr_collector" FROM DUAL;
-COL fc_wr_collector clear
-@@&&fc_wr_collector.
 
 -- Print Database and License info only if it is a DB tool.
 COL db_lic_info NEW_V db_lic_info NOPRI
@@ -767,9 +663,6 @@ HOS if [ -f esp_requirements_&&host_name_short..zip ]; then echo > &&step_ren_cp
 HOS rm -f &&step_ren_cpuinfo.
 UNDEF step_ren_cpuinfo
 
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj esp_requirements_&&host_name_short..zip &&moat369_cpuinfo. >> &&moat369_log3.; fi
-HOS if [ -f esp_requirements_&&host_name_short..zip ]; then zip -mj &&moat369_zip_filename. esp_requirements_&&host_name_short..zip >> &&moat369_log3.; fi
-
 -- zip other files
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./highlight.pack.js  >> &&moat369_log3.; fi
 HOS if [ '&&moat369_conf_sql_highlight.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&moat369_fdr_js./vs.css             >> &&moat369_log3.; fi
@@ -783,12 +676,10 @@ HOS if [ -f &&enc_key_file..enc ]; then zip -j &&moat369_zip_filename. &&moat369
 HOS if [ -f &&enc_key_file..enc ]; then zip -mj &&moat369_zip_filename. &&enc_key_file..enc     >> &&moat369_log3.; fi
 
 HOS cp &&moat369_fdr_js./../LICENSE-3RD-PARTY &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
+HOS if [ -f &&moat369_sw_base./LICENSE-3RD-PARTY ]; then cat &&moat369_sw_base./LICENSE-3RD-PARTY >> &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt; fi
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./LICENSE-3RD-PARTY.txt >> &&moat369_log3.
 
-HOS cp &&moat369_fdr_js./style.css &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
+HOS cp &&moat369_fdr_js./style.css  &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
 HOS zip -mj &&moat369_zip_filename. &&moat369_sw_output_fdr./&&moat369_style_css. >> &&moat369_log3.
-
---HOS zip -r osw_&&esp_host_name_short..zip `ps -ef | &&cmd_grep. OSW | &&cmd_grep. FM | &&cmd_awk. -F 'OSW' '{print $2}' | cut -f 3 -d ' '`
---HOS zip -mT &&moat369_zip_filename. osw_&&esp_host_name_short..zip
 
 --WHENEVER SQLERROR CONTINUE;

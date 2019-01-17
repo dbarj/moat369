@@ -33,13 +33,14 @@ DEF fc_gen_temp_file              = '&&moat369_fdr_sql./moat369_fc_gen_temp_file
 DEF fc_validate_variable          = '&&moat369_fdr_sql./moat369_fc_validate_variable.sql'
 DEF fc_zip_driver_files           = '&&moat369_fdr_sql./moat369_fc_zip_driver_files.sql'
 DEF fc_load_file_ifexist          = '&&moat369_fdr_sql./moat369_fc_load_file_ifexist.sql'
-DEF fc_wr_collector               = '&&moat369_fdr_sql./moat369_fc_wr_collector.sql'
 DEF fc_def_output_file            = '&&moat369_fdr_sql./moat369_fc_def_output_file.sql'
 DEF fc_mod_state                  = '&&moat369_fdr_sql./moat369_fc_mod_state.sql'
 DEF fc_clear_defs                 = '&&moat369_fdr_sql./moat369_fc_clear_defs.sql'
+DEF fc_reset_defs                 = '&&moat369_fdr_sql./moat369_fc_reset_defs.sql'
 DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.sql'
 DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
 DEF fc_add_tablefilter            = '&&moat369_fdr_sql./moat369_fc_add_tablefilter.sql'
+DEF fc_parse_parameters           = '&&moat369_fdr_sql./moat369_fc_parse_parameters.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'
