@@ -258,8 +258,9 @@ END;
 PRINT moat369_sec_from;
 PRINT moat369_sec_to;
 
-COL moat369_0g NEW_V moat369_0g;
-SELECT CASE '&&moat369_conf_incl_tkprof.' WHEN 'Y' THEN 'moat369_0g_' ELSE '&&fc_skip_script.' END moat369_0g FROM DUAL;
+COL skip_tkprof NEW_V skip_tkprof
+SELECT CASE '&&moat369_conf_incl_tkprof.' WHEN 'Y' THEN '' ELSE '&&fc_skip_script.' END skip_tkprof FROM DUAL;
+COL skip_tkprof clear
 
 -- filename prefix
 COL moat369_prefix NEW_V moat369_prefix;
@@ -391,10 +392,19 @@ END;
 /
 
 -- tracing script in case it takes long to execute so we can diagnose it
-ALTER SESSION SET MAX_DUMP_FILE_SIZE = '1G';
-ALTER SESSION SET TRACEFILE_IDENTIFIER = "&&moat369_tracefile_identifier.";
---ALTER SESSION SET STATISTICS_LEVEL = 'ALL';
-ALTER SESSION SET EVENTS '10046 TRACE NAME CONTEXT FOREVER, LEVEL &&sql_trace_level.';
+@@&&fc_def_output_file. step_trace 'step_trace.sql'
+
+@@&&fc_spool_start.
+SPO &&step_trace.
+PRO ALTER SESSION SET MAX_DUMP_FILE_SIZE = '1G';;
+PRO ALTER SESSION SET TRACEFILE_IDENTIFIER = "&&moat369_tracefile_identifier.";;
+PRO ALTER SESSION SET EVENTS '10046 TRACE NAME CONTEXT FOREVER, LEVEL &&sql_trace_level.';;
+SPO OFF
+@@&&fc_spool_end.
+
+@@&&skip_tkprof.&&step_trace.
+HOS rm -f &&step_trace.
+UNDEF step_trace
 
 -- CPU cmd
 COL cmd_getcpu NEW_V cmd_getcpu
