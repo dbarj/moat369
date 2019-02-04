@@ -2,6 +2,8 @@ STORE SET original_settings REPLACE
 @@moat369_0b_pre.sql
 DEF section_id = '0a'
 EXEC DBMS_APPLICATION_INFO.SET_MODULE('&&moat369_prefix.','&&section_id.')
+
+@@&&fc_reset_defs.
 @@&&fc_load_file_ifexist. '&&moat369_sw_folder./&&moat369_sw_name._0a_pre.sql'
 
 -- Report # of columns
