@@ -248,3 +248,7 @@
 @@&&fc_validate_variable. moat369_conf_work_day_to    IS_NUMBER
 
 ---------------------------
+
+@@&&fc_def_empty_var.      moat369_sw_desc_linesize
+@@&&fc_set_value_var_nvl. 'moat369_sw_desc_linesize'  '&&moat369_sw_desc_linesize.'  '80'
+@@&&fc_validate_variable.  moat369_sw_desc_linesize   IS_NUMBER

@@ -18,7 +18,7 @@ PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 -- turing trace off
 ALTER SESSION SET SQL_TRACE = FALSE;
-@@&&moat369_0g.tkprof.sql
+@@&&skip_tkprof.moat369_0g_tkprof.sql
 
 PRO ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -31,27 +31,7 @@ PRO 2. Review &&moat369_main_report_nopath.
 SPO OFF;
 @@&&fc_spool_end.
 
--- cleanup
-SET HEA ON;
-SET LIN 80;
-SET NEWP 1;
-SET PAGES 14;
-SET LONG 80;
-SET LONGC 80;
-SET WRA ON;
-SET TRIMS OFF;
-SET TRIM OFF;
-SET TI OFF;
-SET TIMI OFF;
-SET ARRAY 15;
-SET NUM 10;
-SET NUMF "";
-SET SQLBL OFF;
-SET BLO ON;
-SET RECSEP WR;
-UNDEF 1
-
--- alert log (3 methods)
+-- Alert log (3 methods)
 COL db_name_upper NEW_V db_name_upper
 COL db_name_lower NEW_V db_name_lower
 COL background_dump_dest NEW_V background_dump_dest

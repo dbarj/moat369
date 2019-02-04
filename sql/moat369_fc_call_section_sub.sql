@@ -8,7 +8,7 @@ DEF moat369_subsec_fl = '&2.'
 DEF moat369_subsec_nm = '&3.'
 UNDEF 1 2 3
 
-@@&&moat369_0g.tkprof.sql
+@@&&skip_tkprof.moat369_0g_tkprof.sql
 DEF section_id = '&&moat369_subsec_id.';
 DEF section_name = '&&moat369_subsec_nm.';
 EXEC DBMS_APPLICATION_INFO.SET_MODULE('&&moat369_prefix.','&&section_id.');

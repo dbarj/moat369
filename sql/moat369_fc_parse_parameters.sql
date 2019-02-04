@@ -69,19 +69,31 @@ END;
 WHENEVER SQLERROR CONTINUE
 @@&&fc_set_term_off.
 
+@@&&fc_def_empty_var. moat369_param1
+@@&&fc_def_empty_var. moat369_param2
+@@&&fc_def_empty_var. moat369_param3
+@@&&fc_def_empty_var. moat369_param4
+@@&&fc_def_empty_var. moat369_param5
+
+@@&&fc_set_value_var_nvl. 'moat369_param1' '&&in_main_param1.' '&&moat369_param1.'
+@@&&fc_set_value_var_nvl. 'moat369_param2' '&&in_main_param2.' '&&moat369_param2.'
+@@&&fc_set_value_var_nvl. 'moat369_param3' '&&in_main_param3.' '&&moat369_param3.'
+@@&&fc_set_value_var_nvl. 'moat369_param4' '&&in_main_param4.' '&&moat369_param4.'
+@@&&fc_set_value_var_nvl. 'moat369_param5' '&&in_main_param5.' '&&moat369_param5.'
+
 @@&&fc_def_empty_var. license_pack_param
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param1.' 'license' '&&in_main_param1.' '&&license_pack_param.'
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param2.' 'license' '&&in_main_param2.' '&&license_pack_param.'
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param3.' 'license' '&&in_main_param3.' '&&license_pack_param.'
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param4.' 'license' '&&in_main_param4.' '&&license_pack_param.'
-@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param5.' 'license' '&&in_main_param5.' '&&license_pack_param.'
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param1.' 'license' '&&moat369_param1.' '&&license_pack_param.'
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param2.' 'license' '&&moat369_param2.' '&&license_pack_param.'
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param3.' 'license' '&&moat369_param3.' '&&license_pack_param.'
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param4.' 'license' '&&moat369_param4.' '&&license_pack_param.'
+@@&&fc_set_value_var_decode. 'license_pack_param' '&&moat369_sw_param5.' 'license' '&&moat369_param5.' '&&license_pack_param.'
 
 @@&&fc_def_empty_var. sections_param
-@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param1.' 'section' '&&in_main_param1.' '&&sections_param.'
-@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param2.' 'section' '&&in_main_param2.' '&&sections_param.'
-@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param3.' 'section' '&&in_main_param3.' '&&sections_param.'
-@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param4.' 'section' '&&in_main_param4.' '&&sections_param.'
-@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param5.' 'section' '&&in_main_param5.' '&&sections_param.'
+@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param1.' 'section' '&&moat369_param1.' '&&sections_param.'
+@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param2.' 'section' '&&moat369_param2.' '&&sections_param.'
+@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param3.' 'section' '&&moat369_param3.' '&&sections_param.'
+@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param4.' 'section' '&&moat369_param4.' '&&sections_param.'
+@@&&fc_set_value_var_decode. 'sections_param' '&&moat369_sw_param5.' 'section' '&&moat369_param5.' '&&sections_param.'
 
 @@&&fc_def_output_file. step_parse_param 'step_parse_param.sql'
 COL skip_parse_param NEW_V skip_parse_param NOPRI
@@ -89,37 +101,39 @@ COL skip_parse_param NEW_V skip_parse_param NOPRI
 -- Param 1
 SELECT CASE WHEN '&moat369_sw_param1.' = 'custom' THEN '' ELSE '&&fc_skip_script.' END "skip_parse_param" FROM DUAL;
 SPO &&step_parse_param.
-PRO DEF &&moat369_sw_param1_var. = '&&in_main_param1.'
+PRO DEF &&moat369_sw_param1_var. = '&&moat369_param1.'
 SPO OFF
 @&&skip_parse_param.&&step_parse_param.
 
 -- Param 2
 SELECT CASE WHEN '&moat369_sw_param2.' = 'custom' THEN '' ELSE '&&fc_skip_script.' END "skip_parse_param" FROM DUAL;
 SPO &&step_parse_param.
-PRO DEF &&moat369_sw_param2_var. = '&&in_main_param2.'
+PRO DEF &&moat369_sw_param2_var. = '&&moat369_param2.'
 SPO OFF
 @&&skip_parse_param.&&step_parse_param.
 
 -- Param 3
 SELECT CASE WHEN '&moat369_sw_param3.' = 'custom' THEN '' ELSE '&&fc_skip_script.' END "skip_parse_param" FROM DUAL;
 SPO &&step_parse_param.
-PRO DEF &&moat369_sw_param3_var. = '&&in_main_param3.'
+PRO DEF &&moat369_sw_param3_var. = '&&moat369_param3.'
 SPO OFF
 @&&skip_parse_param.&&step_parse_param.
 
 -- Param 4
 SELECT CASE WHEN '&moat369_sw_param4.' = 'custom' THEN '' ELSE '&&fc_skip_script.' END "skip_parse_param" FROM DUAL;
 SPO &&step_parse_param.
-PRO DEF &&moat369_sw_param4_var. = '&&in_main_param4.'
+PRO DEF &&moat369_sw_param4_var. = '&&moat369_param4.'
 SPO OFF
 @&&skip_parse_param.&&step_parse_param.
 
 -- Param 5
 SELECT CASE WHEN '&moat369_sw_param5.' = 'custom' THEN '' ELSE '&&fc_skip_script.' END "skip_parse_param" FROM DUAL;
 SPO &&step_parse_param.
-PRO DEF &&moat369_sw_param5_var. = '&&in_main_param5.'
+PRO DEF &&moat369_sw_param5_var. = '&&moat369_param5.'
 SPO OFF
 @&&skip_parse_param.&&step_parse_param.
 
 HOS rm -f &&step_parse_param.
 UNDEF skip_parse_param step_parse_param
+
+undef moat369_param1 moat369_param2 moat369_param3 moat369_param4 moat369_param5
