@@ -41,6 +41,7 @@ DEF fc_spool_start                = '&&moat369_fdr_sql./moat369_fc_spool_start.s
 DEF fc_spool_end                  = '&&moat369_fdr_sql./moat369_fc_spool_end.sql'
 DEF fc_add_tablefilter            = '&&moat369_fdr_sql./moat369_fc_add_tablefilter.sql'
 DEF fc_parse_parameters           = '&&moat369_fdr_sql./moat369_fc_parse_parameters.sql'
+DEF fc_check_file_exists          = '&&moat369_fdr_sql./moat369_fc_check_file_exists.sql'
 
 -- Define ShellScripts
 DEF sh_csv_to_metadata_ddl        = '&&moat369_fdr_sh./csv_to_metadata_ddl.sh'

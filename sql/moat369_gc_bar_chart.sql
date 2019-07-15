@@ -13,7 +13,7 @@ DEF one_spool_filename = '&&spool_filename.'
 @@moat369_0j_html_topic_intro.sql &&one_spool_filename._bar_chart.html bar
 
 SPO &&one_spool_fullpath_filename. APP
-PRO <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+PRO <script type="text/javascript" src="&&moat369_sw_gchart_path."></script>
 
 -- chart header
 PRO    <script type="text/javascript" id="gchart_script">
@@ -57,7 +57,10 @@ BEGIN
   l_value := l_others;
   l_style := 'D3D3D3'; -- light gray
   l_tooltip := '('||l_others||'% of remaining data)';
-  DBMS_OUTPUT.PUT_LINE(',['''||l_bar||''', '||l_value||', '''||l_style||''', '''||l_tooltip||''']');
+  IF l_others > 0 AND &&bar_minperc. > 0 -- For non-percentage bar charts
+  THEN
+    DBMS_OUTPUT.PUT_LINE(',['''||l_bar||''', '||l_value||', '''||l_style||''', '''||l_tooltip||''']');
+  END IF;
 END;
 /
 SET SERVEROUT OFF;

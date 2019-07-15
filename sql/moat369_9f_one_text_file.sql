@@ -7,7 +7,6 @@
 BEGIN IF '&&one_spool_text_file_rename.' = 'Y' THEN :file_seq := :file_seq + 1; END IF; END;
 /
 
-@@&&fc_def_empty_var. one_spool_text_file_type
 @@&&fc_set_value_var_nvl. one_spool_text_file_type '&&one_spool_text_file_type.' 'text'
 
 -- one_spool_filename receive just the file_name of one_spool_text_file adapted.
