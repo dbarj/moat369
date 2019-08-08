@@ -115,7 +115,7 @@ select -- Lower or Equal
        decode('&&is_ver_ge_12_1.' ,'Y','--','N','') skip_ver_ge_12_1,
        decode('&&is_ver_ge_12_2.' ,'Y','--','N','') skip_ver_ge_12_2,
        decode('&&is_ver_ge_12.'   ,'Y','--','N','') skip_ver_ge_12,
-       decode('&&is_ver_ge_12.'   ,'Y','--','N','') skip_ver_ge_18
+       decode('&&is_ver_ge_18.'   ,'Y','--','N','') skip_ver_ge_18
 from   dual;
 
 COL is_ver_le_9_1  clear
