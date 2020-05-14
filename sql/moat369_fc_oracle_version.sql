@@ -12,6 +12,8 @@ COL is_ver_le_12_1 new_v is_ver_le_12_1 nopri
 COL is_ver_le_12_2 new_v is_ver_le_12_2 nopri
 COL is_ver_le_12   new_v is_ver_le_12   nopri
 COL is_ver_le_18   new_v is_ver_le_18   nopri
+COL is_ver_le_19   new_v is_ver_le_19   nopri
+COL is_ver_le_20   new_v is_ver_le_20   nopri
 --
 COL is_ver_ge_9_1  new_v is_ver_ge_9_1  nopri
 COL is_ver_ge_9_2  new_v is_ver_ge_9_2  nopri
@@ -26,6 +28,8 @@ COL is_ver_ge_12_1 new_v is_ver_ge_12_1 nopri
 COL is_ver_ge_12_2 new_v is_ver_ge_12_2 nopri
 COL is_ver_ge_12   new_v is_ver_ge_12   nopri
 COL is_ver_ge_18   new_v is_ver_ge_18   nopri
+COL is_ver_ge_19   new_v is_ver_ge_19   nopri
+COL is_ver_ge_20   new_v is_ver_ge_20   nopri
 
 -- Set skip version variables. Value will be '--' when version is the corresponding.
 COL skip_ver_le_9_1  new_v skip_ver_le_9_1  nopri
@@ -41,6 +45,8 @@ COL skip_ver_le_12_1 new_v skip_ver_le_12_1 nopri
 COL skip_ver_le_12_2 new_v skip_ver_le_12_2 nopri
 COL skip_ver_le_12   new_v skip_ver_le_12   nopri
 COL skip_ver_le_18   new_v skip_ver_le_18   nopri
+COL skip_ver_le_19   new_v skip_ver_le_19   nopri
+COL skip_ver_le_20   new_v skip_ver_le_20   nopri
 --
 COL skip_ver_ge_9_1  new_v skip_ver_ge_9_1  nopri
 COL skip_ver_ge_9_2  new_v skip_ver_ge_9_2  nopri
@@ -55,6 +61,8 @@ COL skip_ver_ge_12_1 new_v skip_ver_ge_12_1 nopri
 COL skip_ver_ge_12_2 new_v skip_ver_ge_12_2 nopri
 COL skip_ver_ge_12   new_v skip_ver_ge_12   nopri
 COL skip_ver_ge_18   new_v skip_ver_ge_18   nopri
+COL skip_ver_ge_19   new_v skip_ver_ge_19   nopri
+COL skip_ver_ge_20   new_v skip_ver_ge_20   nopri
 
 select -- Lower or Equal
        case when version <  9  or (version = 9 and release = 1)  then 'Y' else 'N' end is_ver_le_9_1,
@@ -70,6 +78,8 @@ select -- Lower or Equal
        case when version <= 12                                   then 'Y' else 'N' end is_ver_le_12_2,
        case when version <= 12                                   then 'Y' else 'N' end is_ver_le_12,
        case when version <= 18                                   then 'Y' else 'N' end is_ver_le_18,
+       case when version <= 19                                   then 'Y' else 'N' end is_ver_le_19,
+       case when version <= 20                                   then 'Y' else 'N' end is_ver_le_20,
        -- Greater or Equal
        case when version >= 9                                    then 'Y' else 'N' end is_ver_ge_9_1,
        case when version >  9  or (version = 9 and release = 2)  then 'Y' else 'N' end is_ver_ge_9_2,
@@ -84,6 +94,8 @@ select -- Lower or Equal
        case when version >  12 or (version = 12 and release = 2) then 'Y' else 'N' end is_ver_ge_12_2,
        case when version >= 12                                   then 'Y' else 'N' end is_ver_ge_12,
        case when version >= 18                                   then 'Y' else 'N' end is_ver_ge_18
+       case when version >= 19                                   then 'Y' else 'N' end is_ver_ge_19
+       case when version >= 20                                   then 'Y' else 'N' end is_ver_ge_20
 from  (select to_number(substr(version,1,instr(version,'.')-1)) version,
               to_number(substr(version,instr(version,'.')+1, instr(version,'.',1,2)-instr(version,'.')-1)) release
          from v$instance);
@@ -102,6 +114,8 @@ select -- Lower or Equal
        decode('&&is_ver_le_12_2.' ,'Y','--','N','') skip_ver_le_12_2,
        decode('&&is_ver_le_12.'   ,'Y','--','N','') skip_ver_le_12,
        decode('&&is_ver_le_18.'   ,'Y','--','N','') skip_ver_le_18,
+       decode('&&is_ver_le_19.'   ,'Y','--','N','') skip_ver_le_19,
+       decode('&&is_ver_le_20.'   ,'Y','--','N','') skip_ver_le_20,
        -- Greater or Equal
        decode('&&is_ver_ge_9_1.'  ,'Y','--','N','') skip_ver_ge_9_1,
        decode('&&is_ver_ge_9_2.'  ,'Y','--','N','') skip_ver_ge_9_2,
@@ -116,6 +130,8 @@ select -- Lower or Equal
        decode('&&is_ver_ge_12_2.' ,'Y','--','N','') skip_ver_ge_12_2,
        decode('&&is_ver_ge_12.'   ,'Y','--','N','') skip_ver_ge_12,
        decode('&&is_ver_ge_18.'   ,'Y','--','N','') skip_ver_ge_18
+       decode('&&is_ver_ge_19.'   ,'Y','--','N','') skip_ver_ge_19
+       decode('&&is_ver_ge_20.'   ,'Y','--','N','') skip_ver_ge_20
 from   dual;
 
 COL is_ver_le_9_1  clear
@@ -131,6 +147,8 @@ COL is_ver_le_12_1 clear
 COL is_ver_le_12_2 clear
 COL is_ver_le_12   clear
 COL is_ver_le_18   clear
+COL is_ver_le_19   clear
+COL is_ver_le_20   clear
 --
 COL is_ver_ge_9_1  clear
 COL is_ver_ge_9_2  clear
@@ -145,6 +163,8 @@ COL is_ver_ge_12_1 clear
 COL is_ver_ge_12_2 clear
 COL is_ver_ge_12   clear
 COL is_ver_ge_18   clear
+COL is_ver_ge_19   clear
+COL is_ver_ge_20   clear
 
 COL skip_ver_le_9_1  clear
 COL skip_ver_le_9_2  clear
@@ -159,6 +179,8 @@ COL skip_ver_le_12_1 clear
 COL skip_ver_le_12_2 clear
 COL skip_ver_le_12   clear
 COL skip_ver_le_18   clear
+COL skip_ver_le_19   clear
+COL skip_ver_le_20   clear
 --
 COL skip_ver_ge_9_1  clear
 COL skip_ver_ge_9_2  clear
@@ -173,6 +195,8 @@ COL skip_ver_ge_12_1 clear
 COL skip_ver_ge_12_2 clear
 COL skip_ver_ge_12   clear
 COL skip_ver_ge_18   clear
+COL skip_ver_ge_19   clear
+COL skip_ver_ge_20   clear
 
 -------------------------------
 -- Set is_cdb variable. Result will be 'Y' or 'N'.
