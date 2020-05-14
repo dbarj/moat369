@@ -93,8 +93,8 @@ select -- Lower or Equal
        case when version >= 12                                   then 'Y' else 'N' end is_ver_ge_12_1,
        case when version >  12 or (version = 12 and release = 2) then 'Y' else 'N' end is_ver_ge_12_2,
        case when version >= 12                                   then 'Y' else 'N' end is_ver_ge_12,
-       case when version >= 18                                   then 'Y' else 'N' end is_ver_ge_18
-       case when version >= 19                                   then 'Y' else 'N' end is_ver_ge_19
+       case when version >= 18                                   then 'Y' else 'N' end is_ver_ge_18,
+       case when version >= 19                                   then 'Y' else 'N' end is_ver_ge_19,
        case when version >= 20                                   then 'Y' else 'N' end is_ver_ge_20
 from  (select to_number(substr(version,1,instr(version,'.')-1)) version,
               to_number(substr(version,instr(version,'.')+1, instr(version,'.',1,2)-instr(version,'.')-1)) release
@@ -129,8 +129,8 @@ select -- Lower or Equal
        decode('&&is_ver_ge_12_1.' ,'Y','--','N','') skip_ver_ge_12_1,
        decode('&&is_ver_ge_12_2.' ,'Y','--','N','') skip_ver_ge_12_2,
        decode('&&is_ver_ge_12.'   ,'Y','--','N','') skip_ver_ge_12,
-       decode('&&is_ver_ge_18.'   ,'Y','--','N','') skip_ver_ge_18
-       decode('&&is_ver_ge_19.'   ,'Y','--','N','') skip_ver_ge_19
+       decode('&&is_ver_ge_18.'   ,'Y','--','N','') skip_ver_ge_18,
+       decode('&&is_ver_ge_19.'   ,'Y','--','N','') skip_ver_ge_19,
        decode('&&is_ver_ge_20.'   ,'Y','--','N','') skip_ver_ge_20
 from   dual;
 
