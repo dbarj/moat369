@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v2002'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2020-02-27)'
+DEF moat369_fw_vYYNN = 'v2008'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2020-08-13)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -172,7 +172,7 @@ COL fc_convert_txt_to_html clear
 @@&&fc_def_empty_var. moat369_pre_sw_key_file
 @@&&fc_def_output_file. enc_key_file 'key.bin'
 @@&&fc_set_value_var_nvl. 'enc_key_file' '&&moat369_pre_sw_key_file.' '&&enc_key_file.'
- 
+
 
 HOS if [ ! -f &&enc_key_file. -a '&&moat369_conf_encrypt_html.' == 'ON' ]; then openssl rand -base64 32 -out &&enc_key_file.; fi
 HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&moat369_enc_pub_file. -certin -in &&enc_key_file. -out &&enc_key_file..enc; fi
@@ -188,12 +188,14 @@ SELECT bin_prefix1 || 'awk'  cmd_awk,
 from (
 SELECT
 decode(platform_id,
-1,'/usr/xpg4/bin/', -- Solaris[tm] OE (32-bit)
-2,'/usr/xpg4/bin/', -- Solaris[tm] OE (64-bit)
+1,'/usr/xpg4/bin/',  -- Solaris[tm] OE (32-bit)
+2,'/usr/xpg4/bin/',  -- Solaris[tm] OE (64-bit)
+20,'/usr/xpg4/bin/', -- Solaris Operating System (x86-64)
 '') bin_prefix1,
 decode(platform_id,
-1,'/usr/gnu/bin/', -- Solaris[tm] OE (32-bit)
-2,'/usr/gnu/bin/', -- Solaris[tm] OE (64-bit)
+1,'/usr/gnu/bin/',  -- Solaris[tm] OE (32-bit)
+2,'/usr/gnu/bin/',  -- Solaris[tm] OE (64-bit)
+20,'/usr/gnu/bin/', -- Solaris Operating System (x86-64)
 '') bin_prefix2 from v$database);
 COL cmd_awk  NEW_V clear
 COL cmd_grep NEW_V clear
@@ -414,6 +416,7 @@ SELECT decode(platform_id,
 6,'lsconf | grep Processor', -- AIX-Based Systems (64-bit)
 2,'psrinfo -v', -- Solaris[tm] OE (64-bit)
 4,'machinfo', -- HP-UX IA (64-bit)
+20,'/usr/sbin/psrinfo -v', -- Solaris Operating System (x86-64)
 'cat /proc/cpuinfo | grep -i name | sort | uniq' -- Others
 ) cmd_getcpu from v$database;
 COL cmd_getcpu clear
