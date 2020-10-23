@@ -255,3 +255,17 @@
 @@&&fc_def_empty_var.      moat369_sw_desc_linesize
 @@&&fc_set_value_var_nvl. 'moat369_sw_desc_linesize'  '&&moat369_sw_desc_linesize.'  '80'
 @@&&fc_validate_variable.  moat369_sw_desc_linesize   IS_NUMBER
+
+---------------------------
+
+@@&&fc_def_empty_var. moat369_conf_list_rows_color
+@@&&fc_def_empty_var. moat369_conf_list_norows_color
+@@&&fc_def_empty_var. moat369_conf_list_error_color
+
+@@&&fc_set_value_var_nvl. 'moat369_conf_list_rows_color'   '&&moat369_conf_list_rows_color.'   'Black'
+@@&&fc_set_value_var_nvl. 'moat369_conf_list_norows_color' '&&moat369_conf_list_norows_color.' 'LightGrey'
+@@&&fc_set_value_var_nvl. 'moat369_conf_list_error_color'  '&&moat369_conf_list_error_color.'  'LightBlue'
+
+--@@&&fc_validate_variable. moat369_conf_list_rows_color   NOT_NULL
+--@@&&fc_validate_variable. moat369_conf_list_norows_color NOT_NULL
+--@@&&fc_validate_variable. moat369_conf_list_error_color  NOT_NULL

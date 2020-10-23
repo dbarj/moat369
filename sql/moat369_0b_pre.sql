@@ -6,8 +6,8 @@ SET FEED OFF
 SET ECHO OFF
 SET TIM OFF
 SET TIMI OFF
-DEF moat369_fw_vYYNN = 'v2008'
-DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2020-08-13)'
+DEF moat369_fw_vYYNN = 'v2010'
+DEF moat369_fw_vrsn  = '&&moat369_fw_vYYNN. (2020-10-23)'
 
 -- Define all functions and files:
 @@moat369_fc_define_files.sql
@@ -429,6 +429,11 @@ HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
+
+-- main report dynamic link color variables
+COL color_start NEW_V color_start NOPRI
+COL color_end   NEW_V color_end   NOPRI
+COL report_link NEW_V report_link NOPRI
 
 -- get average number of CPUs
 COL avg_cpu_count NEW_V avg_cpu_count FOR A6;

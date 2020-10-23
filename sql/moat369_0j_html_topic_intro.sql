@@ -14,11 +14,12 @@ SPO OFF
 @@&&fc_spool_end.
 
 -- update main report
-@@&&fc_spool_start.
-SPO &&moat369_main_report. APP
-PRO <a href="&&0j_param1.">&&0j_param2.</a>
-SPO OFF
-@@&&fc_spool_end.
+--@@&&fc_spool_start.
+--SPO &&moat369_main_report. APP
+--PRO <a href="&&0j_param1.">&&0j_param2.</a>
+--SPO OFF
+--@@&&fc_spool_end.
+SELECT '&&report_link. <a href="&&0j_param1.">&&0j_param2.</a>' report_link FROM DUAL;
 
 -- get time t0
 EXEC :get_time_t0 := DBMS_UTILITY.get_time;

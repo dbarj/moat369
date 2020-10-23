@@ -12,9 +12,10 @@ SPO OFF
 @@&&fc_set_term_off.
 
 -- update main report
-SPO &&moat369_main_report. APP;
-PRO <a href="&&one_spool_filename..txt">text</a>
-SPO OFF;
+--SPO &&moat369_main_report. APP;
+--PRO <a href="&&one_spool_filename..txt">text</a>
+--SPO OFF;
+SELECT '&&report_link. <a href="&&one_spool_filename..txt">text</a>' report_link FROM DUAL;
 
 -- get time t0
 EXEC :get_time_t0 := DBMS_UTILITY.get_time;
