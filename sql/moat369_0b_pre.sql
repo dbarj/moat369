@@ -172,7 +172,6 @@ COL fc_convert_txt_to_html clear
 @@&&fc_def_empty_var. moat369_pre_sw_key_file
 @@&&fc_def_output_file. enc_key_file 'key.bin'
 @@&&fc_set_value_var_nvl. 'enc_key_file' '&&moat369_pre_sw_key_file.' '&&enc_key_file.'
- 
 
 HOS if [ ! -f &&enc_key_file. -a '&&moat369_conf_encrypt_html.' == 'ON' ]; then openssl rand -base64 32 -out &&enc_key_file.; fi
 HOS if [ -f &&enc_key_file. ]; then openssl rsautl -encrypt -inkey &&moat369_enc_pub_file. -certin -in &&enc_key_file. -out &&enc_key_file..enc; fi
@@ -429,6 +428,11 @@ HOS &&cmd_getcpu. > &&moat369_cpuinfo.
 
 -- initialization
 COL row_num NEW_V row_num HEA '#' PRI
+
+-- main report dynamic link color variables
+COL color_start NEW_V color_start NOPRI
+COL color_end   NEW_V color_end   NOPRI
+COL report_link NEW_V report_link NOPRI
 
 -- get average number of CPUs
 COL avg_cpu_count NEW_V avg_cpu_count FOR A6;

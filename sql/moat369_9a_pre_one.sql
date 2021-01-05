@@ -88,12 +88,6 @@ SPO OFF
 @@&&fc_spool_end.
 SET HEA ON
 
--- update main report
-SPO &&moat369_main_report. APP
-PRO <li title="&&main_table.">&&title.
-SPO OFF
-HOS zip -j &&moat369_zip_filename. &&moat369_main_report. >> &&moat369_log3.
-
 -- Check SQL format and highlight
 @@&&fc_set_value_var_decode. sql_hl     &&moat369_conf_sql_highlight. 'N' 'N' &&sql_hl.
 @@&&fc_set_value_var_decode. sql_format &&moat369_conf_sql_format.    'N' 'N' &&sql_format.
@@ -113,6 +107,7 @@ HOS zip -j &&moat369_zip_filename. &&moat369_main_report. >> &&moat369_log3.
 @@&&fc_set_value_var_nvl2. skip_html_file  '&&skip_html_file.'  '&&fc_skip_script.' ''
 
 -- execute one sql
+SELECT '' report_link FROM dual;
 @@&&skip_html.&&moat369_skip_html.moat369_9b_one_html.sql
 @@&&skip_text.&&moat369_skip_text.moat369_9c_one_text.sql
 @@&&skip_csv.&&moat369_skip_csv.moat369_9d_one_csv.sql
@@ -166,10 +161,19 @@ PRO &&row_num. rows selected.
 SPO OFF
 @@&&fc_set_term_off.
 
+SELECT CASE
+          WHEN &&row_num.=0  THEN '<span style="color:&&moat369_conf_list_norows_color.;">'
+          WHEN &&row_num.=-1 THEN '<span style="color:&&moat369_conf_list_error_color.;">'
+          ELSE                    '<span style="color:&&moat369_conf_list_rows_color.;">'
+       END color_start,
+       '</span>' color_end
+  FROM DUAL;
+
 -- update main report
-@@&&fc_spool_start.
 SPO &&moat369_main_report. APP
-PRO <small><em> (&&row_num.)</em></small>
+PRO &&color_start.<li title="&&main_table.">&&title.&&color_end.
+PRO &&report_link.
+PRO <small><em>&&color_start. (&&row_num.)&&color_end.</em></small>
 PRO </li>
 SPO OFF
 @@&&fc_spool_end.
