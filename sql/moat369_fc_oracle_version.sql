@@ -179,7 +179,7 @@ COL skip_ver_ge_18   clear
 
 COL is_cdb new_v is_cdb nopri
 select
-&&skip_ver_le_11. case when SYS_CONTEXT('USERENV','CON_ID') > 2 then 'N' else 'Y' end is_cdb
+&&skip_ver_le_11. case when SYS_CONTEXT('USERENV','CON_ID') = 1 then 'Y' else 'N' end is_cdb
 &&skip_ver_ge_12. 'N' is_cdb
 from dual;
 COL is_cdb new_v clear
