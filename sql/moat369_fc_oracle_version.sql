@@ -177,15 +177,12 @@ COL skip_ver_ge_18   clear
 -------------------------------
 -- Set is_cdb variable. Result will be 'Y' or 'N'.
 
-COL is_cdb_temp_col new_v is_cdb_temp_col nopri
-select DECODE('&&is_ver_ge_12.','Y','CDB','''N''') is_cdb_temp_col from dual;
-COL is_cdb_temp_col clear
-
 COL is_cdb new_v is_cdb nopri
-select substr(&&is_cdb_temp_col.,1,1) is_cdb from v$database;
+select
+&&skip_ver_le_11. case when SYS_CONTEXT('USERENV','CON_ID') = 1 then 'Y' else 'N' end is_cdb
+&&skip_ver_ge_12. 'N' is_cdb
+from dual;
 COL is_cdb new_v clear
-
-UNDEF is_cdb_temp_col
 
 -------------------------------
 
