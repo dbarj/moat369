@@ -60,8 +60,8 @@ HOS if [ '&&moat369_d3_usage.' == 'Y' ]; then zip -j &&moat369_zip_filename. &&m
 
 @@&&fc_def_empty_var. moat369_tf_usage
 @@&&fc_clean_file_name. "moat369_log3" "moat369_log3_nopath" "PATH"
---HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then cp -av &&moat369_fdr_js./tablefilter/ &&moat369_sw_output_fdr./ >> &&moat369_log3.; cd &&moat369_sw_output_fdr./; zip -rm &&moat369_zip_filename_nopath. tablefilter/ >> &&moat369_log3_nopath.; fi 
-HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then v_zipfdr=$(dirname "&&moat369_zip_filename."); cp -av &&moat369_fdr_js./tablefilter/ &&moat369_sw_output_fdr./ >> &&moat369_log3.; cd &&moat369_sw_output_fdr./; zip -rm $(cd - >/dev/null; cd "${v_zipfdr}"; pwd)/&&moat369_zip_filename_nopath. tablefilter/ >> &&moat369_log3_nopath.; fi 
+--HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then cp -R &&moat369_fdr_js./tablefilter/ &&moat369_sw_output_fdr./ >> &&moat369_log3.; cd &&moat369_sw_output_fdr./; zip -rm &&moat369_zip_filename_nopath. tablefilter/ >> &&moat369_log3_nopath.; fi 
+HOS if [ '&&moat369_tf_usage.' == 'Y' ]; then v_zipfdr=$(dirname "&&moat369_zip_filename."); cp -R &&moat369_fdr_js./tablefilter/ &&moat369_sw_output_fdr./ >> &&moat369_log3.; cd &&moat369_sw_output_fdr./; zip -rm $(cd - >/dev/null; cd "${v_zipfdr}"; pwd)/&&moat369_zip_filename_nopath. tablefilter/ >> &&moat369_log3_nopath.; fi 
 -- Fix above cmd as cur folder can be RO
 
 HOS if [ -z '&&moat369_pre_sw_key_file.' ]; then rm -f &&enc_key_file.; fi
