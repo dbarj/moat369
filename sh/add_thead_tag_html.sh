@@ -14,7 +14,7 @@ fi
 in_file=$1
 out_file=$1.tmp
 
-SOTYPE=$(uname -s)
+SOTYPE=`uname -s`
 if [ "$SOTYPE" = "SunOS" ]
 then
   AWKCMD=/usr/xpg4/bin/awk
