@@ -20,6 +20,7 @@ then
   SEDCMD=/usr/xpg4/bin/sed
   GRPCMD=/usr/xpg4/bin/grep
   PRCCMD="ps -ef -o comm"
+  ECHOCMD=/usr/gnu/bin/echo
   ORATAB=/var/opt/oracle/oratab
 else
   AWKCMD=awk
