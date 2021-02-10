@@ -23,7 +23,7 @@ v_line_o="["
 v_line_c="]"
 v_line_sep=","
 
-SOTYPE=$(uname -s)
+SOTYPE=`uname -s`
 if [ "$SOTYPE" = "SunOS" ]
 then
   AWKCMD=/usr/xpg4/bin/awk
@@ -38,15 +38,15 @@ fi
 
 v_firstline=true
 
-v_head_ncols=$(head -n 1 $v_sourcecsv | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print n }')
+v_head_ncols=`head -n 1 $v_sourcecsv | $AWKCMD '{n=split($0, array, "'$v_sep'")} END{print n }'`
 
-v_tot=$(cat $v_sourcecsv | wc -l | $AWKCMD '{print $1}')
+v_tot=`cat $v_sourcecsv | wc -l | $AWKCMD '{print $1}'`
 
 v_count=0
 
 while read -r line || [ -n "$line" ]
 do
-  v_ncols=$($AWKCMD '{n=split($0, array, "'$v_sep'")} END{print n }' <<< "$line")
+  v_ncols=`$AWKCMD '{n=split($0, array, "'$v_sep'")} END{print n }' <<< "$line"`
   if [ $v_head_ncols -ne $v_ncols ]
   then
     echo ERROR
@@ -55,11 +55,11 @@ do
   $ECHO_E $v_line_o\\c
   if $v_firstline
   then
-    v_linerep=$($SEDCMD "s|$v_sep|${v_fl_col_tag_c}${v_col_sep}${v_fl_col_tag_o}|g" <<< "$line")
+    v_linerep=`$SEDCMD "s|$v_sep|${v_fl_col_tag_c}${v_col_sep}${v_fl_col_tag_o}|g" <<< "$line"`
     $ECHO_E ${v_fl_col_tag_o}${v_linerep}${v_fl_col_tag_c}\\c
     v_firstline=false
   else
-    v_linerep=$($SEDCMD "s|$v_sep|${v_al_col_tag_c}${v_col_sep}${v_al_col_tag_o}|g" <<< "$line")
+    v_linerep=`$SEDCMD "s|$v_sep|${v_al_col_tag_c}${v_col_sep}${v_al_col_tag_o}|g" <<< "$line"`
     $ECHO_E ${v_al_col_tag_o}${v_linerep}${v_al_col_tag_c}\\c
   fi
   $ECHO_E $v_line_c\\c

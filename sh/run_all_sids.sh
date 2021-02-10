@@ -20,12 +20,14 @@ then
   SEDCMD=/usr/xpg4/bin/sed
   GRPCMD=/usr/xpg4/bin/grep
   PRCCMD="ps -ef -o comm"
+  ECHOCMD=/usr/gnu/bin/echo
   ORATAB=/var/opt/oracle/oratab
 else
   AWKCMD=awk
   SEDCMD=sed
   GRPCMD=grep
   PRCCMD="ps axo cmd"
+  ECHOCMD=echo
   ORATAB=/etc/oratab
 fi
 
@@ -59,7 +61,7 @@ for INST in $($PRCCMD | $GRPCMD ora_pmo[n] | $SEDCMD 's/^ora_pmon_//' | $GRPCMD 
   fi
   sqlplus -s /nolog <<EOF
   connect / as sysdba
-  $(echo -e ${TOOLFDR})
+  $($ECHOCMD -e ${TOOLFDR})
   @@moat369/sql/moat369_0a_main.sql
 EOF
   #zip -qmT esp_requirements_host_$INST.zip res_requirements_*.txt esp_requirements_*.csv cpuinfo_model_name.txt
